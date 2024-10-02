@@ -8,22 +8,21 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { toast } from 'react-toastify';
 import useTitle from '../services/hooks/useTitle';
 import useAuth from '../services/hooks/useAuth';
-import { axiosPrivate } from '../services/api/axios';
+import useAxiosPrivate from '../services/hooks/useAxiosPrivate';
 
-const Header = ({ openSidebar, setOpenSidebar, title }) => {
+const Header = ({ openSidebar, setOpenSidebar }) => {
   const {auth} = useAuth();
+  const axiosPrivate = useAxiosPrivate();
   const { appTitle } = useTitle();
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  
-  console.log('The new value header is ', appTitle);
 
   const handleLogout = async (e) => {
     e.preventDefault();
 
     try {
-      const logoutResponse = await axiosPrivate.put('api/logout');
+      const logoutResponse = await axiosPrivate.put('api/account/logout');
       setTimeout(() => {
         toast.success("Logout successful");
         localStorage.clear();

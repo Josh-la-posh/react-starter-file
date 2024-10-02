@@ -23,9 +23,7 @@ const MainLayout = () => {
               className="absolute top-4 right-0 text-white"
               onClick={handleSidebar}
             >
-              {/* <div className=''> */}
-                <FontAwesomeIcon icon={faXmark} style={{fontSize: '20px', color: 'black'}} />
-              {/* </div> */}
+              <FontAwesomeIcon icon={faXmark} style={{fontSize: '20px', color: 'black'}} />
             </button>
           </div>
         )}

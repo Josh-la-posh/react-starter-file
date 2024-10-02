@@ -9,7 +9,7 @@ const Sidebar = ({handleSidebar}) => {
     const [isDropdownOpen, setDropdownOpen] = useState(false);
 
     return (
-        <div className="relative h-[100vh] flex flex-col bg-black text-white text-[12px] sm:text-[14px] lg:text-[16px] shadow-lg">
+        <div className="relative h-[100vh] flex flex-col bg-black text-white text-sm lg:text-[16px] shadow-lg">
             <div className='bg-[#f7f7f7] w-full h-16 flex items-center'>
                 <img src={Logo} alt="Logo" className="max-h-fit max-w-[85%]" />
             </div>
@@ -17,7 +17,7 @@ const Sidebar = ({handleSidebar}) => {
                 <Link to="/" onClick={() => handleSidebar()} className="block py-2 px-4 hover:bg-priColor">
                 <div className='flex items-center gap-2'>
                     <FontAwesomeIcon icon={faChartLine} size='xs' />
-                    Sidebar
+                    Dashboard
                 </div>
                 </Link>
                 <div>
