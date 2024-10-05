@@ -13,10 +13,11 @@ import useAxiosPrivate from '../services/hooks/useAxiosPrivate';
 const Header = ({ openSidebar, setOpenSidebar }) => {
   const {auth} = useAuth();
   const axiosPrivate = useAxiosPrivate();
-  const { appTitle } = useTitle();
+  const { appTitle, setAppTitle } = useTitle();
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  console.log('The title is: ', appTitle)
 
   const handleLogout = async (e) => {
     e.preventDefault();
@@ -27,6 +28,7 @@ const Header = ({ openSidebar, setOpenSidebar }) => {
         toast.success("Logout successful");
         localStorage.clear();
         dispatch(logout());
+        setAppTitle('');
         navigate('/login');
       }, 1000);
     } catch (err) {
@@ -50,7 +52,7 @@ const Header = ({ openSidebar, setOpenSidebar }) => {
       <div className={`text-lg font-semibold ${openSidebar === false && 'ml-12'}`}>{appTitle}</div>
       <div className="relative">
         <button onClick={() => setDropdownOpen(!isDropdownOpen)} className={`flex items-center ${isDropdownOpen ? 'bg-white mr-10' : 'bg-priColor'} rounded-full py-1 px-2`}>
-          <span className={`ml-2 ${!isDropdownOpen ? 'text-white' : 'text-priColor'}`}>{(auth.data.user.firstName).slice(0,1)} {(auth.data.user.lastName).slice(0,1)}</span>
+          <span className={`ml-2 ${!isDropdownOpen ? 'text-white' : 'text-priColor'}`}>{(auth.data.user.firstName).slice(0,1) ?? ''} {(auth.data.user.lastName).slice(0,1) ?? ''}</span>
           {
             !isDropdownOpen
               ? <FiChevronDown className="ml-1 text-white" />
