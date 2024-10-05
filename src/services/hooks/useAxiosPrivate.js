@@ -27,7 +27,7 @@ const useAxiosPrivate = () => {
                 const prevRequest = error?.config;
                 if (error.response.status === 401) {
                     try {
-                        const logout = await axiosPrivate.put('api/account/logout');
+                        // const logout = await axiosPrivate.put('api/account/logout');
                         setAuth({});
                         navigate('/login', {state: {from: location}, replace: true});
                     } catch (err) {

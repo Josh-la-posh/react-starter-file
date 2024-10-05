@@ -35,7 +35,7 @@ const MainLayout = () => {
             <Header setOpenSidebar={setOpenSidebar} openSidebar={openSidebar} />
           </div>
           <main className="pt-20 pb-5 h-full overflow-hidden">
-            <div className='px-5 bg-white h-full overflow-y-scroll'>
+            <div className='p-5 mx-5  bg-white h-full overflow-y-scroll'>
               <Outlet />
             </div>
           </main>

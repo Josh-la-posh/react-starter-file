@@ -23,7 +23,7 @@ const Header = ({ openSidebar, setOpenSidebar }) => {
     e.preventDefault();
 
     try {
-      const logoutResponse = await axiosPrivate.put('api/account/logout');
+      // const logoutResponse = await axiosPrivate.put('api/account/logout');
       setTimeout(() => {
         toast.success("Logout successful");
         localStorage.clear();

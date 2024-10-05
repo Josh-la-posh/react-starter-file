@@ -20,10 +20,10 @@ function Dashboard() {
         setAppTitle('Dashboard');
     }, []);
 
-    // useEffect(() => {
-    //     fetchLumpsum();
-    //     fetchGraph();
-    // }, [interval]);
+    useEffect(() => {
+        fetchLumpsum();
+        fetchGraph();
+    }, [interval]);
 
     const fetchLumpsum = async () => {
         setIsLumpsumLoading(true);
