@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import useTitle from '../../services/hooks/useTitle';
 import useAuth from '../../services/hooks/useAuth';
-import { toast } from 'react-toastify';
 import useAxiosPrivate from '../../services/hooks/useAxiosPrivate';
+import { toast } from 'react-toastify';
 
 function Dashboard() {
     const { setAppTitle } = useTitle();

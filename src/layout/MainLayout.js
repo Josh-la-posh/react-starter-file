@@ -28,7 +28,7 @@ const MainLayout = () => {
           </div>
         )}
         <div className='fixed top-0 left-0 w-48 lg:w-64 z-20 hidden md:block'>
-          <Sidebar/>
+          <Sidebar handleSidebar={handleSidebar}/>
         </div>
         <div className="h-full relative overflow-hidden md:ml-48 lg:ml-64 bg-[#f7f7f7]">
           <div className='bg-white z-10 p-4 border-b border-gray-300 h-16 w-full fixed top-0 right-0 left-0 md:pl-48 lg:pl-64'>

@@ -7,6 +7,19 @@ import RegisterPage from '../pages/Auth/Register/RegisterPage';
 import ResetPasswordPage from '../pages/Auth/ResetPassword/ResetPasswordPage';
 import ForgotPasswordPage from '../pages/Auth/ForgotPassword/ForgotPasswordPage';
 import Dashboard from '../pages/Dashboard/Dashboard';
+import CustomersPage from '../pages/Customers/Customers';
+import DisputesPage from '../pages/Disputes/Disputes';
+import Aggregator from '../pages/Aggregator/Aggregator';
+import AggregatorBank from '../pages/Aggregator/AggregatorBank';
+import AggregatorDocument from '../pages/Aggregator/AggregatorDocument';
+import MerchantPage from '../pages/Merchant/Merchant';
+import AllSettlement from '../pages/Settlement/AllSettlement';
+import InvoicesPage from '../pages/Invoices/Invoices';
+import TransactionPage from '../pages/Transaction/Transaction';
+import SettingsPage from '../pages/Settings/Settings';
+import HelpCenter from '../pages/HelpCenter/HelpCenter';
+import SettlementConfiguration from '../pages/Settlement/Configuration';
+import SettlementBankAccount from '../pages/Settlement/BankAccount';
 
 const RoutesSystem = () => {
   return (
@@ -27,24 +40,28 @@ const RoutesSystem = () => {
       <Route element={<RequireAuth />}>
         <Route path='/' element={<MainLayout />}>
           <Route path="/" element={<Dashboard />} />
-          {/* <Route path="customers" element={<Customers />} />
-          <Route path="merchants" element={<Merchants />} />
-          <Route path="/merchant/credentials/:merchantCode" element={<MerchantCredentials />} />
-          <Route path="merchant/credentials/merchantPopUpForm" element={<MerchantPopUpForm />} /> */}
-
-          {/* <Route path="/settlement" >
+          <Route path="customers" element={<CustomersPage />} />
+          <Route path="disputes" element={<DisputesPage />} />
+          <Route path='/aggregator'>
+            <Route path="all" element={<Aggregator />} />
+            <Route path="bank" element={<AggregatorBank />} />
+            <Route path="document" element={<AggregatorDocument />} />
+          </Route>
+          <Route path="merchants" element={<MerchantPage />} />
+          <Route path="/settlement" >
             <Route path='all' element={<AllSettlement />} />
-            <Route path='bank-account' element={<BankAccount />} />
-            <Route path='configuration' element={<Configuration />} />
-          </Route> */}
+            <Route path='bank' element={<SettlementBankAccount />} />
+            <Route path='configuration' element={<SettlementConfiguration />} />
+          </Route>
+          <Route path="invoices" element={<InvoicesPage />} />
+          <Route path="transactions" element={<TransactionPage />} />
+          <Route path="settings" element={<SettingsPage />} />
+          <Route path="help-center" element={<HelpCenter />} />
 
 
           {/* Add other routes */}
 
-          {/* <Route path="transaction" element={<Transactions />} />
-          <Route path="disputes" element={<Disputes />} />
-          <Route path="invoices" element={<Invoices />} />
-          <Route path="settings" element={<Settings />} />
+          {/* 
           <Route path='/change-password' element={<ChangePasswordPage />} /> */}
 
           {/* Compliance Routes */}

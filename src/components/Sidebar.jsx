@@ -6,7 +6,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Logo from "../assets/logo.jpg"
 
 const Sidebar = ({handleSidebar}) => {
-    const [isDropdownOpen, setDropdownOpen] = useState(false);
+    const [isAggregatorDropdown, setIsAggregatorDropdown] = useState(false);
+    const [isSettlementDropdown, setIsSettlementDropdown] = useState(false);
 
     return (
         <div className="relative h-[100vh] flex flex-col bg-black text-white text-sm lg:text-[14px] shadow-lg">
@@ -20,61 +21,63 @@ const Sidebar = ({handleSidebar}) => {
                         Dashboard
                     </div>
                 </Link>
-                <Link to="/" onClick={() => handleSidebar()} className="block py-4 px-4 hover:bg-priColor">
+                <Link to="/customers" onClick={() => handleSidebar()} className="block py-4 px-4 hover:bg-priColor">
                     <div className='flex items-center gap-2'>
                         <FontAwesomeIcon icon={faChartLine} size='xs' />
                         Customer
                     </div>
                 </Link>
-                <Link to="/" onClick={() => handleSidebar()} className="block py-4 px-4 hover:bg-priColor">
+                <Link to="/disputes" onClick={() => handleSidebar()} className="block py-4 px-4 hover:bg-priColor">
                     <div className='flex items-center gap-2'>
                         <FontAwesomeIcon icon={faChartLine} size='xs' />
                         Dispute
                     </div>
                 </Link>
                 <div>
-                    <button onClick={() => setDropdownOpen(!isDropdownOpen)} className="w-full text-left py-4 px-4 hover:bg-priColor flex justify-between">
+                    <button onClick={() => setIsAggregatorDropdown(!isAggregatorDropdown)} className="w-full text-left py-4 px-4 hover:bg-priColor flex justify-between">
                         <div className='flex items-center gap-2'>
                         <FontAwesomeIcon icon={faHandshake} size='xs' />
                         Aggregator
                         </div>
-                        {isDropdownOpen ? <FiChevronUp /> : <FiChevronDown />}
+                        {isAggregatorDropdown ? <FiChevronUp /> : <FiChevronDown />}
                     </button>
-                    {isDropdownOpen && (
+                    {isAggregatorDropdown && (
                         <div className="ml-4">
-                            <Link to="/settlement/all" onClick={() => handleSidebar()} className="block py-2 px-4 text-[12px] lg:text-[14px] hover:bg-priColor">Dropdown</Link>
-                            <Link to="/settlement/bank-account" onClick={() => handleSidebar()} className="block py-2 px-4 text-[12px] lg:text-[14px] hover:bg-priColor">Dropdown 1</Link>
+                            <Link to="/aggregator/all" onClick={() => handleSidebar()} className="block py-2 px-4 text-[12px] lg:text-[14px] hover:bg-priColor">Aggregator</Link>
+                            <Link to="/aggregator/bank" onClick={() => handleSidebar()} className="block py-2 px-4 text-[12px] lg:text-[14px] hover:bg-priColor">Aggregator Bank</Link>
+                            <Link to="/aggregator/document" onClick={() => handleSidebar()} className="block py-2 px-4 text-[12px] lg:text-[14px] hover:bg-priColor">Aggregator Document</Link>
                         </div>
                     )}
                 </div>
-                <Link to="/" onClick={() => handleSidebar()} className="block py-4 px-4 hover:bg-priColor">
+                <Link to="/merchants" onClick={() => handleSidebar()} className="block py-4 px-4 hover:bg-priColor">
                     <div className='flex items-center gap-2'>
                         <FontAwesomeIcon icon={faChartLine} size='xs' />
                         Merchant
                     </div>
                 </Link>
                 <div>
-                    <button onClick={() => setDropdownOpen(!isDropdownOpen)} className="w-full text-left py-4 px-4 hover:bg-priColor flex justify-between">
+                    <button onClick={() => setIsSettlementDropdown(!isSettlementDropdown)} className="w-full text-left py-4 px-4 hover:bg-priColor flex justify-between">
                         <div className='flex items-center gap-2'>
                         <FontAwesomeIcon icon={faHandshake} size='xs' />
                         Settlement
                         </div>
-                        {isDropdownOpen ? <FiChevronUp /> : <FiChevronDown />}
+                        {isSettlementDropdown ? <FiChevronUp /> : <FiChevronDown />}
                     </button>
-                    {isDropdownOpen && (
+                    {isSettlementDropdown && (
                         <div className="ml-4">
-                            <Link to="/settlement/all" onClick={() => handleSidebar()} className="block py-2 px-4 text-[12px] lg:text-[14px] hover:bg-priColor">Dropdown</Link>
-                            <Link to="/settlement/bank-account" onClick={() => handleSidebar()} className="block py-2 px-4 text-[12px] lg:text-[14px] hover:bg-priColor">Dropdown 1</Link>
+                            <Link to="/settlement/all" onClick={() => handleSidebar()} className="block py-2 px-4 text-[12px] lg:text-[14px] hover:bg-priColor">All Settlements</Link>
+                            <Link to="/settlement/bank" onClick={() => handleSidebar()} className="block py-2 px-4 text-[12px] lg:text-[14px] hover:bg-priColor">Settlement Bank</Link>
+                            <Link to="/settlement/configuration" onClick={() => handleSidebar()} className="block py-2 px-4 text-[12px] lg:text-[14px] hover:bg-priColor">Settlement Configuration</Link>
                         </div>
                     )}
                 </div>
-                <Link to="/" onClick={() => handleSidebar()} className="block py-4 px-4 hover:bg-priColor">
+                <Link to="/invoices" onClick={() => handleSidebar()} className="block py-4 px-4 hover:bg-priColor">
                     <div className='flex items-center gap-2'>
                         <FontAwesomeIcon icon={faChartLine} size='xs' />
                         Invoice
                     </div>
                 </Link>
-                <Link to="/" onClick={() => handleSidebar()} className="block py-4 px-4 hover:bg-priColor">
+                <Link to="/transactions" onClick={() => handleSidebar()} className="block py-4 px-4 hover:bg-priColor">
                     <div className='flex items-center gap-2'>
                         <FontAwesomeIcon icon={faChartLine} size='xs' />
                         Transaction
@@ -88,7 +91,7 @@ const Sidebar = ({handleSidebar}) => {
                     Settings
                 </div>
                 </Link>
-                <Link to="/settings" onClick={() => handleSidebar()} className="block py-2 px-4 hover:bg-priColor">
+                <Link to="/help-center" onClick={() => handleSidebar()} className="block py-2 px-4 hover:bg-priColor">
                 <div className='flex items-center gap-2'>
                     <FontAwesomeIcon icon={faHeadphones} size='xs' />
                     Help Center
