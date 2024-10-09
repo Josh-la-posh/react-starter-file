@@ -1,4 +1,4 @@
-import { aggregatorBankFailure, aggregatorBankStart, aggregatorFailure, aggregatorMerchantFailure, aggregatorMerchantStart, aggregatorStart } from "../../redux/slices/aggregatorSlice";
+import { aggregatorBankFailure, aggregatorBankStart, aggregatorDocumentFailure, aggregatorDocumentStart, aggregatorFailure, aggregatorMerchantFailure, aggregatorMerchantStart, aggregatorStart } from "../../redux/slices/aggregatorSlice";
 import { disputeFailure, disputeStart } from "../../redux/slices/disputeSlice";
 
 class AggregatorService {
@@ -135,7 +135,7 @@ class AggregatorService {
     async updateAggregatorBankById({id, data}) {
         dispatch(aggregatorBankStart());
       try {
-        const response = await this.axiosPrivate.post(
+        const response = await this.axiosPrivate.put(
           `api/AggregatorBank/${id}`,
           JSON.stringify({data})
         );
@@ -153,12 +153,11 @@ class AggregatorService {
 
     // deactivate aggregator bank
   
-    async updateAggregatorBankById({id}) {
+    async deactivateAggregatorBankById({id}) {
         dispatch(aggregatorBankStart());
       try {
-        const response = await this.axiosPrivate.post(
-          `api/AggregatorBank/deactivate/${id}`,
-          JSON.stringify({data})
+        const response = await this.axiosPrivate.put(
+          `api/AggregatorBank/deactivate/${id}`
         );
         console.log('Deactivated bank data ', response.data);
         return response.data;
@@ -166,7 +165,132 @@ class AggregatorService {
         if (!err.response) {
             dispatch(aggregatorBankFailure('No response from server'));
         } else {
-            dispatch(aggregatorBankFailure('Failed to load data. Try again.'));
+            dispatch(aggregatorBankFailure('Failed to deactivate bank. Try again.'));
+        }
+      } finally {
+      }
+    }
+
+    // activate aggregator bank
+  
+    async activateAggregatorBankById({id}) {
+        dispatch(aggregatorBankStart());
+      try {
+        const response = await this.axiosPrivate.put(
+          `api/AggregatorBank/activate/${id}`
+        );
+        console.log('activated bank data ', response.data);
+        return response.data;
+      } catch (err) {
+        if (!err.response) {
+            dispatch(aggregatorBankFailure('No response from server'));
+        } else {
+            dispatch(aggregatorBankFailure('Failed to activate bank. Try again.'));
+        }
+      } finally {
+      }
+    }
+
+    // set aggregator bank as primary account
+  
+    async setAggregatorBankAsPrimary({id}) {
+        dispatch(aggregatorBankStart());
+      try {
+        const response = await this.axiosPrivate.put(
+          `api/AggregatorBank/set-primary-account/${id}`,
+          JSON.stringify({data})
+        );
+        console.log('set bank as primary: ', response.data);
+        return response.data;
+      } catch (err) {
+        if (!err.response) {
+            dispatch(aggregatorBankFailure('No response from server'));
+        } else {
+            dispatch(aggregatorBankFailure('Failed to set as primary account. Try again.'));
+        }
+      } finally {
+      }
+    }
+
+
+    // aggregator documents
+
+    // fetch aggregator document type
+  
+    async fetchAggregatorDocumentTypes() {
+        dispatch(aggregatorDocumentStart());
+      try {
+        const response = await this.axiosPrivate.get(
+          'api/AggregatorDocuments/document-types',
+        );
+        console.log('This are the aggregator document types ', response.data);
+        return response.data;
+      } catch (err) {
+        if (!err.response) {
+            dispatch(aggregatorDocumentFailure('No response from server'));
+        } else {
+            dispatch(aggregatorDocumentFailure('Failed to load data. Try again.'));
+        }
+      } finally {
+      }
+    }
+
+    // fetch aggregator document
+  
+    async fetchAggregatorDocuments() {
+        dispatch(aggregatorDocumentStart());
+      try {
+        const response = await this.axiosPrivate.get(
+          'api/AggregatorDocuments',
+        );
+        console.log('This are the aggregator documents ', response.data);
+        return response.data;
+      } catch (err) {
+        if (!err.response) {
+            dispatch(aggregatorDocumentFailure('No response from server'));
+        } else {
+            dispatch(aggregatorDocumentFailure('Failed to load data. Try again.'));
+        }
+      } finally {
+      }
+    }
+
+    // download aggregator document
+  
+    async downloadAggregatorDocuments({id}) {
+        dispatch(aggregatorDocumentStart());
+      try {
+        const response = await this.axiosPrivate.get(
+          `api/AggregatorDocuments/download/${id}`,
+        );
+        console.log('This is the aggregator download ', response.data);
+        return response.data;
+      } catch (err) {
+        if (!err.response) {
+            dispatch(aggregatorDocumentFailure('No response from server'));
+        } else {
+            dispatch(aggregatorDocumentFailure('Failed to download data. Try again.'));
+        }
+      } finally {
+      }
+    }
+
+    // post aggregator document
+  
+    async postAggregatorDocuments({documentId, data}) {
+        dispatch(aggregatorDocumentStart());
+      try {
+        const response = await this.axiosPrivate.get(
+          `api/AggregatorDocuments/document/${documentId}`,
+          JSON.stringify({data})
+        );
+        console.log('Uploading aggregator download ', response.data);
+        return response.data;
+      } catch (err) {
+        if (!err.response) {
+            dispatch(aggregatorDocumentFailure('No response from server'));
+        } else {
+            dispatch(aggregatorDocumentFailure('Failed to download data. Try again.'));
         }
       } finally {
       }
