@@ -1,5 +1,4 @@
 import { aggregatorBankFailure, aggregatorBankStart, aggregatorDocumentFailure, aggregatorDocumentStart, aggregatorFailure, aggregatorMerchantFailure, aggregatorMerchantStart, aggregatorStart } from "../../redux/slices/aggregatorSlice";
-import { disputeFailure, disputeStart } from "../../redux/slices/disputeSlice";
 
 class AggregatorService {
     constructor(axiosPrivate, auth) {
@@ -9,7 +8,7 @@ class AggregatorService {
 
     // fetch aggregator
   
-    async fetchAggregator() {
+    async fetchAggregator(dispatch) {
         dispatch(aggregatorStart());
       try {
         const response = await this.axiosPrivate.get(
@@ -29,7 +28,7 @@ class AggregatorService {
 
     // fetch aggregator merchants
   
-    async fetchAggregatorMerchants() {
+    async fetchAggregatorMerchants(dispatch) {
         dispatch(aggregatorMerchantStart());
       try {
         const response = await this.axiosPrivate.get(
@@ -49,7 +48,7 @@ class AggregatorService {
 
     // update aggregator
   
-    async updateAggregator(data) {
+    async updateAggregator(dispatch, data) {
         dispatch(aggregatorStart());
       try {
         const response = await this.axiosPrivate.put(
@@ -72,7 +71,7 @@ class AggregatorService {
 
     // fetch aggregator bank
   
-    async fetchAggregatorBank() {
+    async fetchAggregatorBank(dispatch) {
         dispatch(aggregatorBankStart());
       try {
         const response = await this.axiosPrivate.get(
@@ -92,7 +91,7 @@ class AggregatorService {
 
     // fetch aggregator bank by id
   
-    async fetchAggregatorBankById({id}) {
+    async fetchAggregatorBankById(dispatch, id) {
         dispatch(aggregatorBankStart());
       try {
         const response = await this.axiosPrivate.get(
@@ -112,7 +111,7 @@ class AggregatorService {
 
     // add aggregator bank
   
-    async addAggregatorBankById() {
+    async addAggregatorBankById(dispatch) {
         dispatch(aggregatorBankStart());
       try {
         const response = await this.axiosPrivate.post(
@@ -132,7 +131,7 @@ class AggregatorService {
 
     // update aggregator bank by id
   
-    async updateAggregatorBankById({id, data}) {
+    async updateAggregatorBankById(dispatch, id, data) {
         dispatch(aggregatorBankStart());
       try {
         const response = await this.axiosPrivate.put(
@@ -153,7 +152,7 @@ class AggregatorService {
 
     // deactivate aggregator bank
   
-    async deactivateAggregatorBankById({id}) {
+    async deactivateAggregatorBankById(dispatch, id) {
         dispatch(aggregatorBankStart());
       try {
         const response = await this.axiosPrivate.put(
@@ -173,7 +172,7 @@ class AggregatorService {
 
     // activate aggregator bank
   
-    async activateAggregatorBankById({id}) {
+    async activateAggregatorBankById(dispatch, id) {
         dispatch(aggregatorBankStart());
       try {
         const response = await this.axiosPrivate.put(
@@ -193,7 +192,7 @@ class AggregatorService {
 
     // set aggregator bank as primary account
   
-    async setAggregatorBankAsPrimary({id}) {
+    async setAggregatorBankAsPrimary(dispatch, id) {
         dispatch(aggregatorBankStart());
       try {
         const response = await this.axiosPrivate.put(
@@ -217,7 +216,7 @@ class AggregatorService {
 
     // fetch aggregator document type
   
-    async fetchAggregatorDocumentTypes() {
+    async fetchAggregatorDocumentTypes(dispatch) {
         dispatch(aggregatorDocumentStart());
       try {
         const response = await this.axiosPrivate.get(
@@ -237,7 +236,7 @@ class AggregatorService {
 
     // fetch aggregator document
   
-    async fetchAggregatorDocuments() {
+    async fetchAggregatorDocuments(dispatch) {
         dispatch(aggregatorDocumentStart());
       try {
         const response = await this.axiosPrivate.get(
@@ -257,7 +256,7 @@ class AggregatorService {
 
     // download aggregator document
   
-    async downloadAggregatorDocuments({id}) {
+    async downloadAggregatorDocuments(dispatch, id) {
         dispatch(aggregatorDocumentStart());
       try {
         const response = await this.axiosPrivate.get(
@@ -277,7 +276,7 @@ class AggregatorService {
 
     // post aggregator document
   
-    async postAggregatorDocuments({documentId, data}) {
+    async postAggregatorDocuments(dispatch, documentId, data) {
         dispatch(aggregatorDocumentStart());
       try {
         const response = await this.axiosPrivate.get(
