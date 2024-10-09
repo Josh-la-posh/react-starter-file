@@ -5,7 +5,7 @@ const TitleContext = createContext({});
 export const TitleProvider = ({ children }) => {
     const [appTitle, setAppTitle] = useState(() => {
         const storedTitle = localStorage.getItem('pelpayTitle');
-        return storedTitle ? JSON.parse(storedTitle) : {};
+        return storedTitle ? JSON.parse(storedTitle) : '';
     });
 
     useEffect(() => {

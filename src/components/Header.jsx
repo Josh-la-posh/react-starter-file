@@ -17,7 +17,6 @@ const Header = ({ openSidebar, setOpenSidebar }) => {
   const [isDropdownOpen, setDropdownOpen] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  console.log('The title is: ', appTitle)
 
   const handleLogout = async (e) => {
     e.preventDefault();
@@ -49,7 +48,7 @@ const Header = ({ openSidebar, setOpenSidebar }) => {
           </button>
       }
 
-      <div className={`text-lg font-semibold ${openSidebar === false && 'ml-12'}`}>{appTitle}</div>
+      <div className={`text-lg font-semibold ${openSidebar === false && 'ml-12'}`}>{appTitle ?? ''}</div>
       <div className="relative">
         <button onClick={() => setDropdownOpen(!isDropdownOpen)} className={`flex items-center ${isDropdownOpen ? 'bg-white mr-10' : 'bg-priColor'} rounded-full py-1 px-2`}>
           <span className={`ml-2 ${!isDropdownOpen ? 'text-white' : 'text-priColor'}`}>{(auth.data.user.firstName).slice(0,1) ?? ''} {(auth.data.user.lastName).slice(0,1) ?? ''}</span>
