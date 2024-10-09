@@ -30,6 +30,11 @@ const RegisterForm = () => {
     // const emailRef = useRef();
     const [countryList, setCountryList] = useState([]);
     const [showCountryListReload, setShowCountryListReload] = useState(false);
+    const [industryList, setIndustryList] = useState([]);
+    const [showIndustryListReload, setShowIndustryListReload] = useState(false);
+    const [industryCategoryList, setIndustryCategoryList] = useState([]);
+    const [showIndustryCategoryListReload, setShowIndustryCategoryListReload] = useState(false);
+    const [showIndustryCategories, setShowIndustryCategories] = useState(false);
     const errRef = useRef();
 
     const [validBusinessName, setValidBusinessName] = useState(false);
@@ -84,10 +89,45 @@ const RegisterForm = () => {
         }
     }
 
+    const getIndustry = async () => {
+        // e.preventDefault();
+        try {
+            const response = await axios.get('api/industry');
+            if (response.data.message === 'Successful') {
+                console.log('The new response is ', response.data);
+                setIndustryList(response.data.responseData);
+                setShowIndustryListReload(false);
+            } else {
+                setShowIndustryListReload(true);
+            }
+        } catch (err) {
+            console.log('Error printing industry ', err.response);
+            setShowIndustryListReload(true);
+        }
+    }
+
+    const getIndustryCategories = async (id) => {
+        // e.preventDefault();
+        try {
+            const response = await axios.get(`api/industry/categories/${id}`);
+            if (response.data.message === 'Successful') {
+                console.log('The new industry categories are ', response.data);
+                setIndustryCategoryList(response.data.responseData);
+                setShowIndustryCategoryListReload(false);
+            } else {
+                setShowIndustryCategoryListReload(true);
+            }
+        } catch (err) {
+            console.log('Error printing industry categories ', err.response);
+            setShowIndustryCategoryListReload(true);
+        }
+    }
+
     useEffect(() =>  {
         if (countryList.length < 1) {
             getCountry();
         }
+        getIndustry();
     }, [])
 
     // useEffect(() => {
