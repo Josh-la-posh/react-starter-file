@@ -3,9 +3,9 @@ import '../auth.css';
 import { Link } from 'react-router-dom';
 import AuthInputField from '../../../components/AuthInptField';
 import axios from '../../../services/api/axios';
-import { faCircleCheck, faHouse, faLock, faPhone, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faCircleCheck, faHouse, faPhone, faUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEnvelope, faEye, faEyeSlash } from '@fortawesome/free-regular-svg-icons';
+import { faEnvelope } from '@fortawesome/free-regular-svg-icons';
 import { toast } from 'react-toastify';
 import Logo from '../../../assets/logo.jpg';
 
@@ -18,13 +18,6 @@ const EMAIL_REGEX = /^[a-zA-Z][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 const REGISTER_URL = '/api/onboard-merchant';
 
-const industryCategories = [
-    { id: 1, name: 'Fintech' },
-    { id: 2, name: 'Agriculture' },
-    { id: 3, name: 'Healthcare' },
-    // Add more industries as needed
-];
-
 const RegisterForm = () => {
     // const userRef = useRef();
     // const emailRef = useRef();
@@ -35,6 +28,7 @@ const RegisterForm = () => {
     const [industryCategoryList, setIndustryCategoryList] = useState([]);
     const [showIndustryCategoryListReload, setShowIndustryCategoryListReload] = useState(false);
     const [showIndustryCategories, setShowIndustryCategories] = useState(false);
+    const [industryId, setIndustryId] = useState(null);
     const errRef = useRef();
 
     const [validBusinessName, setValidBusinessName] = useState(false);
@@ -107,7 +101,6 @@ const RegisterForm = () => {
     }
 
     const getIndustryCategories = async (id) => {
-        // e.preventDefault();
         try {
             const response = await axios.get(`api/industry/categories/${id}`);
             if (response.data.message === 'Successful') {
@@ -173,8 +166,15 @@ const RegisterForm = () => {
         }));
     };
 
+    const handleCategoryChange = (e) => {
+        setIndustryId(e.target.value);
+        getIndustryCategories(e.target.value);
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        console.log('category list id: ', formData.industryCategoryId)
 
         const v1 = BUSINESS_REGEX.test(formData.businessName);
         const v2 = EMAIL_REGEX.test(formData.contactEmail);
@@ -360,7 +360,7 @@ const RegisterForm = () => {
                             </div>
                             <div className="block md:flex md:space-x-4 mb-6">
                                 <div className="mb-6 w-full">
-                                    <label className="block text-black text-[11px] lg:text-[13px] mb-1 lg:mb-2 flex items-center" htmlFor="country">
+                                    <label className="text-black text-[11px] lg:text-[13px] mb-1 lg:mb-2 flex items-center" htmlFor="country">
                                         Country
                                     </label>
                                     <select
@@ -382,7 +382,29 @@ const RegisterForm = () => {
                                     </div>}
                                 </div>
                                 <div className="mb-6 w-full">
-                                    <label className="block text-black text-[11px] lg:text-[13px] mb-1 lg:mb-2 flex items-center" htmlFor="industryCategoryId">
+                                    <label className="text-black text-[11px] lg:text-[13px] mb-1 lg:mb-2 flex items-center" htmlFor="industry">
+                                        Industry
+                                    </label>
+                                    <select
+                                        id="industry"
+                                        name="industry"
+                                        value={formData.industry}
+                                        onChange={(e) => handleCategoryChange(e)}
+                                        className="w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
+                                        required
+                                    >
+                                        {industryList.map((industry) => (
+                                            <option key={industry.id} value={industry.id}>
+                                                {industry.industryName}
+                                            </option>
+                                        ))}
+                                    </select>
+                                </div>
+                            </div>
+                            {
+                                industryId !== null &&
+                                <div className="mb-6 w-full">
+                                    <label className="text-black text-[11px] lg:text-[13px] mb-1 lg:mb-2 flex items-center" htmlFor="industryCategoryId">
                                         Industry Category
                                     </label>
                                     <select
@@ -393,18 +415,18 @@ const RegisterForm = () => {
                                         className="w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
                                         required
                                     >
-                                        {industryCategories.map((category) => (
-                                            <option key={category.id} value={category.id}>
-                                                {category.name}
+                                        {industryCategoryList.map((industry) => (
+                                            <option key={industry.id} value={industry.id}>
+                                                {industry.categoryName}
                                             </option>
                                         ))}
                                     </select>
                                 </div>
-                            </div>
+                            }
                             <button
                                 type="submit"
                                 className="w-full bg-priColor text-sm text-white py-2 rounded-lg"
-                                disabled={loading || !validBusinessName || !validContactEmail || !validContactFirstName || !validContactLastName || !validContactPhoneNumber ? true : false}
+                                // disabled={loading || !validBusinessName || !validContactEmail || !validContactFirstName || !validContactLastName || !validContactPhoneNumber ? true : false}
                             >
                                 {loading ? 'Registering...' : 'Register'}
                             </button>

@@ -1,4 +1,4 @@
-import { graphFailure, graphStart, lumpsumFailure, lumpsumStart } from "../../redux/slices/dashboardSlice";
+import { graphFailure, graphStart, lumpsumFailure, lumpsumStart, lumpsumSuccess } from "../../redux/slices/dashboardSlice";
 
 class DashboardService {
     constructor(axiosPrivate, auth) {
@@ -6,13 +6,15 @@ class DashboardService {
       this.auth = auth;
     }
   
-    async fetchLumpsum(merchantCode, interval, dispatch) {
+    async fetchLumpsum(merchantCode, interval, env, dispatch) {
         dispatch(lumpsumStart());
       try {
         const response = await this.axiosPrivate.get(
-          `api/Dashboard/tnx/lumpsum/${merchantCode}?interval=${interval}`,
+          `api/Dashboard/tnx/lumpsum/${merchantCode}?env=${env}&interval=${interval}`,
         );
-        console.log('This is the lumpsum data ', response.data);
+        const data = response.data.responseData;
+        console.log('This is the lumpsum data ', data);
+        dispatch(lumpsumSuccess(data))
         return response.data;
       } catch (err) {
         if (!err.response) {

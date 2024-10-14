@@ -6,8 +6,8 @@ const initialState = {
   graphLoading: false,
   lumpsumError: null,
   graphError: null,
-  lumpsum: {},
-  graph: {}
+  lumpsum: [],
+  graph: []
 };
 
 const dashboardSlice = createSlice({

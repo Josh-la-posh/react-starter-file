@@ -192,7 +192,7 @@ class AggregatorService {
 
     // set aggregator bank as primary account
   
-    async setAggregatorBankAsPrimary(dispatch, id) {
+    async setAggregatorBankAsPrimary(data, dispatch, id) {
         dispatch(aggregatorBankStart());
       try {
         const response = await this.axiosPrivate.put(

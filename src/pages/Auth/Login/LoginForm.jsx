@@ -50,6 +50,7 @@ const LoginForm = () => {
       );
       
       const data = response.data.responseData;
+      console.log('user data: ', data);
 
       setAuth({data});
       dispatch(loginSuccess(data));

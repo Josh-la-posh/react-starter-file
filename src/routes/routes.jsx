@@ -42,11 +42,13 @@ const RoutesSystem = () => {
           <Route path="/" element={<Dashboard />} />
           <Route path="customers" element={<CustomersPage />} />
           <Route path="disputes" element={<DisputesPage />} />
+
           <Route path='/aggregator'>
             <Route path="all" element={<Aggregator />} />
             <Route path="bank" element={<AggregatorBank />} />
             <Route path="document" element={<AggregatorDocument />} />
           </Route>
+          
           <Route path="merchants" element={<MerchantPage />} />
           <Route path="/settlement" >
             <Route path='all' element={<AllSettlement />} />

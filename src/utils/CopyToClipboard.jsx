@@ -7,7 +7,7 @@ const CopyToClipboardField = ({text, value, successMessage = "Copied to clipboar
     navigator.clipboard.writeText(value)
       .then(() => {
         setCopied(true);
-        setTimeout(() => setCopied(false), 2000); // Hide the message after 2 seconds
+        setTimeout(() => setCopied(false), 2000);
       })
       .catch(err => console.error('Failed to copy text: ', err));
   };

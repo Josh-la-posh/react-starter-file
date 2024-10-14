@@ -1,6 +1,5 @@
 import React from 'react'
 import '../pages/Auth/auth.css';
-import { Link } from 'react-router-dom';
 import { faCheck, faTimes, faInfoCircle } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 

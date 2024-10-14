@@ -18,6 +18,7 @@ function Dashboard() {
     const [merchant, setMerchant] = useState(merchants[0] || {});
     const merchantCode = merchant.merchantCode;
     const dashboardService = new DashboardService(axiosPrivate, auth);
+    const env = 'Test';
 
     useEffect(() => {
         setAppTitle('Dashboard');
@@ -26,7 +27,7 @@ function Dashboard() {
     useEffect(() => {
         const loadData = async () => {
           if (merchantCode) {
-            await dashboardService.fetchLumpsum(merchantCode, interval, dispatch);
+            await dashboardService.fetchLumpsum(merchantCode, env, interval, dispatch);
             await dashboardService.fetchGraph(merchantCode, interval, dispatch);
           }
         };
