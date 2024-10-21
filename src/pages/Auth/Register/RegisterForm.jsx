@@ -123,10 +123,6 @@ const RegisterForm = () => {
         getIndustry();
     }, [])
 
-    // useEffect(() => {
-    //   userRef.current.focus();
-    // }, [])
-
     useEffect(() => {
         const result = BUSINESS_REGEX.test(formData.businessName);
         setValidBusinessName(result);
@@ -173,8 +169,6 @@ const RegisterForm = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        console.log('category list id: ', formData.industryCategoryId)
 
         const v1 = BUSINESS_REGEX.test(formData.businessName);
         const v2 = EMAIL_REGEX.test(formData.contactEmail);

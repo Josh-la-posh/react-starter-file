@@ -1,18 +1,30 @@
-// src/features/auth/authSlice.js
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  loading: false,
-  error: null
+  transactionLoading: false,
+  transactionError: null,
+  transactions: []
 };
 
 const transactionSlice = createSlice({
   name: 'transaction',
   initialState,
   reducers: {
+    transactionStart: (state) => {
+      state.transactionLoading = true;
+      state.transactionError = null;
+    },
+    transactionSuccess: (state, action) => {
+      state.transactionLoading = false;
+      state.transactions = action.payload;
+    },
+    transactionFailure: (state, action) => {
+      state.transactionLoading = false;
+      state.transactionError = action.payload;
+    }
   },
 });
 
-export const {  } = transactionSlice.actions;
+export const { transactionStart, transactionSuccess, transactionFailure } = transactionSlice.actions;
 
 export default transactionSlice.reducer;

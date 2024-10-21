@@ -6,6 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheckCircle, faUser, faVoicemail } from '@fortawesome/free-solid-svg-icons';
 import Logo from '../../../assets/logo.jpg';
 import AuthInputField from '../../../components/AuthInptField';
+import AuthService from '../../../services/api/authApi';
 
 const FORGOT_PASSWORD_URL = '/api/account/forget-password';
 const EMAIL_REGEX = /^[a-zA-Z][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -20,6 +21,7 @@ const ForgotPasswordForm = () => {
     const [errMsg, setErrMsg] = useState(false);
     const [successMsg, setSuccessMsg] = useState('');
     const navigate = useNavigate();
+    const authService = new AuthService();
 
     useEffect(() => {
         const result = EMAIL_REGEX.test(email);
@@ -31,39 +33,10 @@ const ForgotPasswordForm = () => {
         setSuccessMsg('');
     }, [email])
 
-    const handleLogin = async (e) => {
+    const handleForgotPassword = async (e) => {
         e.preventDefault();
-        setLoading(true);
 
-        try {
-            const response = await axios.post(FORGOT_PASSWORD_URL,
-                JSON.stringify({email}),
-                 {
-                    headers: {
-                        'Accept': '*/*',
-                        'Content-Type': 'application/json',
-                    },
-                }
-            );
-            const data = response.data;
-            console.log(data)
-
-            if (data.requestSuccessful === true) {
-                setIsTokenSent(true);
-                setSuccessMsg(data.message);
-            };
-        } catch (error) {
-            console.log(error.response)
-            if (!error.response) {
-                setErrMsg('No Server Response');
-            } else {
-                setErrMsg(error.response.data.message)
-            }
-
-            errRef.current.focus();
-        } finally {
-            setLoading(false);
-        }
+        authService.submitForgotPassword(email, setLoading, setIsTokenSent, setSuccessMsg, setErrMsg, errRef);
     };
 
     return (
@@ -79,7 +52,7 @@ const ForgotPasswordForm = () => {
                         <h2 className="text-[15px] text-black text-opacity-60 mb-6">Kindly enter your email address</h2>
                         <p ref={errRef} className={errMsg ? "errmsg" :
                             "offscreen"} aria-live='asserive'>{errMsg}</p>
-                        <form onSubmit={handleLogin}>
+                        <form onSubmit={handleForgotPassword}>
                             <div className="mb-4">
                                 <AuthInputField
                                     label="Email"

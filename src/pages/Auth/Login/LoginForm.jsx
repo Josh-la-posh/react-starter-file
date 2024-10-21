@@ -1,16 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { loginStart, loginSuccess, loginFailure } from '../../../redux/slices/authSlice';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import useAuth from '../../../services/hooks/useAuth';
-import axios from '../../../services/api/axios';
-import { toast } from 'react-toastify';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faEye, faEyeSlash } from '@fortawesome/free-regular-svg-icons';
 import Logo from '../../../assets/logo.jpg';
 import { faLock } from '@fortawesome/free-solid-svg-icons';
-
-const LOGIN_URL = '/api/account';
+import AuthService from '../../../services/api/authApi';
 
 const LoginForm = () => {
   const { setAuth } = useAuth();
@@ -19,6 +15,7 @@ const LoginForm = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const userRef = useRef();
+  const authService = new AuthService();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -35,43 +32,7 @@ const LoginForm = () => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    dispatch(loginStart());
-
-    try {
-      const response = await axios.post(LOGIN_URL,
-        JSON.stringify({email, password}),
-        {
-          headers: {
-            'Accept': '*/*',
-            'Content-Type': 'application/json',
-          },
-          // withCredentials: true
-        }
-      );
-      
-      const data = response.data.responseData;
-      console.log('user data: ', data);
-
-      setAuth({data});
-      dispatch(loginSuccess(data));
-      toast.success("Login successful");
-
-      const from = location.state?.from?.pathname || '/';
-      navigate(from, {replace: true});
-      
-    } catch (err) {
-      if (!err.response) {
-        dispatch(loginFailure('No Server Response'));
-      } else {
-        if (err.response.status === 400) {
-          toast.error(err.response.data.message ?? 'Login failed');
-          dispatch(loginFailure(err.response.data.message));
-        } else {
-          toast.error('Login failed');
-          dispatch(loginFailure('Login Failed'));
-        }
-      }
-    }
+    await authService.submitLogin(email, password, setAuth, location, navigate, dispatch);
   };
 
   return (
