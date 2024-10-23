@@ -8,7 +8,7 @@ import invoiceReducer from './slices/invoiceSlice';
 import merchantReducer from './slices/merchantSlice';
 import settlementReducer from './slices/settlementSlice';
 import transactionReducer from './slices/transactionSlice';
-import usersReducer from './slices/usersSlice';
+import usersReducer from './slices/userSlice';
 
 export const store = configureStore({
   reducer: {

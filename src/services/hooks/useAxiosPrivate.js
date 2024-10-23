@@ -3,6 +3,7 @@ import { axiosPrivate } from "../api/axios";
 import useRefreshToken from "./useRefreshToken";
 import useAuth from "./useAuth";
 import { useNavigate, useLocation } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const useAxiosPrivate = () => {
     const refresh = useRefreshToken();
@@ -27,9 +28,12 @@ const useAxiosPrivate = () => {
                 const prevRequest = error?.config;
                 if (error.response.status === 401) {
                     try {
-                        // const logout = await axiosPrivate.put('api/account/logout');
-                        setAuth({});
-                        navigate('/login', {state: {from: location}, replace: true});
+                        toast.error('Session expired.\n Redirecting to login');
+                        setTimeout(() => {
+                            // const logout = await axiosPrivate.put('api/account/logout');
+                            setAuth({});
+                            navigate('/login', {state: {from: location}, replace: true});
+                        }, 2000);
                     } catch (err) {
                         console.log('New error ', err);
                     }

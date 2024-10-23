@@ -9,8 +9,9 @@ import { toast } from 'react-toastify';
 import useTitle from '../services/hooks/useTitle';
 import useAuth from '../services/hooks/useAuth';
 import useAxiosPrivate from '../services/hooks/useAxiosPrivate';
+import {AlignJustify} from 'lucide-react';
 
-const Header = ({ openSidebar, setOpenSidebar }) => {
+const Header = ({ openSidebar, setOpenSidebar, setIsSidebarTextVisible }) => {
   const {auth} = useAuth();
   const axiosPrivate = useAxiosPrivate();
   const { appTitle, setAppTitle } = useTitle();
@@ -37,6 +38,7 @@ const Header = ({ openSidebar, setOpenSidebar }) => {
 
   const handleSidebar = () => {
     setOpenSidebar(true);
+    setIsSidebarTextVisible(true)
   }
 
   return (
@@ -44,7 +46,7 @@ const Header = ({ openSidebar, setOpenSidebar }) => {
       {
         openSidebar === false && 
           <button className="absolute left-2 block md:hidden" onClick={handleSidebar}>
-            <FontAwesomeIcon icon={faBars} />
+            <AlignJustify />
           </button>
       }
 
