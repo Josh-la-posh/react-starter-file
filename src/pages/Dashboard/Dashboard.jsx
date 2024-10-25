@@ -4,7 +4,10 @@ import useAuth from '../../services/hooks/useAuth';
 import useAxiosPrivate from '../../services/hooks/useAxiosPrivate';
 import { toast } from 'react-toastify';
 import DashboardService from '../../services/api/dashboardApi';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import MerchantSelector from '../../components/MerchantSelector';
+import DashboardCards from './component/DashboardCards';
+import DashboardChart from './component/DashboardChart';
 
 function Dashboard() {
     const { setAppTitle } = useTitle();
@@ -18,6 +21,7 @@ function Dashboard() {
     const [merchant, setMerchant] = useState(merchants[0] || {});
     const merchantCode = merchant.merchantCode;
     const dashboardService = new DashboardService(axiosPrivate, auth);
+    const { lumpsum } = useSelector((state) => state.dashboard);
     const env = 'Test';
 
     useEffect(() => {
@@ -30,23 +34,18 @@ function Dashboard() {
             await dashboardService.fetchLumpsum(merchantCode, env, interval, dispatch);
             await dashboardService.fetchGraph(merchantCode, interval, dispatch);
           }
+          console.log('The lumpsum is: ', lumpsum);
         };
         loadData();
-    }, [merchantCode, interval, dashboardService, dispatch]);
+    }, [merchantCode, interval, dispatch]);
 
     const handleIntervalChange = (e) => {
       setInterval(e.target.value);
-      console.log(e.target.value, interval);
     };
 
-    const handleMerchantChange = (e) => {
-        const selectedMerchantId = e.target.value;
-        const selectedMerchant = merchants.find((m) => m.id.toString() === selectedMerchantId);
-        if (selectedMerchant) {
-          setMerchant(selectedMerchant);
-          console.log(merchantCode);
-        }
-      };
+    const handleMerchantChange = (selectedMerchant) => {
+      setMerchant(selectedMerchant)
+    };
       
   return (
     <div>
@@ -65,22 +64,72 @@ function Dashboard() {
             <option value="Yearly">Yearly</option>
           </select>
         </div>
-        <div className="mt-8">
-          <label htmlFor="merchant" className="mr-2 text-sm">Merchant:</label>
-          <select
-            id="merchant"
-            value={merchant?.id || ''}
-            onChange={handleMerchantChange}
-            className="p-2 border focus:outline-none rounded-md"
-          >
-            {merchants.map((merchant) => (
-              <option value={merchant.id} key={merchant.id}>
-                {merchant.merchantName}
-              </option>
-            ))}
-          </select>
-        </div>
+        <MerchantSelector merchants={merchants} onMerchantChange={handleMerchantChange} />
+
+        <DashboardChart lumpsum={lumpsum} />
+
+        <DashboardCards lumpsum={lumpsum} />
+
       </header>
+
+
+
+      <div className="dashboard p-6 space-y-8">
+      
+      {/* User Summary */}
+      <div className="flex justify-between items-center">
+        <div className="account-balance p-4 bg-white shadow rounded-md w-1/3">
+          <h3 className="text-gray-700 text-lg">Account Balance</h3>
+          <p className="text-2xl font-semibold">$12,500</p>
+        </div>
+        <div className="recent-transactions p-4 bg-white shadow rounded-md w-1/3">
+          <h3 className="text-gray-700 text-lg">Recent Transactions</h3>
+          <ul className="text-sm">
+            <li>Purchase at Store - $120</li>
+            <li>Transfer to John - $500</li>
+          </ul>
+        </div>
+        <div className="pending-actions p-4 bg-white shadow rounded-md w-1/3">
+          <h3 className="text-gray-700 text-lg">Pending Actions</h3>
+          <p>2 pending verifications</p>
+        </div>
+      </div>
+
+      {/* Financial Overview & Metrics */}
+      <div className="financial-overview p-4 bg-white shadow rounded-md">
+        <h3 className="text-gray-700 text-lg">Financial Overview</h3>
+        <div className="grid grid-cols-3 gap-4">
+          <div className="income-expense-chart">Income vs. Expense Chart</div>
+          <div className="savings-investments">Savings: $2,000</div>
+          <div className="outstanding-invoices">Outstanding Invoices: $1,200</div>
+        </div>
+      </div>
+
+      {/* Quick Actions */}
+      <div className="quick-actions p-4 bg-white shadow rounded-md flex justify-around">
+        <button className="bg-blue-500 text-white py-2 px-4 rounded">Transfer Money</button>
+        <button className="bg-blue-500 text-white py-2 px-4 rounded">Create Invoice</button>
+        <button className="bg-blue-500 text-white py-2 px-4 rounded">Generate Report</button>
+        <button className="bg-blue-500 text-white py-2 px-4 rounded">Manage Disputes</button>
+      </div>
+
+      {/* Transaction Insights */}
+      <div className="transaction-insights p-4 bg-white shadow rounded-md">
+        <h3 className="text-gray-700 text-lg">Transaction Insights</h3>
+        <div className="grid grid-cols-2 gap-4">
+          <div className="spending-breakdown">Spending Breakdown Chart</div>
+          <div className="upcoming-payments">Upcoming Payments List</div>
+        </div>
+      </div>
+
+      {/* Compliance & Security */}
+      <div className="compliance-security p-4 bg-white shadow rounded-md">
+        <h3 className="text-gray-700 text-lg">Compliance & Security</h3>
+        <p>KYC Status: Pending</p>
+        <p>Security Alerts: No recent alerts</p>
+      </div>
+
+    </div>
     </div>
   )
 }

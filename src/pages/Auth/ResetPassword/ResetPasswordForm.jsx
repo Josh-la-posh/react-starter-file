@@ -108,7 +108,7 @@ const ResetPasswordForm = () => {
                                     icon={faLock}
                                     validName={validNewPassword}
                                     valueName={newPassword}
-                                    id="contactEmail"
+                                    id="newPassword"
                                     onChange={(e) => setNewPassword(e.target.value)}
                                     setOnFocus={setNewPasswordFocus}
                                     nameFocus={NewPasswordFocus}
@@ -132,7 +132,7 @@ const ResetPasswordForm = () => {
                                     icon={faLock}
                                     validName={validConfirmPassword}
                                     valueName={confirmPassword}
-                                    id="contactEmail"
+                                    id="confirmPassword"
                                     onChange={(e) => setConfirmPassword(e.target.value)}
                                     setOnFocus={setConfirmPasswordFocus}
                                     nameFocus={ConfirmPasswordFocus}

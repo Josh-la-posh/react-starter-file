@@ -37,8 +37,8 @@ const MainLayout = () => {
           <div className={`bg-white z-10 p-4 border-b border-gray-300 h-16 w-full fixed top-0 right-0 left-0 ${isSidebarTextVisible ? 'md:pl-48 lg:pl-64' : 'pl-20'}`}>
             <Header setOpenSidebar={setOpenSidebar} openSidebar={openSidebar} setIsSidebarTextVisible={setIsSidebarTextVisible} />
           </div>
-          <main className="pt-20 pb-5 h-full overflow-hidden">
-            <div className='p-5 mx-5  bg-white h-full overflow-y-scroll'>
+          <main className="pt-20 pb-5 px-5 h-full overflow-hidden">
+            <div className='h-full overflow-y-scroll scrollbar-none'>
               <Outlet />
             </div>
           </main>

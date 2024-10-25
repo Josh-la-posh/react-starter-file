@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { faGear, faChartLine, faHandshake, faArrowRightFromBracket, faHeadphones } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import useTitle from '../services/hooks/useTitle';
 import { ArrowLeftRight, Combine, Handshake, Headset, LayoutDashboard, LogOut, MessageSquareX, RefreshCwOff, ScrollText, Settings, User, Warehouse } from 'lucide-react';
 import Logo from "../assets/logo.jpg"
@@ -63,7 +61,7 @@ const Sidebar = ({handleSidebar, isSidebarTextVisible}) => {
                         <div className={isSidebarTextVisible ? 'block' : 'hidden'}>Transaction</div>
                     </div>
                 </Link>
-                <Link to="/settings" onClick={() => handleSidebar(false)} className={`block py-4 ${appTitle === 'Settings' ? 'text-priColor' : ''}`}>
+                <Link to="/settings/profile" onClick={() => handleSidebar(false)} className={`block py-4 ${appTitle === 'Settings' ? 'text-priColor' : ''}`}>
                 <div className={`flex items-center ${isSidebarTextVisible ? '' : 'justify-center'} gap-2`}>
                         <Settings size={isSidebarTextVisible ? '18' : '22'} />
                         <div className={isSidebarTextVisible ? 'block' : 'hidden'}>Settings</div>

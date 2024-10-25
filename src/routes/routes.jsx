@@ -16,10 +16,15 @@ import MerchantPage from '../pages/Merchant/Merchant';
 import AllSettlement from '../pages/Settlement/AllSettlement';
 import InvoicesPage from '../pages/Invoices/Invoices';
 import TransactionPage from '../pages/Transaction/Transaction';
-import SettingsPage from '../pages/Settings/Settings';
 import HelpCenter from '../pages/HelpCenter/HelpCenter';
 import SettlementConfiguration from '../pages/Settlement/Configuration';
 import SettlementBankAccount from '../pages/Settlement/BankAccount';
+import SettingsLayout from '../layout/SettingsLayout';
+import ProfilePage from '../pages/Settings/Profile';
+import SecuritySettings from '../pages/Settings/SecuritySettingsPage';
+import NotificationSettings from '../pages/Settings/NotificationSettingsPage';
+import PrivacySettings from '../pages/Settings/PrivacySettings';
+import UserManagementTable from '../pages/Settings/UserManagement';
 
 const RoutesSystem = () => {
   return (
@@ -57,8 +62,16 @@ const RoutesSystem = () => {
           </Route>
           <Route path="invoices" element={<InvoicesPage />} />
           <Route path="transactions" element={<TransactionPage />} />
-          <Route path="settings" element={<SettingsPage />} />
           <Route path="help-center" element={<HelpCenter />} />
+          <Route path='/settings' element={<SettingsLayout/>}>
+            <Route path='/settings'>
+              <Route path="profile" element={<ProfilePage />} />
+              <Route path="security" element={<SecuritySettings />} />
+              <Route path="notification" element={<NotificationSettings />} />
+              <Route path="privacy" element={<PrivacySettings />} />
+              {/* <Route path="user" element={<UserManagementTable />} /> */}
+            </Route>
+          </Route>
 
 
           {/* Add other routes */}

@@ -4,6 +4,7 @@ import useAuth from '../../services/hooks/useAuth';
 import useAxiosPrivate from '../../services/hooks/useAxiosPrivate';
 import AggregatorService from '../../services/api/aggregatorApi';
 import { useDispatch } from 'react-redux';
+import MerchantSelector from '../../components/MerchantSelector';
 
 function Aggregator() {
   const { setAppTitle } = useTitle();
@@ -39,21 +40,7 @@ function Aggregator() {
   
   return (
     <div>
-      <div className="mt-8">
-        <label htmlFor="merchant" className="mr-2 text-sm">Merchant:</label>
-        <select
-          id="merchant"
-          value={merchant?.id || ''}
-          onChange={handleMerchantChange}
-          className="p-2 border focus:outline-none rounded-md"
-        >
-          {merchants.map((merchant) => (
-            <option value={merchant.id} key={merchant.id}>
-              {merchant.merchantName}
-            </option>
-          ))}
-        </select>
-      </div>
+      <MerchantSelector merchants={merchants} onMerchantChange={handleMerchantChange} />
     </div>
   )
 }

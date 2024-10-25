@@ -4,6 +4,7 @@ import useAuth from '../../services/hooks/useAuth';
 import useAxiosPrivate from '../../services/hooks/useAxiosPrivate';
 import DisputeService from '../../services/api/disputeApi';
 import { useDispatch } from 'react-redux';
+import MerchantSelector from '../../components/MerchantSelector';
 
 function DisputesPage() {
   const { setAppTitle } = useTitle();
@@ -25,38 +26,25 @@ function DisputesPage() {
   useEffect(() => {
     const loadData = async () => {
       if (merchantCode) {
-        await disputeService.fetchDisputes(merchantCode, pageNumber, pageSize, env, dispatch);
+        await disputeService.fetchDisputes(
+          merchantCode,
+          pageNumber,
+          pageSize,
+          env,
+          dispatch
+        );
       }
     };
     loadData();
   }, [merchantCode, pageNumber, pageSize, env, dispatch, disputeService]);
 
-  const handleMerchantChange = (e) => {
-    const selectedMerchantId = e.target.value;
-    const selectedMerchant = merchants.find((m) => m.id.toString() === selectedMerchantId);
-    if (selectedMerchant) {
-      setMerchant(selectedMerchant);
-      console.log(merchantCode);
-    }
-  };
+  const handleMerchantChange = (selectedMerchant) => {
+    setMerchant(selectedMerchant)
+    };
 
   return (
     <div>
-      <div className="mt-8">
-        <label htmlFor="merchant" className="mr-2 text-sm">Merchant:</label>
-        <select
-          id="merchant"
-          value={merchant?.id || ''}
-          onChange={handleMerchantChange}
-          className="p-2 border focus:outline-none rounded-md"
-        >
-          {merchants.map((merchant) => (
-            <option value={merchant.id} key={merchant.id}>
-              {merchant.merchantName}
-            </option>
-          ))}
-        </select>
-      </div>
+      <MerchantSelector merchants={merchants} onMerchantChange={handleMerchantChange} />
     </div>
   )
 }

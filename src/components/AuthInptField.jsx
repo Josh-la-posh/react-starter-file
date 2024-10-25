@@ -6,7 +6,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 function AuthInputField({ label, type, validName, valueName, id, onChange, setOnFocus, nameFocus, errNote, icon }) {
     return (
         <div className="mb-6">
-            <label className="block text-black text-[13px] mb-1 lg:mb-2" htmlFor={id}>
+            <label className="block text-sm font-medium text-gray-700" htmlFor={id}>
                 {label}
                 <span className={validName ? 'valid' : 'hide'}>
                     <FontAwesomeIcon icon={faCheck} />
@@ -15,8 +15,8 @@ function AuthInputField({ label, type, validName, valueName, id, onChange, setOn
                     <FontAwesomeIcon icon={faTimes} />
                 </span>
             </label>
-            <div className="relative w-full pl-9 pr-3 py-1 border border-gray rounded-lg">
-                <FontAwesomeIcon icon={icon} style={{color: 'gray', fontSize: '14px'}} className='absolute top-2.5 left-3' />
+            <div className="relative mt-1 w-full pl-9 pr-3 py-2 border border-gray-300 rounded-md">
+                <FontAwesomeIcon icon={icon} style={{color: 'gray', fontSize: '14px'}} className='absolute top-3 left-3' />
                 <input
                     type={type}
                     id={id}
@@ -24,7 +24,7 @@ function AuthInputField({ label, type, validName, valueName, id, onChange, setOn
                     // ref={emailRef}
                     value={valueName}
                     onChange={onChange}
-                    className="bg-transparent text-sm focus:outline-none w-full"
+                    className="bg-transparent block text-base text-gray-900 focus:outline-none w-full"
                     required
                     autoComplete='off'
                     aria-invalid={() => validName ? 'false' : 'true'}
