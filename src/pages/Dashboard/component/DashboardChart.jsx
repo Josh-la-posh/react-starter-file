@@ -1,58 +1,37 @@
-import ApexCharts from "apexcharts";
+import ReactApexChart from "react-apexcharts";
+import { processGraphData } from "../../../data/processedGraphData";
 
-function DashboardChart({lumpsum}) {
+function DashboardChart({graph, type}) {
+    const {
+        successfulGraphCount,
+        successfulGraphVolume,
+        dataDate
+    } = processGraphData(graph);
 
-    const lumpsumCount = lumpsum
-        .filter(item => item.transactionStatus === 'Successful')
-        .transactionCount;
-
-
-    const series = [{
-        name: "STOCK ABC",
-        data: lumpsumCount
+    const chartSeries = [{
+        name: "Transactions",
+        data: type === 'Count'
+            ? successfulGraphCount
+            : successfulGraphVolume
     }];
-    const options = {
+
+    const chartOptions = {
         chart: {
-        type: 'area',
-        height: 350,
-        zoom: {
-            enabled: false
-        }
+            type: 'area',
+            height: 350,
+            zoom: {enabled: false}
         },
-        dataLabels: {
-        enabled: false
-        },
-        stroke: {
-        curve: 'straight'
-        },
+        dataLabels: {enabled: false},
+        stroke: {curve: 'smooth'},
+        labels: dataDate,
+        xaxis: {type: 'datetime'},
+        yaxis: {opposite: false},
+        legend: {horizontalAlign: 'left'},
         
-        title: {
-        text: 'Fundamental Analysis of Stocks',
-        align: 'left'
-        },
-        subtitle: {
-        text: 'Price Movements',
-        align: 'left'
-        },
-        labels: series.monthDataSeries1.dates,
-        xaxis: {
-        type: 'datetime',
-        },
-        yaxis: {
-        opposite: true
-        },
-        legend: {
-        horizontalAlign: 'left'
-        }
     };
 
     return (
-    <div>
-        <div id="chart">
-        <ReactApexChart options={options} series={series} type="area" height={350} />
-        </div>
-        <div id="html-dist"></div>
-    </div>
+        <ReactApexChart options={chartOptions} series={chartSeries} type="area" height={350} />
     );
   }
 
