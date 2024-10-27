@@ -89,7 +89,7 @@ function Dashboard() {
           </div>
           <div className="bg-white  w-[250px] border-b border-b-gray">
             <p className="text-[16px] font-[800] mb-5 py-5 px-6 border-b border-b-gray">Transaction {transactionMode}</p>
-            <div className="">
+            <div className="mb-5">
               <DashboardPie graph={graph} />
             </div>
           </div>
