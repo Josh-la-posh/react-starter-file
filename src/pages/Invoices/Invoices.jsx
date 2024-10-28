@@ -31,13 +31,8 @@ function InvoicesPage() {
     loadData();
   }, [merchantCode, pageNumber, pageSize, dispatch, invoiceService]);
 
-  const handleMerchantChange = (e) => {
-    const selectedMerchantId = e.target.value;
-    const selectedMerchant = merchants.find((m) => m.id.toString() === selectedMerchantId);
-    if (selectedMerchant) {
-      setMerchant(selectedMerchant);
-      console.log(merchantCode);
-    }
+  const handleMerchantChange = (selectedMerchant) => {
+    setMerchant(selectedMerchant);
   };
 
   return (
