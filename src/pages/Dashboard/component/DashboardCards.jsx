@@ -6,14 +6,13 @@ import Card from '../../../components/Card';
 import { Smile } from 'lucide-react';
 
 function DashboardCards({ lumpsum }) {
-
     const totalRevenue = lumpsum && Array.isArray(lumpsum)
       ? lumpsum.filter(data => data.transactionStatus === 'Successful')
         .reduce((sum, data) => sum + data.transactionVolume, 0)
       : 0;
 
       const totalCounts = lumpsum && Array.isArray(lumpsum)
-      ? lumpsum.reduce((total, current) => total + current.transactionCount, 0)
+      ? lumpsum.reduce((sum, t) => sum + t.transactionCount, 0)
       : 0;
 
       const successfulTransaction = lumpsum && Array.isArray(lumpsum)

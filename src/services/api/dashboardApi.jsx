@@ -6,13 +6,14 @@ class DashboardService {
       this.auth = auth;
     }
   
-    async fetchLumpsum(merchantCode, interval, env, dispatch) {
+    async fetchLumpsum(merchantCode, env, interval, dispatch) {
         dispatch(lumpsumStart());
       try {
         const response = await this.axiosPrivate.get(
           `api/Dashboard/tnx/lumpsum/${merchantCode}?env=${env}&interval=${interval}`,
         );
         const data = response.data.responseData;
+        console.log('The new lumpsum: ', data);
         dispatch(lumpsumSuccess(data));
       } catch (err) {
         if (!err.response) {

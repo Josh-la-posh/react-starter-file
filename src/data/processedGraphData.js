@@ -16,12 +16,16 @@ export const processGraphData = (graph) => {
             const pendingCount = item.value
                 .filter(transaction => transaction.status === 'Pending')
                 .reduce((sum, t) => sum + t.transactionCount, 0);
+            
+            const totalCounts = item.value
+                .reduce((sum, t) => sum + t.transactionCount, 0);
 
             return {
                 successfulCount,
                 processingCount,
                 failedCount,
-                pendingCount
+                pendingCount,
+                totalCounts
             }
         })
         : [];
@@ -76,20 +80,24 @@ export const processGraphData = (graph) => {
     const successfulGraphCount = graphCount
         .map(count => count.successfulCount);
 
-    const successfulGraphVolume = graphCount
-        .map(count => count.successfulCount);
+    const successfulGraphVolume = graphVolume
+        .map(volume => volume.successfulVolume);
 
     const finalGraphCount = Object.values(graphCountSum);
 
     const finalGraphVolume = Object.values(graphVolumeSum);
 
     const dataDate = graph.map(item => item.key);
+    
+    const totalTransactionsCount = graphCount
+        .reduce((sum, t) => sum + t.totalCounts, 0);
 
     return {
         successfulGraphCount,
         successfulGraphVolume,
         finalGraphCount,
         finalGraphVolume,
-        dataDate
+        dataDate,
+        totalTransactionsCount
     };
 }

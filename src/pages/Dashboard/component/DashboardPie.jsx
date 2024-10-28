@@ -4,7 +4,8 @@ import { processGraphData } from "../../../data/processedGraphData";
 function DashboardPie({graph, type}) {
     const {
         finalGraphCount,
-        finalGraphVolume        
+        finalGraphVolume,
+        totalTransactionsCount
     } = processGraphData(graph);
 
     const pieSeries = 'Count' ? finalGraphCount : finalGraphVolume;
@@ -18,12 +19,41 @@ function DashboardPie({graph, type}) {
         },
         legend: {
             position: 'bottom',
-            show: true,
             horizontalAlign: 'center',
             fontSize: '13px',
             width: 220           
         },
         labels: ['Success', 'Processing', 'Failed', 'Pending'],
+        plotOptions: {
+            pie: {
+                donut: {
+                  size: '70%',
+                  labels: {
+                    show: true,
+                    name: {
+                      show: true,
+                      fontSize: '22px',
+                      color: '#000',
+                      offsetY: -10,
+                    },
+                    value: {
+                      show: true,
+                      fontSize: '16px',
+                      color: '#000',
+                      offsetY: 10,
+                      formatter: () => `${totalTransactionsCount} Total`,
+                    },
+                    total: {
+                      show: true,
+                      label: totalTransactionsCount ?? 0,
+                      color: '#000',
+                      fontSize: '16px',
+                      formatter: () => totalTransactionsCount,
+                    },
+                  },
+                },
+              },
+        },
         responsive: [
             {
                 breakpoint: 300,
