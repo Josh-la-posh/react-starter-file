@@ -1,4 +1,4 @@
-import { transactionFailure, transactionStart } from "../../redux/slices/transactionSlice";
+import { transactionFailure, transactionStart, transactionSuccess } from "../../redux/slices/transactionSlice";
 
 class TransactionService {
     constructor(axiosPrivate, auth) {
@@ -85,8 +85,9 @@ class TransactionService {
         const response = await this.axiosPrivate.get(
           `api/Transaction/paginated/${pageNumber}/${pageSize}?merchantCode=${merchantCode}&env=${env}`
         );
-        console.log('This is the transaction data ', response.data);
-        return response.data;
+        const data = response.data.data;
+        console.log('Transaction data: ', response.data);
+        dispatch(transactionSuccess(data));
       } catch (err) {
         if (!err.response) {
             dispatch(transactionFailure('No response from server'));

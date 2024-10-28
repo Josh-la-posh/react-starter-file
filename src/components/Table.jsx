@@ -28,7 +28,7 @@ const DataTable = ({ columns, data, rowsPerPageOptions, onIndexChange, actionBut
     return (
         <div className="">
             <div className="overflow-x-auto" id={elementId}>
-                <table className="min-w-full bg-white rounded-lg border border-gray-200">
+                <table className="min-w-full rounded-lg divide-y-8">
                     <thead className="bg-[#F0F2F5]">
                         <tr>
                             {columns.map((column, colIndex) => (
@@ -42,7 +42,7 @@ const DataTable = ({ columns, data, rowsPerPageOptions, onIndexChange, actionBut
                             {displayActionButton && <th className="px-6 py-3 text-left text-[9px] md:text-[11px] font-medium text-gray-500 uppercase tracking-wider"></th>}
                         </tr>
                     </thead>
-                    <tbody className="bg-white divide-y divide-gray-200">
+                    <tbody className="divide-y-8">
                         {paginatedData.length === 0 ? (
                             <tr>
                                 <td colSpan={columns.length + (displayActionButton ? 1 : 0)} className="px-6 py-4 whitespace-nowrap text-center text-gray-500">
@@ -53,7 +53,7 @@ const DataTable = ({ columns, data, rowsPerPageOptions, onIndexChange, actionBut
                             paginatedData.map((row, rowIndex) => (
                                 <tr key={rowIndex} className="hover:bg-gray-50">
                                     {columns.map((column, colIndex) => (
-                                        <td key={colIndex} className="px-6 py-4 whitespace-nowrap text-xs lg:text-[12px] text-gray-500">
+                                        <td key={colIndex} className="px-6 whitespace-nowrap text-xs lg:text-[12px] text-gray-500 bg-white">
                                             {column.render
                                                 ? column.render(row[column.accessor], row)
                                                 : typeof row[column.accessor] === 'string' && row[column.accessor].length > 17
