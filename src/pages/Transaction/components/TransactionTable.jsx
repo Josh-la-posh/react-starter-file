@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import ExportPopup from '../../../utils/exportPopup';
 import DataTable from '../../../components/Table';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faMagnifyingGlass, faArrowDownWideShort } from '@fortawesome/free-solid-svg-icons';
 import { dateFormatter, timeFormatter } from '../../../utils/dateFormatter';
 import CustomModal from '../../../components/Modal';
 import useAxiosPrivate from '../../../services/hooks/useAxiosPrivate';
@@ -62,54 +60,53 @@ const TransactionTable = ({filteredData, handleOpenModal, isExportPopupOpen, set
                 </span>
             ),
         },
-        {
-            header: 'Action',
-            accessor: 'transactionStatus',
-            render: (id, row) => (
-                row.transactionStatus !== 'Successful' && 
-                <button
-                    onClick={() => handleDispute(row)}
-                    className='bg-red-700 text-white text-xs px-2 py-1 rounded-[4px]'
-                >
-                    Dispute
-                </button>
-            ),
-        },
+        // {
+        //     header: 'Action',
+        //     accessor: 'transactionStatus',
+        //     render: (id, row) => (
+        //         row.transactionStatus !== 'Successful' && 
+        //         <button
+        //             onClick={() => handleDispute(row)}
+        //             className='bg-red-700 text-white text-xs px-2 py-1 rounded-[4px]'
+        //         >
+        //             Dispute
+        //         </button>
+        //     ),
+        // },
     ];
 
-    const submitDispute = async (e) => {
-        e.preventDefault();
-        setLoading(true);
+    // const submitDispute = async (e) => {
+    //     e.preventDefault();
+    //     setLoading(true);
 
 
-        try {
-            const response = await axiosPrivate.post('',
-                JSON.stringify({paymentReference, description})
-            );
-            console.log(response);
-            const data = response.status;
-            if (data === 201) {
-                toast('Sent Successfully');
-                setPaymentReference('');
-                setIsDispute(false);
-            }
-        } catch (err) {
-            if (!err.status) {
-             setErrMsg('No Server Response');   
-            } else {
-                setErrMsg('Unable to send request at this time.')
-            }
-        } finally {
-            setLoading(false);
-        }
+    //     try {
+    //         const response = await axiosPrivate.post('',
+    //             JSON.stringify({paymentReference, description})
+    //         );
+    //         console.log(response);
+    //         const data = response.status;
+    //         if (data === 201) {
+    //             toast('Sent Successfully');
+    //             setPaymentReference('');
+    //             setIsDispute(false);
+    //         }
+    //     } catch (err) {
+    //         if (!err.status) {
+    //          setErrMsg('No Server Response');   
+    //         } else {
+    //             setErrMsg('Unable to send request at this time.')
+    //         }
+    //     } finally {
+    //         setLoading(false);
+    //     }
 
-    }
+    // }
 
-    const handleDispute = (id) => {
-        setPaymentReference(id.paymentReference);
-        setIsDispute(true);
-        // console.log('Dispute ID:', id);
-    };
+    // const handleDispute = (id) => {
+    //     setPaymentReference(id.paymentReference);
+    //     setIsDispute(true);
+    // };
 
     const getDataToParent = (id) => {
         handleOpenModal(filteredData[id]);

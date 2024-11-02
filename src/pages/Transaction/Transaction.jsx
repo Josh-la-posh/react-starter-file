@@ -7,6 +7,7 @@ import TransactionService from '../../services/api/transactionApi';
 import MerchantSelector from '../../components/MerchantSelector';
 import TransactionTable from './components/TransactionTable';
 import TransactionFilter from './components/TransactionFilter';
+import TransactionForm from './components/TransactionForm';
 
 function TransactionPage() {
   const { auth } = useAuth();
@@ -64,6 +65,13 @@ function TransactionPage() {
       <MerchantSelector merchants={merchants} onMerchantChange={handleMerchantChange} />
 
       <TransactionFilter filteredData={filteredData} setFilteredData={setFilteredData} transactions={transactions}/>
+
+      {isModalOpen && 
+        (<TransactionForm
+            handleCloseModal={handleCloseModal}
+            data={selectedTransactionData}
+        />
+      )}
 
       <TransactionTable isExportPopupOpen={isExportPopupOpen} setIsExportPopupOpen={setIsExportPopupOpen} filteredData={filteredData} handleOpenModal={handleOpenModal} />
     </div>

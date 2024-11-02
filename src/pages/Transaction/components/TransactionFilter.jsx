@@ -22,10 +22,10 @@ function TransactionFilter({filteredData, setFilteredData, transactions}) {
                 ? row.transactionStatus === filterStatus 
                 : true;
 
-            return matchFilter && matchSearch;
+            return matchSearch && matchFilter;
         });
         setFilteredData(filteredTransactions);
-    }, [filterStatus, transactions, filteredData]);
+    }, [filterStatus, transactions, search]);
 
     const handleFilteredDataChange = (val) => {
         setFilterStatus(val);
@@ -41,7 +41,7 @@ function TransactionFilter({filteredData, setFilteredData, transactions}) {
     
   return (
     <div className='mb-4'>
-        <div className="flex mb-8 justify-end">
+        <div className="flex justify-end">
             <button onClick={() => setSearchMode('All')}
                 className={`${searchMode === 'All' ? 'text-white bg-priColor font-[600]' : 'text-gray-400 border border-gray bg-white'} text-xs w-20 py-2 px-2 rounded-sm`}>
                     All
@@ -59,7 +59,7 @@ function TransactionFilter({filteredData, setFilteredData, transactions}) {
                 </button>
             }
             { searchMode === 'Filter' &&
-                <div className="flex items-center justify-center gap-2">
+                <div className ="flex items-center justify-center gap-2">
                     <select id="searchFilterType" value={searchFilterType} onChange={handleSearchMode} className="p-2 border focus:outline-none rounded-md bg-white text-gray-400 selection:bg-transparent text-xs">
                         <option value="Name">Name</option>
                         <option value="Email">Email</option>
@@ -73,10 +73,17 @@ function TransactionFilter({filteredData, setFilteredData, transactions}) {
                             className="p-2 pl-8 border border-gray-300 rounded-lg focus:outline-none text-xs"
                             placeholder="Search transactions..."
                         />
-                        <Search size='14' className='absolute left-2 top-2/4 transform -translate-y-2/4 text-gray-400' />
+                        <Search
+                            size='14'
+                            className='absolute left-2 top-2/4 transform -translate-y-2/4 text-gray-400' />
                     </div>
                 </div>
             }
+        </div>
+        <div className="h-32 bg-[#F0F2F5] my-4 p-4">
+            <div className="bg-white h-full w-full flex justify-center items-center">
+                redfjckvljk ykjhj;ok ytglim;l bnlkjbvgc uygbiuhoho fdtrfchvjb
+            </div>
         </div>
         <div className="flex py-2">
             <button onClick={() => handleFilteredDataChange('All')}

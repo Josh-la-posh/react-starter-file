@@ -6,7 +6,7 @@ function MerchantSelector({ merchants, onMerchantChange }) {
   useEffect(() => {
     // Inform the parent component about the initially selected merchant
     onMerchantChange(selectedMerchant);
-  }, [selectedMerchant, onMerchantChange]);
+  }, [selectedMerchant]);
 
   const handleMerchantChange = (e) => {
     const selectedMerchantId = e.target.value;
