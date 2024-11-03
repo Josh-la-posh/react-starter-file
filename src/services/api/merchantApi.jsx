@@ -1,4 +1,4 @@
-import { merchantAccountFailure, merchantAccountStart, merchantAddressFailure, merchantAddressStart, merchantContactFailure, merchantContactStart, merchantDocumentFailure, merchantDocumentStart, merchantDomainFailure, merchantDomainStart, merchantFailure, merchantProfileFailure, merchantProfileStart, merchantStart } from "../../redux/slices/merchantSlice";
+import { merchantAccountFailure, merchantAccountStart, merchantAccountSuccess, merchantAddressFailure, merchantAddressStart, merchantContactFailure, merchantContactStart, merchantDocumentFailure, merchantDocumentStart, merchantDomainFailure, merchantDomainStart, merchantFailure, merchantProfileFailure, merchantProfileStart, merchantStart, merchantSuccess } from "../../redux/slices/merchantSlice";
 
 class MerchantService {
     constructor(axiosPrivate, auth) {
@@ -126,7 +126,9 @@ class MerchantService {
         const response = await this.axiosPrivate.get(
           `api/Merchant/credentials/${merchantCode}`
         );
-        console.log('merchant credential fetched successfully ', response.data);
+        const data = response.data;
+        // dispatch(merchantSuccess(data));
+        console.log('merchant data: ', data);
         return response.data;
       } catch (err) {
         if (!err.response) {
@@ -311,10 +313,11 @@ class MerchantService {
         dispatch(merchantAccountStart());
       try {
         const response = await this.axiosPrivate.get(
-          `api/MerchantAccount/${merchantCode}?pageNumber=${pageNumber}&pageSize=${pageSize}`
+          `api/MerchantAccount/by-merchant-paginated/${merchantCode}?pageNumber=${pageNumber}&pageSize=${pageSize}`
         );
-        console.log('merchant Account fetched successfully ', response.data);
-        return response.data;
+        const data = response.data.data;
+        console.log(data);
+        dispatch(merchantAccountSuccess(data));
       } catch (err) {
         if (!err.response) {
             dispatch(merchantAccountFailure('No response from server'));

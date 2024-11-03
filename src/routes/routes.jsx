@@ -25,6 +25,7 @@ import SecuritySettings from '../pages/Settings/SecuritySettingsPage';
 import NotificationSettings from '../pages/Settings/NotificationSettingsPage';
 import PrivacySettings from '../pages/Settings/PrivacySettings';
 import UserManagementTable from '../pages/Settings/UserManagement';
+import AddMerchantPage from '../pages/Merchant/AddMerchant';
 
 const RoutesSystem = () => {
   return (
@@ -54,7 +55,10 @@ const RoutesSystem = () => {
             <Route path="document" element={<AggregatorDocument />} />
           </Route>
           
-          <Route path="merchants" element={<MerchantPage />} />
+          <Route path="/merchants">
+            <Route path='' element={<MerchantPage />} />
+            <Route path='addNew' element={<AddMerchantPage />} />
+          </Route>
           <Route path="/settlement" >
             <Route path='all' element={<AllSettlement />} />
             <Route path='bank' element={<SettlementBankAccount />} />

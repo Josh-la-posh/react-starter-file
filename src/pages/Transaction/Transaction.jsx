@@ -15,7 +15,6 @@ function TransactionPage() {
   const axiosPrivate = useAxiosPrivate();
   const dispatch = useDispatch();
   const { transactions } = useSelector((state) => state.transaction);
-  const [search, setSearch] = useState('');
   const [filteredData, setFilteredData] = useState(transactions);
   const merchants = auth?.data?.merchants || [];
   const [merchant, setMerchant] = useState(merchants[0] || {});
