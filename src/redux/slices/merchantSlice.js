@@ -3,25 +3,25 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   merchantLoading: false,
   merchantError: null,
-  merhcant: [],
+  merchant: [],
   merchantDocumentLoading: false,
   merchantDocumentError: null,
-  merhcantDocument: [],
+  merchantDocument: [],
   merchantAccountLoading: false,
   merchantAccountError: null,
-  merhcantAccount: [],
+  merchantAccount: [],
   merchantAddressLoading: false,
   merchantAddressError: null,
-  merhcantAddress: [],
+  merchantAddress: [],
   merchantContactLoading: false,
   merchantContactError: null,
-  merhcantContact: [],
+  merchantContact: [],
   merchantDomainLoading: false,
   merchantDomainError: null,
-  merhcantDomain: [],
+  merchantDomain: [],
   merchantProfileLoading: false,
   merchantProfileError: null,
-  merhcantProfile: []
+  merchantProfile: []
 };
 
 const merchantSlice = createSlice({
@@ -34,7 +34,7 @@ const merchantSlice = createSlice({
     },
     merchantSuccess: (state, action) => {
       state.merchantLoading = false;
-      state.merhcant = action.payload;
+      state.merchant = action.payload;
     },
     merchantFailure: (state, action) => {
       state.merchantLoading = false;
@@ -46,7 +46,7 @@ const merchantSlice = createSlice({
     },
     merchantDocumentSuccess: (state, action) => {
       state.merchantDocumentLoading = false;
-      state.merhcantDocument = action.payload;
+      state.merchantDocument = action.payload;
     },
     merchantDocumentFailure: (state, action) => {
       state.merchantDocumentLoading = false;
@@ -58,7 +58,7 @@ const merchantSlice = createSlice({
     },
     merchantAccountSuccess: (state, action) => {
       state.merchantAccountLoading = false;
-      state.merhcantAccount = action.payload;
+      state.merchantAccount = action.payload;
     },
     merchantAccountFailure: (state, action) => {
       state.merchantAccountLoading = false;
@@ -70,7 +70,7 @@ const merchantSlice = createSlice({
     },
     merchantAddressSuccess: (state, action) => {
       state.merchantAddressLoading = false;
-      state.merhcantAddress = action.payload;
+      state.merchantAddress = action.payload;
     },
     merchantAddressFailure: (state, action) => {
       state.merchantAddressLoading = false;
@@ -82,7 +82,7 @@ const merchantSlice = createSlice({
     },
     merchantContactSuccess: (state, action) => {
       state.merchantContactLoading = false;
-      state.merhcantContact = action.payload;
+      state.merchantContact = action.payload;
     },
     merchantContactFailure: (state, action) => {
       state.merchantContactLoading = false;
@@ -94,7 +94,7 @@ const merchantSlice = createSlice({
     },
     merchantDomainSuccess: (state, action) => {
       state.merchantDomainLoading = false;
-      state.merhcantDomain = action.payload;
+      state.merchantDomain = action.payload;
     },
     merchantDomainFailure: (state, action) => {
       state.merchantDomainLoading = false;
@@ -106,7 +106,7 @@ const merchantSlice = createSlice({
     },
     merchantProfileSuccess: (state, action) => {
       state.merchantProfileLoading = false;
-      state.merhcantProfile = action.payload;
+      state.merchantProfile = action.payload;
     },
     merchantProfileFailure: (state, action) => {
       state.merchantProfileLoading = false;

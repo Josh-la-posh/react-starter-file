@@ -9,10 +9,10 @@ const initialState = {
   aggregatorMerchantError: null,
   aggregatorBankError: null,
   aggregatorDocumentError: null,
-  aggregator: {},
+  aggregator: [],
   aggregatorMerchants: [],
-  aggregatorBank: {},
-  aggregatorDocument: {}
+  aggregatorBank: [],
+  aggregatorDocument: []
 };
 
 const aggregatorSlice = createSlice({

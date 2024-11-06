@@ -5,6 +5,8 @@ import { dateFormatter, timeFormatter } from '../../../utils/dateFormatter';
 import CustomModal from '../../../components/Modal';
 import useAxiosPrivate from '../../../services/hooks/useAxiosPrivate';
 import { toast } from 'react-toastify';
+import { render } from '@testing-library/react';
+import { Link } from 'react-router-dom';
 
 const MerchantTable = ({filteredData, handleOpenModal, isExportPopupOpen, setIsExportPopupOpen}) => {
     const axiosPrivate = useAxiosPrivate();
@@ -21,35 +23,69 @@ const MerchantTable = ({filteredData, handleOpenModal, isExportPopupOpen, setIsE
             ),
         },
         {
-            header: 'Name',
-            accessor: 'accountName',
+            header: 'Merchant',
+            accessor: 'merchantName',
         },
-        // {
-        //     header: 'Transaction ID',
-        //     accessor: 'paymentReference',
-        // },
-        // {
-        //     header: 'Name',
-        //     accessor: 'customerName',
-        //     render: (value) => (
-        //         <span className='font-medimu text-gray-900'>
-        //             {value}
-        //         </span>
-        //     ),
-        // },
-        // {
-        //     header: 'Amount',
-        //     accessor: 'amount',
-        // },
-        // {
-        //     header: 'Status',
-        //     accessor: 'transactionStatus',
-        //     render: (value) => (
-        //         <span className={`${value === 'Successful' ? 'text-green-600' : value === 'Failed' ? 'text-red-600' : 'text-orange-400'}`}>
-        //             {value}
-        //         </span>
-        //     ),
-        // },
+        {
+            header: 'Profile',
+            accessor: 'merchantCode',
+            render: (row) => (
+                <Link
+                    to={`/merchants/profile/${row}`}
+                    className='text-priColor'
+                >
+                    Profile
+                </Link>
+            )
+        },
+        {
+            header: 'Domain',
+            accessor: '',
+            render: (id) => (
+                <Link
+                    to='/'
+                    className='text-priColor'
+                >
+                    Domain
+                </Link>
+            )
+        },
+        {
+            header: 'Document',
+            accessor: '',
+            render: (id) => (
+                <Link
+                    to='/'
+                    className='text-priColor'
+                >
+                    Document
+                </Link>
+            )
+        },
+        {
+            header: 'Credentials',
+            accessor: '',
+            render: (id) => (
+                <Link
+                    to='/'
+                    className='text-priColor'
+                >
+                    Credentials
+                </Link>
+            )
+        },
+        {
+            header: 'Business Type',
+            accessor: 'businessType',
+        },
+        {
+            header: 'Charge Type',
+            accessor: 'chargeType',
+        },
+        {
+            header: 'Status',
+            accessor: 'status',
+        },
         // {
         //     header: 'Action',
         //     accessor: 'transactionStatus',

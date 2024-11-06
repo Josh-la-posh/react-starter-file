@@ -1,9 +1,8 @@
-import { merchantAccountFailure, merchantAccountStart, merchantAccountSuccess, merchantAddressFailure, merchantAddressStart, merchantContactFailure, merchantContactStart, merchantDocumentFailure, merchantDocumentStart, merchantDomainFailure, merchantDomainStart, merchantFailure, merchantProfileFailure, merchantProfileStart, merchantStart, merchantSuccess } from "../../redux/slices/merchantSlice";
+import { merchantAccountFailure, merchantAccountStart, merchantAccountSuccess, merchantAddressFailure, merchantAddressStart, merchantContactFailure, merchantContactStart, merchantDocumentFailure, merchantDocumentStart, merchantDomainFailure, merchantDomainStart, merchantFailure, merchantProfileFailure, merchantProfileStart, merchantProfileSuccess, merchantStart, merchantSuccess } from "../../redux/slices/merchantSlice";
 
 class MerchantService {
-    constructor(axiosPrivate, auth) {
+    constructor(axiosPrivate) {
       this.axiosPrivate = axiosPrivate;
-      this.auth = auth;
     }
 
     // merchant document
@@ -562,8 +561,8 @@ class MerchantService {
         const response = await this.axiosPrivate.get(
           `api/MerchantProfile/${merchantCode}`
         );
-        console.log('merchant profile fetched successfully ', response.data);
-        return response.data;
+        const data = response.data.responseData;
+        dispatch(merchantProfileSuccess(data));
       } catch (err) {
         if (!err.response) {
             dispatch(merchantProfileFailure('No response from server'));

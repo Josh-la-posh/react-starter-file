@@ -8,7 +8,6 @@ import AuthInputField from '../../components/AuthInptField';
 import useAxiosPrivate from '../../services/hooks/useAxiosPrivate';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
-import { faEnvelope, faHouse, faPhone, faUser } from '@fortawesome/free-solid-svg-icons';
 
 const BUSINESS_REGEX = /^[a-zA-Z0-9\s\-']{3,50}$/;
 const NAME_REGEX = /^[a-zA-Z]{2,24}$/;
@@ -285,9 +284,40 @@ function AddMerchantPage() {
                     )}
                 />
                 <AuthInputField
-                    label="Email"
+                    label="City"
+                    type='text'
+                    validName={validBusinessName}
+                    valueName={formData.businessName}
+                    id="businessName"
+                    onChange={handleChange}
+                    setOnFocus={setBusinessNameFocus}
+                    nameFocus={businessNameFocus}
+                    errNote={(
+                        <>
+                            City is required.
+                        </>
+                    )}
+                />
+                <AuthInputField
+                    label="Postal Code"
+                    type='text'
+                    validName={validBusinessName}
+                    valueName={formData.businessName}
+                    id="businessName"
+                    onChange={handleChange}
+                    setOnFocus={setBusinessNameFocus}
+                    nameFocus={businessNameFocus}
+                    errNote={(
+                        <>
+                            Postal code is required.
+                            <br />
+                            Address cannot start or end with a space.
+                        </>
+                    )}
+                />
+                <AuthInputField
+                    label="Business Email"
                     type='email'
-                    icon={faEnvelope}
                     validName={validContactEmail}
                     valueName={formData.contactEmail}
                     id="contactEmail"
@@ -300,11 +330,54 @@ function AddMerchantPage() {
                         </>
                     )}
                 />
-                
+                <AuthInputField
+                    label="Contact Email"
+                    type='email'
+                    validName={validContactEmail}
+                    valueName={formData.contactEmail}
+                    id="contactEmail"
+                    onChange={handleChange}
+                    setOnFocus={setContactEmailFocus}
+                    nameFocus={contactEmailFocus}
+                    errNote={(
+                        <>
+                            Enter a valid email address
+                        </>
+                    )}
+                />
+                <AuthInputField
+                    label="Dispute Email"
+                    type='email'
+                    validName={validContactEmail}
+                    valueName={formData.disputeEmail}
+                    id="contactEmail"
+                    onChange={handleChange}
+                    setOnFocus={setContactEmailFocus}
+                    nameFocus={contactEmailFocus}
+                    errNote={(
+                        <>
+                            Enter a valid email address
+                        </>
+                    )}
+                />
+                <AuthInputField
+                    label="Support Email"
+                    type='email'
+                    validName={validContactEmail}
+                    valueName={formData.supportEmail}
+                    id="contactEmail"
+                    onChange={handleChange}
+                    setOnFocus={setContactEmailFocus}
+                    nameFocus={contactEmailFocus}
+                    errNote={(
+                        <>
+                            Enter a valid email address
+                        </>
+                    )}
+                />
                 <AuthInputField
                     label="Phone Number"
                     type='tel'
-                    icon={faPhone}
                     validName={validContactPhoneNumber}
                     valueName={formData.contactPhoneNumber}
                     id="contactPhoneNumber"
@@ -317,11 +390,9 @@ function AddMerchantPage() {
                         </>
                     )}
                 />
-
                 <AuthInputField
-                    label="First Name"
+                    label="Website"
                     type='text'
-                    icon={faUser}
                     validName={validContactFirstName}
                     valueName={formData.contactFirstName}
                     id="contactFirstName"
@@ -330,21 +401,16 @@ function AddMerchantPage() {
                     nameFocus={contactFirstNameFocus}
                     errNote={(
                         <>
-                            First name is required.
+                            Website is required.
                             <br />
-                            First name must be between 2 and 24 characters.
-                            <br />
-                            First name can only contain letters and .
-                            <br />
-                            First name cannot contain spaces.
+                            website cannot contain spaces.
                         </>
                     )}
                 />
 
                 <AuthInputField
-                    label="Last Name"
+                    label="Return Url"
                     type='text'
-                    icon={faUser}
                     validName={validContactLastName}
                     valueName={formData.contactLastName}
                     id="contactLastName"
@@ -353,13 +419,43 @@ function AddMerchantPage() {
                     nameFocus={contactLastNameFocus}
                     errNote={(
                         <>
-                            Last name is required.
+                            Return url is required.
                             <br />
-                            Last name must be between 2 and 24 characters.
+                            Return url cannot contain spaces.
+                        </>
+                    )}
+                />
+                <AuthInputField
+                    label="Notification Url"
+                    type='text'
+                    validName={validContactLastName}
+                    valueName={formData.contactLastName}
+                    id="contactLastName"
+                    onChange={handleChange}
+                    setOnFocus={setContactLastNameFocus}
+                    nameFocus={contactLastNameFocus}
+                    errNote={(
+                        <>
+                            Notification url is required.
                             <br />
-                            Last name can only contain letters and .
+                            Notification url cannot contain spaces.
+                        </>
+                    )}
+                />
+                <AuthInputField
+                    label="Business Description"
+                    type='text'
+                    validName={validContactLastName}
+                    valueName={formData.contactLastName}
+                    id="contactLastName"
+                    onChange={handleChange}
+                    setOnFocus={setContactLastNameFocus}
+                    nameFocus={contactLastNameFocus}
+                    errNote={(
+                        <>
+                            Business description is required.
                             <br />
-                            Last name cannot contain spaces.
+                            Business description cannot contain spaces.
                         </>
                     )}
                 />

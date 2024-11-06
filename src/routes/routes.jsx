@@ -26,6 +26,7 @@ import NotificationSettings from '../pages/Settings/NotificationSettingsPage';
 import PrivacySettings from '../pages/Settings/PrivacySettings';
 import UserManagementTable from '../pages/Settings/UserManagement';
 import AddMerchantPage from '../pages/Merchant/AddMerchant';
+import MerchantProfile from '../pages/Merchant/MerchantProfile';
 
 const RoutesSystem = () => {
   return (
@@ -58,6 +59,7 @@ const RoutesSystem = () => {
           <Route path="/merchants">
             <Route path='' element={<MerchantPage />} />
             <Route path='addNew' element={<AddMerchantPage />} />
+            <Route path='profile/:merchantCode' element={<MerchantProfile />} />
           </Route>
           <Route path="/settlement" >
             <Route path='all' element={<AllSettlement />} />
