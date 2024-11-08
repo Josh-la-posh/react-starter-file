@@ -1,0 +1,78 @@
+import React, { useEffect } from 'react';
+import useAxiosPrivate from '../../services/hooks/useAxiosPrivate';
+import { useDispatch } from 'react-redux';
+import MerchantService from '../../services/api/merchantApi';
+import { useParams } from 'react-router-dom';
+
+function MerchantProfileUpdate() {
+    const { merchantCode } = useParams();
+    const axiosPrivate = useAxiosPrivate();
+    const merchantService = new MerchantService(axiosPrivate);
+    const dispatch = useDispatch();
+
+  useEffect(() => {
+    const loadData = async () => {
+      if (merchantCode) {
+        await merchantService.fetchMerchantProfile(merchantCode, dispatch);
+      }
+    };
+    loadData();
+  }, [merchantCode, dispatch]);
+
+  return (
+    <div className="p-5">
+        <div className="mb-8 flex justify-between items-center">
+            <p className='text-lg'>Update Merchant Profile</p>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 text-base font-[700] text-gray-600">
+            {/* <div className="flex">
+                <p className='flex-1'>Merchant Name:</p>
+                <span className='font-[400] ml-4 flex-1'>{merchantProfile.merchantName}</span>
+            </div> */}
+            <div className="flex">
+                <p className='flex-1'>Merchant Code:</p>
+                <span className='font-[400] ml-4 flex-1'>{merchantProfile.merchantCode}</span>
+
+            </div>
+            <div className="flex">
+                <p className='flex-1'>Address:</p>
+                <span className='font-[400] ml-4 flex-1'>{merchantProfile.paymentReference}</span>
+            </div>
+            <div className="flex">
+                <p className='flex-1'>City:</p>
+                <span className='font-[400] ml-4 flex-1'>{merchantProfile.city ?? 'Not Set'}</span>
+            </div>
+            <div className="flex">
+                <p className='flex-1'>State:</p>
+                <span className='font-[400] ml-4 flex-1'>{merchantProfile.state ?? 'Not Set'}</span>
+            </div>
+            <div className="flex">
+                <p className='flex-1'>Postal Code:</p>
+                <span className='font-[400] ml-4 flex-1'>{merchantProfile.postalCode}</span>
+            </div>
+            <div className="flex">
+                <p className='flex-1'>Country:</p>
+                <span className='font-[400] ml-4 flex-1'>{merchantProfile.countryCode}</span>
+            </div>
+            <div className="flex">
+                <p className='flex-1'>Status:</p>
+                <span className='font-[400] ml-4 flex-1'>{merchantProfile.status}</span>
+            </div>
+            <div className="flex">
+                <p className='flex-1'>White Listed:</p>
+                <span className='font-[400] ml-4 flex-1'>{merchantProfile.isWhitelisted}</span>
+            </div>
+            <div className="flex">
+                <p className='flex-1'>Business type:</p>
+                <span className='font-[400] ml-4 flex-1'>{merchantProfile.businessType}</span>
+            </div>
+            <div className="flex">
+                <p className='flex-1'>Registration Type:</p>
+                <span className='font-[400] ml-4 flex-1'>{merchantProfile.registrationType}</span>
+            </div>
+        </div>
+    </div>
+  )
+}
+
+export default MerchantProfileUpdate;
