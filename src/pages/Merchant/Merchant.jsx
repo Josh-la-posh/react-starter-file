@@ -28,7 +28,6 @@ function MerchantPage() {
   return (
     <div>
       <MerchantFilter />
-
       <MerchantTable filteredData={aggregatorMerchants} />
     </div>
   )

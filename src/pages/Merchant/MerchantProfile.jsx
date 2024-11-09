@@ -3,7 +3,7 @@ import useTitle from '../../services/hooks/useTitle';
 import useAxiosPrivate from '../../services/hooks/useAxiosPrivate';
 import { useDispatch, useSelector } from 'react-redux';
 import MerchantService from '../../services/api/merchantApi';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 function MerchantProfile() {
     const { merchantCode } = useParams();
@@ -31,9 +31,9 @@ function MerchantProfile() {
     <div className="p-5">
         <div className="mb-8 flex justify-between items-center">
             <p className='text-lg'>Merchant ({merchantProfile.merchantName})</p>
-            <button className='bg-priColor text-xs text-white py-2 px-5 rounded-md'>
+            <Link to='/merchants/profile/update' className='bg-priColor text-xs text-white py-2 px-5 rounded-md'>
                 Update profile
-            </button>
+            </Link>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 text-base font-[700] text-gray-600">
             {/* <div className="flex">
