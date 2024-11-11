@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
+import useAuth from '../services/hooks/useAuth';
 
 function MerchantSelector({ merchants, onMerchantChange }) {
+  const {auth, setAuth} = useAuth();
   const [selectedMerchant, setSelectedMerchant] = useState(merchants[0] || {});
 
   useEffect(() => {
-    // Inform the parent component about the initially selected merchant
     onMerchantChange(selectedMerchant);
+  console.log('This is what I\'m sawing: ', auth);
   }, [selectedMerchant, onMerchantChange]);
 
   const handleMerchantChange = (e) => {
@@ -15,9 +17,15 @@ function MerchantSelector({ merchants, onMerchantChange }) {
     onMerchantChange(selected);
   };
 
+  useEffect(() => {
+    setAuth(prev => {
+      return { ...prev, merchantCode: selectedMerchant.merchantCode }
+  });
+  console.log('This is what I said: ', auth);
+  }, [selectedMerchant]);
+
   return (
-    <div className="mt-8">
-      <label htmlFor="merchant" className="mr-2 text-sm">Merchant:</label>
+    <div className="">
       <select
         id="merchant"
         value={selectedMerchant.id || ''}

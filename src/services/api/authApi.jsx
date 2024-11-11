@@ -25,7 +25,7 @@ class AuthService {
         const data = response.data.responseData;
         console.log('user data: ', data);
   
-        setAuth({data});
+        setAuth({data, merchantCode: ''});
         dispatch(loginSuccess(data));
         toast.success("Login successful");
   
