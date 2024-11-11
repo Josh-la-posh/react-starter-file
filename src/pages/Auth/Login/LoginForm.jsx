@@ -78,7 +78,7 @@ const LoginForm = () => {
           </div>
         </div>
         <div className="flex items-center justify-between mb-6">
-          <label className="block text-black text-[11px] sm:text-xs mb-1 lg:mb-2 flex items-center">
+          <label className="text-black text-[11px] sm:text-xs mb-1 lg:mb-2 flex items-center">
             <input
               type="checkbox"
               checked={rememberMe}
