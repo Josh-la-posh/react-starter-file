@@ -2,8 +2,9 @@ import React, { useEffect, useRef, useState } from 'react';
 import useAxiosPrivate from '../../services/hooks/useAxiosPrivate';
 import { useDispatch } from 'react-redux';
 import MerchantService from '../../services/api/merchantApi';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import AuthInputField from '../../components/AuthInptField';
+import axios from '../../services/api/axios';
 
 const BUSINESS_REGEX = /^[a-zA-Z0-9\s\-']{3,50}$/;
 
@@ -60,6 +61,90 @@ function MerchantProfileUpdate() {
         industryCategoryId: 1,
     });
 
+    const getCountry = async () => {
+        // e.preventDefault();
+        try {
+            const response = await axios.get('api/country');
+            if (response.data.message === 'Successful') {
+                console.log('The new response is ', response.data);
+                setCountryList(response.data.responseData);
+                setShowCountryListReload(false);
+            } else {
+                setShowCountryListReload(true);
+            }
+        } catch (err) {
+            console.log('Error printing country ', err.response);
+            setShowCountryListReload(true);
+        }
+    }
+
+    const getState = async () => {
+        // e.preventDefault();
+        try {
+            const response = await axios.get('api/state');
+            if (response.data.message === 'Successful') {
+                console.log('The new response is ', response.data);
+                setStateList(response.data.responseData);
+                setShowStateListReload(false);
+            } else {
+                setShowStateListReload(true);
+            }
+        } catch (err) {
+            console.log('Error printing State ', err.response);
+            setShowStateListReload(true);
+        }
+    }
+
+    const getCity = async () => {
+        // e.preventDefault();
+        try {
+            const response = await axios.get('api/city');
+            if (response.data.message === 'Successful') {
+                console.log('The new response is ', response.data);
+                setCityList(response.data.responseData);
+                setShowCityListReload(false);
+            } else {
+                setShowCityListReload(true);
+            }
+        } catch (err) {
+            console.log('Error printing city ', err.response);
+            setShowCityListReload(true);
+        }
+    }
+
+    const getIndustry = async () => {
+        // e.preventDefault();
+        try {
+            const response = await axios.get('api/industry');
+            if (response.data.message === 'Successful') {
+                console.log('The new response is ', response.data);
+                setIndustryList(response.data.responseData);
+                setShowIndustryListReload(false);
+            } else {
+                setShowIndustryListReload(true);
+            }
+        } catch (err) {
+            console.log('Error printing industry ', err.response);
+            setShowIndustryListReload(true);
+        }
+    }
+
+    const getIndustryCategories = async (id) => {
+        try {
+            const response = await axios.get(`api/industry/categories/${id}`);
+            if (response.data.message === 'Successful') {
+                console.log('The new industry categories are ', response.data);
+                setIndustryCategoryList(response.data.responseData);
+                setShowIndustryCategoryListReload(false);
+            } else {
+                setShowIndustryCategoryListReload(true);
+            }
+        } catch (err) {
+            console.log('Error printing industry categories ', err.response);
+            setShowIndustryCategoryListReload(true);
+        }
+    }
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prevState) => ({
@@ -78,6 +163,8 @@ function MerchantProfileUpdate() {
 
     const handleWhitelistedChange = () => {}
 
+    const handleCategoryChange = () => {}
+
     useEffect(() => {
         const result = BUSINESS_REGEX.test(formData.businessName);
         setValidMerchantName(result);
@@ -93,11 +180,11 @@ function MerchantProfileUpdate() {
   }, [merchantCode, dispatch]);
 
   return (
-    <div className="p-5">
-        <div className="mb-8 flex justify-between items-center">
-            <p className='text-lg'>Update Merchant Profile</p>
+    <div className="py-10 px-5 bg-white h-full">
+        <div className="mb-12 flex justify-between items-center">
+            <p className='text-base font-[600]'>Update Merchant Profile</p>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 text-base font-[700] text-gray-600">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5 text-sm font-medium text-gray-700">
             <AuthInputField
                 label="Merchant Name"
                 type='text'
@@ -156,7 +243,7 @@ function MerchantProfileUpdate() {
                 )}
             />
             <div className="mb-6 w-full">
-                <label className="text-black text-[11px] lg:text-[13px] mb-1 lg:mb-2 flex items-center" htmlFor="country">
+                <label className="mb-1 lg:mb-2 flex items-center" htmlFor="country">
                     Country
                 </label>
                 <select
@@ -178,7 +265,7 @@ function MerchantProfileUpdate() {
                 </div>}
             </div>
             <div className="mb-6 w-full">
-                <label className="text-black text-[11px] lg:text-[13px] mb-1 lg:mb-2 flex items-center" htmlFor="state">
+                <label className="mb-1 lg:mb-2 flex items-center" htmlFor="state">
                     State
                 </label>
                 <select
@@ -200,7 +287,7 @@ function MerchantProfileUpdate() {
                 </div>}
             </div>
             <div className="mb-6 w-full">
-                <label className="text-black text-[11px] lg:text-[13px] mb-1 lg:mb-2 flex items-center" htmlFor="city">
+                <label className="mb-1 lg:mb-2 flex items-center" htmlFor="city">
                     City
                 </label>
                 <select
@@ -237,7 +324,7 @@ function MerchantProfileUpdate() {
                 )}
             />
             <div className="mb-6 w-full">
-                <label className="text-black text-[11px] lg:text-[13px] mb-1 lg:mb-2 flex items-center" htmlFor="status">
+                <label className="mb-1 lg:mb-2 flex items-center" htmlFor="status">
                     Status
                 </label>
                 <select
@@ -256,7 +343,7 @@ function MerchantProfileUpdate() {
                 </select>
             </div>
             <div className="mb-6 w-full">
-                <label className="text-black text-[11px] lg:text-[13px] mb-1 lg:mb-2 flex items-center" htmlFor="whitelisted">
+                <label className="mb-1 lg:mb-2 flex items-center" htmlFor="whitelisted">
                     White Listed
                 </label>
                 <select
@@ -305,7 +392,7 @@ function MerchantProfileUpdate() {
                 )}
             />
             <div className="mb-6 w-full">
-                <label className="text-black text-[11px] lg:text-[13px] mb-1 lg:mb-2 flex items-center" htmlFor="industry">
+                <label className="mb-1 lg:mb-2 flex items-center" htmlFor="industry">
                     Industry
                 </label>
                 <select
@@ -326,7 +413,7 @@ function MerchantProfileUpdate() {
             {
                 industryId !== null &&
                 <div className="mb-6 w-full">
-                    <label className="text-black text-[11px] lg:text-[13px] mb-1 lg:mb-2 flex items-center" htmlFor="industryCategoryId">
+                    <label className="mb-1 lg:mb-2 flex items-center" htmlFor="industryCategoryId">
                         Industry Category
                     </label>
                     <select
