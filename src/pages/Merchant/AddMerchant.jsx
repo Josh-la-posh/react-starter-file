@@ -240,7 +240,10 @@ function AddMerchantPage() {
 
 
   return (
-    <div>
+    <div className='bg-white p-5'>
+    <div className="mb-12">
+        <p className='text-base font-[600]'>Add Merchant</p>
+    </div>
         <form onnSubmit={handleSubmit}>
             <div className='grid lg:grid-cols-3 gap-4'>
                 <AuthInputField

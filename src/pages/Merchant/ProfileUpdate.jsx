@@ -251,7 +251,7 @@ function MerchantProfileUpdate() {
                     name="country"
                     value={formData.country}
                     onChange={(e) => handleCountryChange(e)}
-                    className="w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
+                    className="bg-transparent block text-sm text-gray-900 focus:outline-none w-full"
                     required
                 >
                     {countryList.map((country) => (
@@ -273,7 +273,7 @@ function MerchantProfileUpdate() {
                     name="state"
                     value={formData.state}
                     onChange={(e) => handleStateChange(e)}
-                    className="w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
+                    className="bg-transparent block text-sm text-gray-900 focus:outline-none w-full"
                     required
                 >
                     {stateList.map((state) => (
@@ -295,7 +295,7 @@ function MerchantProfileUpdate() {
                     name="city"
                     value={formData.city}
                     onChange={(e) => handleCityChange(e)}
-                    className="w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
+                    className="bg-transparent block text-sm text-gray-900 focus:outline-none w-full"
                     required
                 >
                     {cityList.map((city) => (
@@ -332,7 +332,7 @@ function MerchantProfileUpdate() {
                     name="status"
                     value={formData.status}
                     onChange={(e) => handleStatusChange(e)}
-                    className="w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
+                    className="bg-transparent block text-sm text-gray-900 focus:outline-none w-full"
                     required
                 >
                     {/* {countryList.map((country) => (
@@ -351,7 +351,7 @@ function MerchantProfileUpdate() {
                     name="whitelisted"
                     value={formData.isWhitelisted}
                     onChange={(e) => handleWhitelistedChange(e)}
-                    className="w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
+                    className="bg-transparent block text-sm text-gray-900 focus:outline-none w-full"
                     required
                 >
                     {/* {countryList.map((country) => (
@@ -400,7 +400,7 @@ function MerchantProfileUpdate() {
                     name="industry"
                     value={formData.industry}
                     onChange={(e) => handleCategoryChange(e)}
-                    className="w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
+                    className="bg-transparent block text-sm text-gray-900 focus:outline-none w-full"
                     required
                 >
                     {industryList.map((industry) => (
@@ -421,7 +421,7 @@ function MerchantProfileUpdate() {
                         name="industryCategoryId"
                         value={formData.industryCategoryId}
                         onChange={handleChange}
-                        className="w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
+                        className="bg-transparent block text-sm text-gray-900 focus:outline-none w-full"
                         required
                     >
                         {industryCategoryList.map((industry) => (

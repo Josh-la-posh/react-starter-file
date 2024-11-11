@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import ExportPopup from '../../../utils/exportPopup';
-import DataTable from '../../../components/Table';
-import { dateFormatter, timeFormatter } from '../../../utils/dateFormatter';
-import CustomModal from '../../../components/Modal';
-import useAxiosPrivate from '../../../services/hooks/useAxiosPrivate';
+import ExportPopup from '../../../../utils/exportPopup';
+import DataTable from '../../../../components/Table';
+import { dateFormatter, timeFormatter } from '../../../../utils/dateFormatter';
+import CustomModal from '../../../../components/Modal';
+import useAxiosPrivate from '../../../../services/hooks/useAxiosPrivate';
 import { toast } from 'react-toastify';
 import { render } from '@testing-library/react';
 import { Link } from 'react-router-dom';
@@ -43,7 +43,7 @@ const MerchantTable = ({filteredData, handleOpenModal, isExportPopupOpen, setIsE
             accessor: '',
             render: (id) => (
                 <Link
-                    to='/'
+                    to='/merchants/domain'
                     className='text-priColor'
                 >
                     Domain
@@ -55,7 +55,7 @@ const MerchantTable = ({filteredData, handleOpenModal, isExportPopupOpen, setIsE
             accessor: '',
             render: (id) => (
                 <Link
-                    to='/'
+                    to='/merchants/document'
                     className='text-priColor'
                 >
                     Document
@@ -67,7 +67,7 @@ const MerchantTable = ({filteredData, handleOpenModal, isExportPopupOpen, setIsE
             accessor: '',
             render: (id) => (
                 <Link
-                    to='/'
+                    to='/merchants/credential'
                     className='text-priColor'
                 >
                     Credentials

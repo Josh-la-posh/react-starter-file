@@ -3,8 +3,8 @@ import useTitle from '../../services/hooks/useTitle';
 import useAxiosPrivate from '../../services/hooks/useAxiosPrivate';
 import { useDispatch, useSelector } from 'react-redux';
 import AggregatorService from '../../services/api/aggregatorApi';
-import MerchantTable from './components/MerchantTable';
-import MerchantFilter from './components/MerchantFilter';
+import MerchantTable from './components/merchant/MerchantTable';
+import MerchantFilter from './components/merchant/MerchantFilter';
 
 function MerchantPage() {
   const { setAppTitle } = useTitle();
@@ -26,7 +26,7 @@ function MerchantPage() {
   }, [dispatch]);
 
   return (
-    <div>
+    <div className='space-y-4'>
       <MerchantFilter />
       <MerchantTable filteredData={aggregatorMerchants} />
     </div>

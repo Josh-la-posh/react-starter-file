@@ -7,7 +7,7 @@ class MerchantService {
 
     // merchant document
   
-    async fetchMercahntDocumentTypes(dispatch) {
+    async fetchMerchantDocumentTypes(dispatch) {
         dispatch(merchantDocumentStart());
       try {
         const response = await this.axiosPrivate.get(
@@ -63,7 +63,7 @@ class MerchantService {
       }
     }
   
-    async fetchMercahntDocument(merchantCode, dispatch) {
+    async fetchMerchantDocument(merchantCode, dispatch) {
         dispatch(merchantDocumentStart());
       try {
         const response = await this.axiosPrivate.get(
@@ -81,7 +81,7 @@ class MerchantService {
       }
     }
   
-    async downloadMercahntDocument(Id, dispatch) {
+    async downloadMerchantDocument(Id, dispatch) {
         dispatch(merchantDocumentStart());
       try {
         const response = await this.axiosPrivate.get(
