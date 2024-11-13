@@ -40,10 +40,10 @@ const MerchantTable = ({filteredData, handleOpenModal, isExportPopupOpen, setIsE
         },
         {
             header: 'Domain',
-            accessor: '',
+            accessor: 'merchantCode',
             render: (id) => (
                 <Link
-                    to='/merchants/domain'
+                    to={`/merchants/domain/${id}`}
                     className='text-priColor'
                 >
                     Domain
@@ -52,10 +52,10 @@ const MerchantTable = ({filteredData, handleOpenModal, isExportPopupOpen, setIsE
         },
         {
             header: 'Document',
-            accessor: '',
+            accessor: 'merchantCode',
             render: (id) => (
                 <Link
-                    to='/merchants/document'
+                    to={`/merchants/document/${id}`}
                     className='text-priColor'
                 >
                     Document

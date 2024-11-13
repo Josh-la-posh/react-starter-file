@@ -7,7 +7,6 @@ function MerchantSelector({ merchants, onMerchantChange }) {
 
   useEffect(() => {
     onMerchantChange(selectedMerchant);
-  console.log('This is what I\'m sawing: ', auth);
   }, [selectedMerchant, onMerchantChange]);
 
   const handleMerchantChange = (e) => {
@@ -21,7 +20,6 @@ function MerchantSelector({ merchants, onMerchantChange }) {
     setAuth(prev => {
       return { ...prev, merchantCode: selectedMerchant.merchantCode }
   });
-  console.log('This is what I said: ', auth);
   }, [selectedMerchant]);
 
   return (

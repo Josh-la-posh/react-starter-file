@@ -28,18 +28,24 @@ const MerchantDomainTable = ({filteredData, handleOpenModal, isExportPopupOpen, 
         {
             header: 'Approaved',
             accessor: 'approaved',
-            // render: (row) => (
-            //     <Link
-            //         to={`/merchants/profile/${row}`}
-            //         className='text-priColor'
-            //     >
-            //         Profile
-            //     </Link>
-            // )
+            render: (value) => (
+                <span 
+                    className={value === true ? 'text-priColor' : 'text-red-600'}
+                >
+                    {value === true ? 'True' : 'False'}
+                </span>
+            )
         },
         {
             header: 'Status',
             accessor: 'isActive',
+            render: (value) => (
+                <span 
+                    className={value === true ? 'text-priColor' : 'text-red-600'}
+                >
+                    {value === true ? 'True' : 'False'}
+                </span>
+            )
         },
     ];
 
@@ -60,7 +66,7 @@ const MerchantDomainTable = ({filteredData, handleOpenModal, isExportPopupOpen, 
                 rowsPerPageOptions={[5, 10, 20, 50]}
                 onIndexChange={handleSelectedRow}
                 selectedIndex={selectedIndex}
-                displayActionButton={true}
+                displayActionButton={false}
                 elementId='MerchantDomainTable'
                 actionButton={
                     <>

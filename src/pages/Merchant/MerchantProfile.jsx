@@ -12,7 +12,6 @@ function MerchantProfile() {
   const merchantService = new MerchantService(axiosPrivate);
   const dispatch = useDispatch();
   const { merchantProfile } = useSelector((state) => state.merchant);
-  console.log('merchant profile and its like: ', merchantProfile);
 
   useEffect(() => {
       setAppTitle('Merchant Profile');

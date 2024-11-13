@@ -5,8 +5,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import MerchantService from '../../services/api/merchantApi';
 import MerchantDomainFilter from './components/merchantDomain/merchantDomainFilter';
 import MerchantDomainTable from './components/merchantDomain/MerchantDomainTable';
+import { useParams } from 'react-router-dom';
 
 function MerchantDomain() {
+  const { merchantCode } = useParams();
   const { setAppTitle } = useTitle();
   const axiosPrivate = useAxiosPrivate();
   const merchantService = new MerchantService(axiosPrivate);
@@ -18,17 +20,17 @@ function MerchantDomain() {
       setAppTitle('Merchant Domain');
   }, []);
 
-  // useEffect(() => {
-  //   const loadData = async () => {
-  //       await merchantService.fetchMerchantDomain(merchantCode, dispatch);
-  //   };
-  //   loadData();
-  // }, [merchantCode, dispatch]);
+  useEffect(() => {
+    const loadData = async () => {
+        await merchantService.fetchMerchantDomain(merchantCode, dispatch);
+    };
+    loadData();
+  }, [merchantCode, dispatch]);
 
   return (
     <div>
       <MerchantDomainFilter />
-      <MerchantDomainTable filteredData={filteredData} />
+      <MerchantDomainTable filteredData={merchantDomain} />
     </div>
   )
 }

@@ -64,8 +64,8 @@ const RoutesSystem = () => {
             <Route path='addNew' element={<AddMerchantPage />} />
             <Route path='profile/:merchantCode' element={<MerchantProfile />} />
             <Route path='profile/update' element={<MerchantProfileUpdate />} />
-            <Route path='domain' element={<MerchantDomain />} />
-            <Route path='document' element={<MerchantDocument />} />
+            <Route path='domain/:merchantCode' element={<MerchantDomain />} />
+            <Route path='document/:merchantCode' element={<MerchantDocument />} />
             <Route path='credential' element={<MerchantCredential />} />
           </Route>
           <Route path="/settlement" >
