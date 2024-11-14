@@ -1,4 +1,4 @@
-import { merchantAccountFailure, merchantAccountStart, merchantAccountSuccess, merchantAddressFailure, merchantAddressStart, merchantContactFailure, merchantContactStart, merchantDocumentFailure, merchantDocumentStart, merchantDomainFailure, merchantDomainStart, merchantDomainSuccess, merchantFailure, merchantProfileFailure, merchantProfileStart, merchantProfileSuccess, merchantStart, merchantSuccess } from "../../redux/slices/merchantSlice";
+import { merchantAccountFailure, merchantAccountStart, merchantAccountSuccess, merchantAddressFailure, merchantAddressStart, merchantContactFailure, merchantContactStart, merchantDocumentFailure, merchantDocumentStart, merchantDocumentSuccess, merchantDomainFailure, merchantDomainStart, merchantDomainSuccess, merchantFailure, merchantProfileFailure, merchantProfileStart, merchantProfileSuccess, merchantStart, merchantSuccess } from "../../redux/slices/merchantSlice";
 
 class MerchantService {
     constructor(axiosPrivate) {
@@ -67,10 +67,11 @@ class MerchantService {
         dispatch(merchantDocumentStart());
       try {
         const response = await this.axiosPrivate.get(
-          `api/MerchantDocuments/${merchantCode}`,
+          `api/MechantDocuments/${merchantCode}`,
         );
-        console.log('merchant document fetched successfully ', response.data);
-        return response.data;
+        const data = response.data.responseData;
+        console.log('New data: ', data)
+        dispatch(merchantDocumentSuccess(data));
       } catch (err) {
         if (!err.response) {
             dispatch(merchantDocumentFailure('No response from server'));
@@ -99,14 +100,15 @@ class MerchantService {
       }
     }
   
-    async deleteMerchant(merchantCode, documentId, dispatch) {
+    async deleteMerchantDocument(documentId, merchantCode, dispatch) {
         dispatch(merchantDocumentStart());
       try {
         const response = await this.axiosPrivate.delete(
-          `api/MerchantDocuments/${documentId}`
+          `api/MechantDocuments/${documentId}`
         );
-        console.log('Merchant document deleted sucessfully: ', response.data);
-        return response.data;
+        const data = response.data.responseData;
+        console.log('Merchant document deleted sucessfully: ', data);
+        await this.fetchMerchantDocument(merchantCode, dispatch);
       } catch (err) {
         if (!err.response) {
             dispatch(merchantDocumentFailure('No response from server'));
@@ -487,6 +489,7 @@ class MerchantService {
           `api/MerchantDomain/all/${merchantCode}`
         );
         const data = response.data.responseData;
+        console.log('Hte domain: ', data);
         dispatch(merchantDomainSuccess(data));
       } catch (err) {
         if (!err.response) {

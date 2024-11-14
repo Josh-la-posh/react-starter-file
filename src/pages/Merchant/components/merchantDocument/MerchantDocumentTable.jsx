@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
-import ExportPopup from '../../../../utils/exportPopup';
 import DataTable from '../../../../components/Table';
-import { dateFormatter, timeFormatter } from '../../../../utils/dateFormatter';
-import CustomModal from '../../../../components/Modal';
+import { dateFormatter } from '../../../../utils/dateFormatter';
 import useAxiosPrivate from '../../../../services/hooks/useAxiosPrivate';
-import { render } from '@testing-library/react';
-import { Link } from 'react-router-dom';
+import MerchantService from '../../../../services/api/merchantApi';
+import { useDispatch } from 'react-redux';
 
-const MerchantDocumentTable = ({filteredData, handleOpenModal, isExportPopupOpen, setIsExportPopupOpen}) => {
+const MerchantDocumentTable = ({filteredData, merchantCode}) => {
     const axiosPrivate = useAxiosPrivate();
     const [selectedIndex, setSelectedIndex] = useState(null);
+    const merchantService = new MerchantService(axiosPrivate);
+    const dispatch = useDispatch();
     
     const columns = [
         {
@@ -22,25 +22,32 @@ const MerchantDocumentTable = ({filteredData, handleOpenModal, isExportPopupOpen
             ),
         },
         {
-            header: 'Approaved',
-            accessor: 'approaved',
-            // render: (row) => (
-            //     <Link
-            //         to={`/merchants/profile/${row}`}
-            //         className='text-priColor'
-            //     >
-            //         Profile
-            //     </Link>
-            // )
-        },
-        {
             header: 'Status',
             accessor: 'isActive',
+            render: (value) => (
+                <span 
+                    className={value === true ? 'text-priColor' : 'text-red-600'}
+                >
+                    {value === true ? 'True' : 'False'}
+                </span>
+            )
+        },
+        {
+            header: 'Action',
+            accessor: 'documentId',
+            render: (row) => (
+                <button
+                    onClick={() => handleDelete(row)}
+                    className='bg-red-700 text-white text-xs px-2 py-1 rounded-[4px]'
+                >
+                    Delete
+                </button>
+            ),
         },
     ];
 
-    const getDataToParent = (id) => {
-        handleOpenModal(filteredData[id]);
+    const handleDelete = async (id) => {
+        await merchantService.deleteMerchantDocument(id, merchantCode, dispatch);
     }
     
     const handleSelectedRow = (index) => {
@@ -56,34 +63,8 @@ const MerchantDocumentTable = ({filteredData, handleOpenModal, isExportPopupOpen
                 rowsPerPageOptions={[5, 10, 20, 50]}
                 onIndexChange={handleSelectedRow}
                 selectedIndex={selectedIndex}
-                displayActionButton={true}
-                elementId='MerchantDomainTable'
-                actionButton={
-                    <>
-                    {
-                        <div className="absolute right-0 mt-2 w-32 bg-white border border-gray-200 shadow-lg z-10 rounded-[8px] text-xs">
-                            <button onClick={() => getDataToParent(selectedIndex)} className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">
-                                View Details
-                            </button>
-                            {/* <button className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">
-                                Edit
-                            </button>
-                            <button className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">
-                                Change Status
-                            </button>
-                            <button className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">
-                                Delete
-                            </button> */}
-                        </div>
-                    }
-                    </>
-                }
-            />
-            <ExportPopup
-                isOpen={isExportPopupOpen}
-                onClose={() => setIsExportPopupOpen(false)}
-                data={filteredData}
-                elementId='MerchantDomainTable'
+                displayActionButton={false}
+                elementId='MerchantDocumentTable'
             />
         </div>
     );

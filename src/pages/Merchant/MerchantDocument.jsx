@@ -3,11 +3,11 @@ import useTitle from '../../services/hooks/useTitle';
 import useAxiosPrivate from '../../services/hooks/useAxiosPrivate';
 import { useDispatch, useSelector } from 'react-redux';
 import MerchantService from '../../services/api/merchantApi';
-import MerchantFilter from './components/merchant/MerchantFilter';
+import { useParams } from 'react-router-dom';
 import MerchantDocumentTable from './components/merchantDocument/MerchantDocumentTable';
-import MerchantDomainFilter from './components/merchantDomain/merchantDomainFilter';
 
 function MerchantDocument() {
+  const { merchantCode } = useParams();
   const { setAppTitle } = useTitle();
   const axiosPrivate = useAxiosPrivate();
   const merchantService = new MerchantService(axiosPrivate);
@@ -19,17 +19,16 @@ function MerchantDocument() {
       setAppTitle('Merchant Document');
   }, []);
 
-  // useEffect(() => {
-  //   const loadData = async () => {
-  //       await merchantService.fetchMerchantDocument(merchantCode, dispatch);
-  //   };
-  //   loadData();
-  // }, [merchantCode, dispatch]);
+  useEffect(() => {
+    const loadData = async () => {
+        await merchantService.fetchMerchantDocument(merchantCode, dispatch);
+    };
+    loadData();
+  }, [merchantCode, dispatch]);
 
   return (
     <div>
-      <MerchantDomainFilter />
-      <MerchantDocumentTable filteredData={filteredData} />
+      <MerchantDocumentTable filteredData={merchantDocument} merchantCode={merchantCode} />
     </div>
   )
 }

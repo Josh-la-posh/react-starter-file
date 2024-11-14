@@ -53,7 +53,7 @@ const DataTable = ({ columns, data, rowsPerPageOptions, onIndexChange, actionBut
                             paginatedData.map((row, rowIndex) => (
                                 <tr key={rowIndex} className="hover:bg-gray-50">
                                     {columns.map((column, colIndex) => (
-                                        <td key={colIndex} className="px-6 whitespace-nowrap text-xs lg:text-[12px] text-gray-500 bg-white">
+                                        <td key={colIndex} className="px-6 py-4 whitespace-nowrap text-xs lg:text-[12px] text-gray-500 bg-white">
                                             {column.render
                                                 ? column.render(row[column.accessor], row)
                                                 : typeof row[column.accessor] === 'string' && row[column.accessor].length > 17
