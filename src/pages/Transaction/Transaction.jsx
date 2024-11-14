@@ -4,7 +4,6 @@ import useAuth from '../../services/hooks/useAuth';
 import useAxiosPrivate from '../../services/hooks/useAxiosPrivate';
 import { useDispatch, useSelector } from 'react-redux';
 import TransactionService from '../../services/api/transactionApi';
-import MerchantSelector from '../../components/MerchantSelector';
 import TransactionTable from './components/TransactionTable';
 import TransactionFilter from './components/TransactionFilter';
 import TransactionForm from './components/TransactionForm';
@@ -16,9 +15,7 @@ function TransactionPage() {
   const dispatch = useDispatch();
   const { transactions } = useSelector((state) => state.transaction);
   const [filteredData, setFilteredData] = useState(transactions);
-  const merchants = auth?.data?.merchants || [];
-  const [merchant, setMerchant] = useState(merchants[0] || {});
-  const merchantCode = merchant.merchantCode;
+  const merchantCode = auth?.merchantCode;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedTransactionData, setSelectedTransactionData] = useState({});
   const [isExportPopupOpen, setIsExportPopupOpen] = useState(false);
@@ -40,10 +37,6 @@ function TransactionPage() {
     loadData();
   }, [merchantCode, env, pageNumber, pageSize, dispatch]);
 
-  const handleMerchantChange = (selectedMerchant) => {
-    setMerchant(selectedMerchant);
-  };
-
   const handleOpenModal = (val) => {
     setSelectedTransactionData(val);
     setIsModalOpen(true);
@@ -61,8 +54,6 @@ function TransactionPage() {
 
   return (
     <div>
-      <MerchantSelector merchants={merchants} onMerchantChange={handleMerchantChange} />
-
       <TransactionFilter filteredData={filteredData} setFilteredData={setFilteredData} transactions={transactions}/>
 
       {isModalOpen && 

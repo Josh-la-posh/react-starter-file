@@ -1,25 +1,25 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import useTitle from '../../services/hooks/useTitle';
 import useAuth from '../../services/hooks/useAuth';
 import useAxiosPrivate from '../../services/hooks/useAxiosPrivate';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import SettlementService from '../../services/api/settlementApi';
-import MerchantSelector from '../../components/MerchantSelector';
+import SettlementTable from './components/settlementTable';
+import SettlementFilter from './components/AllSettlementFilter';
 
 function AllSettlementPage() {
   const { setAppTitle } = useTitle();
   const axiosPrivate = useAxiosPrivate();
   const dispatch = useDispatch();
+  const { settlement } = useSelector(state => state.settlement);
   const { auth } = useAuth();
-  const merchants = auth?.data?.merchants || [];
-  const [merchant, setMerchant] = useState(merchants[0] || {});
-  const merchantCode = merchant.merchantCode;
+  const merchantCode = auth?.merchantCode;
   const settlementservice = new SettlementService(axiosPrivate, auth);
   const pageNumber = 1;
   const pageSize = 40;
 
   useEffect(() => {
-      setAppTitle('Settlement');
+      setAppTitle('Settlement History');
   }, []);
 
   useEffect(() => {
@@ -29,15 +29,12 @@ function AllSettlementPage() {
       }
     };
     loadData();
-  }, [merchantCode, pageNumber, pageSize, dispatch, settlementservice]);
-
-  const handleMerchantChange = (selectedMerchant) => {
-    setMerchant(selectedMerchant);
-  };
+  }, [merchantCode, pageNumber, pageSize, dispatch]);
 
   return (
-    <div>
-      <MerchantSelector merchants={merchants} onMerchantChange={handleMerchantChange} />
+    <div className='space-y-4'>
+      <SettlementFilter />
+      <SettlementTable filteredData={settlement}/>
     </div>
   )
 }

@@ -1,4 +1,4 @@
-import { invoiceFailure, invoiceStart } from "../../redux/slices/invoiceSlice";
+import { invoiceFailure, invoiceStart, invoiceSuccess } from "../../redux/slices/invoiceSlice";
 
 class InvoiceService {
     constructor(axiosPrivate, auth) {
@@ -31,8 +31,9 @@ class InvoiceService {
         const response = await this.axiosPrivate.get(
           `api/Invoice?merchantCode=${merchantCode}&pageNumber=${pageNumber}&pageSize=${pageSize}`
         );
-        console.log('This is the invoice data ', response.data);
-        return response.data;
+        const data = response.data.responseData.data;
+        console.log('invoice data, ', data);
+        dispatch(invoiceSuccess(data));
       } catch (err) {
         if (!err.response) {
             dispatch(invoiceFailure('No response from server'));

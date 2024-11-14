@@ -1,4 +1,4 @@
-import { disputeFailure, disputeStart } from "../../redux/slices/disputeSlice";
+import { disputeFailure, disputeStart, disputeSuccess } from "../../redux/slices/disputeSlice";
 
 class DisputeService {
     constructor(axiosPrivate, auth) {
@@ -12,8 +12,9 @@ class DisputeService {
         const response = await this.axiosPrivate.get(
           `api/Disputes/${merchantCode}/?pageNumber=${pageNumber}&pageSize=${pageSize}&env=${env}`,
         );
-        console.log('This is the dispute data ', response.data);
-        return response.data;
+        const data = response.data.data;
+        console.log('dispute data: ', data);
+        dispatch(disputeSuccess(data));
       } catch (err) {
         if (!err.response) {
             dispatch(disputeFailure('No response from server'));

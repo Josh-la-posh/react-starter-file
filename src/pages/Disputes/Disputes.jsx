@@ -1,21 +1,20 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import useTitle from '../../services/hooks/useTitle';
 import useAuth from '../../services/hooks/useAuth';
 import useAxiosPrivate from '../../services/hooks/useAxiosPrivate';
 import DisputeService from '../../services/api/disputeApi';
-import { useDispatch } from 'react-redux';
-import MerchantSelector from '../../components/MerchantSelector';
+import { useDispatch, useSelector } from 'react-redux';
+import DisputeTable from './components/DisputeTable';
 
 function DisputesPage() {
   const { setAppTitle } = useTitle();
   const axiosPrivate = useAxiosPrivate();
   const dispatch = useDispatch();
+  const { disputes } = useSelector((state) => state.dispute);
   const { auth } = useAuth();
-  const merchants = auth?.data?.merchants || [];
-  const [merchant, setMerchant] = useState(merchants[0] || {});
-  const merchantCode = merchant.merchantCode;
+  const merchantCode = auth?.merchantCode;
   const disputeService = new DisputeService(axiosPrivate, auth);
-  const env = merchant.status;
+  const env = auth?.data?.merchants[0].status;
   const pageNumber = 1;
   const pageSize = 40;
 
@@ -36,15 +35,11 @@ function DisputesPage() {
       }
     };
     loadData();
-  }, [merchantCode, pageNumber, pageSize, env, dispatch, disputeService]);
-
-  const handleMerchantChange = (selectedMerchant) => {
-    setMerchant(selectedMerchant)
-    };
+  }, [merchantCode, pageNumber, pageSize, env, dispatch]);
 
   return (
     <div>
-      <MerchantSelector merchants={merchants} onMerchantChange={handleMerchantChange} />
+      <DisputeTable filteredData={disputes}/>
     </div>
   )
 }

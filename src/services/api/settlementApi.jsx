@@ -1,4 +1,4 @@
-import { settlementConfigurationDetailFailure, settlementConfigurationDetailStart, settlementConfigurationFailure, settlementConfigurationStart, settlementFailure, settlementStart } from "../../redux/slices/settlementSlice";
+import { settlementConfigurationDetailFailure, settlementConfigurationDetailStart, settlementConfigurationFailure, settlementConfigurationStart, settlementFailure, settlementStart, settlementSuccess } from "../../redux/slices/settlementSlice";
 
 class SettlementService {
     constructor(axiosPrivate, auth) {
@@ -9,13 +9,14 @@ class SettlementService {
     // settlement
   
     async fetchSettlement(merchantCode, pageNumber, pageSize, dispatch) {
+      console.log('Secg to it: ', merchantCode);
         dispatch(settlementStart());
       try {
         const response = await this.axiosPrivate.get(
           `api/Settlement/${merchantCode}?pageSize=${pageSize}&pageNumber=${pageNumber}`,
         );
-        console.log('This is the settlement data ', response.data);
-        return response.data;
+        const data = response.data.data;
+        dispatch(settlementSuccess(data));
       } catch (err) {
         if (!err.response) {
             dispatch(settlementFailure('No response from server'));
