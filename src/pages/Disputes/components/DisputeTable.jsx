@@ -40,6 +40,11 @@ const DisputeTable = ({filteredData, handleOpenModal, isExportPopupOpen, setIsEx
         {
             header: 'Status',
             accessor: 'transactionStatus',
+            render: (value) => (
+                <span className={`${value === 'Successful' ? 'text-green-600' : value === 'Failed' ? 'text-red-600' : value === 'Pending' ? 'text-orange-400' : 'text-red-500'}`}>
+                    {value}
+                </span>
+            )
         },
         // {
         //     header: 'Action',

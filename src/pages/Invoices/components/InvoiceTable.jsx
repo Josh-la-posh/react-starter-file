@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import ExportPopup from '../../../utils/exportPopup';
 import DataTable from '../../../components/Table';
 import { dateFormatter } from '../../../utils/dateFormatter';
-import { Link } from 'react-router-dom';
 
 const InvoiceTable = ({filteredData, handleOpenModal, isExportPopupOpen, setIsExportPopupOpen}) => {
     const [selectedIndex, setSelectedIndex] = useState(null);
@@ -22,7 +21,7 @@ const InvoiceTable = ({filteredData, handleOpenModal, isExportPopupOpen, setIsEx
             accessor: 'customer',
             render: (value) => (
                 <span>
-                    {dateFormatter(value.customerEmail)}
+                    {value.customerEmail}
                 </span>
             ),
         },
@@ -41,6 +40,11 @@ const InvoiceTable = ({filteredData, handleOpenModal, isExportPopupOpen, setIsEx
         {
             header: 'Status',
             accessor: 'status',
+            render: (value) => (
+                <span className={`${value === 'Successful' ? 'text-green-600' : value === 'Failed' ? 'text-red-600' : value === 'Pending' ? 'text-orange-400' : 'text-red-500'}`}>
+                    {value}
+                </span>
+            )
         },
         // {
         //     header: 'Action',

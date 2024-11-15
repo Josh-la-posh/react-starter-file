@@ -19,24 +19,24 @@ const Sidebar = ({handleSidebar, isSidebarTextVisible}) => {
                         <div className={isSidebarTextVisible ? 'block' : 'hidden'}>Dashboard</div>
                     </div>
                 </Link>
-                <Link to="/customers" onClick={() => handleSidebar(true)} className={`block py-4 ${appTitle === 'Customers' ? 'text-priColor' : ''}`}>
+                {/* <Link to="/customers" onClick={() => handleSidebar(true)} className={`block py-4 ${appTitle === 'Customers' ? 'text-priColor' : ''}`}>
                     <div className={`flex items-center ${isSidebarTextVisible ? '' : 'justify-center'} gap-2`}>
                         <User size={isSidebarTextVisible ? '18' : '22'} />
                         <div className={isSidebarTextVisible ? 'block' : 'hidden'}>Customer</div>
                     </div>
-                </Link>
-                <Link to="/disputes" onClick={() => handleSidebar(true)} className={`block py-4 ${appTitle === 'Disputes' ? 'text-priColor' : ''}`}>
+                </Link> */}
+                {/* <Link to="/disputes" onClick={() => handleSidebar(true)} className={`block py-4 ${appTitle === 'Disputes' ? 'text-priColor' : ''}`}>
                     <div className={`flex items-center ${isSidebarTextVisible ? '' : 'justify-center'} gap-2`}>
                         <MessageSquareX size={isSidebarTextVisible ? '18' : '22'} />
                         <div className={isSidebarTextVisible ? 'block' : 'hidden'}>Dispute</div>
                     </div>
-                </Link>
-                <Link to="/aggregator/all" onClick={() => handleSidebar(true)} className={`block py-4 ${appTitle === 'Aggregator' ? 'text-priColor' : ''}`}>
+                </Link> */}
+                {/* <Link to="/aggregator/all" onClick={() => handleSidebar(true)} className={`block py-4 ${appTitle === 'Aggregator' ? 'text-priColor' : ''}`}>
                     <div className={`flex items-center ${isSidebarTextVisible ? '' : 'justify-center'} gap-2`}>
                         <Combine size={isSidebarTextVisible ? '18' : '22'} />
                         <div className={isSidebarTextVisible ? 'block' : 'hidden'}>Aggregator</div>
                     </div>
-                </Link>
+                </Link> */}
                 <Link to="/merchants" onClick={() => handleSidebar(true)} className={`block py-4 ${appTitle === 'Merchant' ? 'text-priColor' : ''}`}>
                     <div className={`flex items-center ${isSidebarTextVisible ? '' : 'justify-center'} gap-2`}>
                         <Warehouse size={isSidebarTextVisible ? '18' : '22'} />
@@ -49,12 +49,12 @@ const Sidebar = ({handleSidebar, isSidebarTextVisible}) => {
                         <div className={isSidebarTextVisible ? 'block' : 'hidden'}>Settlement</div>
                     </div>
                 </Link>
-                <Link to="/invoices" onClick={() => handleSidebar(true)} className={`block py-4 ${appTitle === 'Invoices' ? 'text-priColor' : ''}`}>
+                {/* <Link to="/invoices" onClick={() => handleSidebar(true)} className={`block py-4 ${appTitle === 'Invoices' ? 'text-priColor' : ''}`}>
                     <div className={`flex items-center ${isSidebarTextVisible ? '' : 'justify-center'} gap-2`}>
                         <ScrollText size={isSidebarTextVisible ? '18' : '22'} />
                         <div className={isSidebarTextVisible ? 'block' : 'hidden'}>Invoice</div>
                     </div>
-                </Link>
+                </Link> */}
                 <Link to="/transactions" onClick={() => handleSidebar(true)} className={`block py-4 ${appTitle === 'Transaction' ? 'text-priColor' : ''}`}>
                     <div className={`flex items-center ${isSidebarTextVisible ? '' : 'justify-center'} gap-2`}>
                         <ArrowLeftRight size={isSidebarTextVisible ? '18' : '22'} />

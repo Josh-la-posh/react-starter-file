@@ -1,4 +1,4 @@
-import { customerFailure, customerStart } from "../../redux/slices/customerSlice";
+import { customerFailure, customerStart, customerSuccess } from "../../redux/slices/customerSlice";
 
 class CustomerService {
     constructor(axiosPrivate, auth) {
@@ -12,8 +12,9 @@ class CustomerService {
         const response = await this.axiosPrivate.get(
           `api/Customer/paginated/${pageNumber}/${pageSize}?merchantCode=${merchantCode}`,
         );
-        console.log('This is the customer paginated data ', response.data);
-        return response.data;
+        const data = response.data.data;
+        console.log(data)
+        dispatch(customerSuccess(data));
       } catch (err) {
         if (!err.response) {
             dispatch(customerFailure('No response from server'));
