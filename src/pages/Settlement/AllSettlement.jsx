@@ -13,8 +13,8 @@ function AllSettlementPage() {
   const dispatch = useDispatch();
   const { settlement } = useSelector(state => state.settlement);
   const { auth } = useAuth();
-  const merchantCode = auth?.merchantCode;
-  const settlementservice = new SettlementService(axiosPrivate, auth);
+  const merchantCode = auth?.merchant.merchantCode;
+  const settlementservice = new SettlementService(axiosPrivate);
   const pageNumber = 1;
   const pageSize = 40;
 
@@ -34,7 +34,7 @@ function AllSettlementPage() {
   return (
     <div className='space-y-4'>
       <SettlementFilter />
-      <SettlementTable filteredData={settlement}/>
+      <SettlementTable filteredData={settlement} merchantCode={merchantCode}/>
     </div>
   )
 }

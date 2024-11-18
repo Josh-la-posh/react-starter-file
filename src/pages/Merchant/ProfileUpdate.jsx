@@ -1,25 +1,23 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import useAxiosPrivate from '../../services/hooks/useAxiosPrivate';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import MerchantService from '../../services/api/merchantApi';
 import { Link, useParams } from 'react-router-dom';
 import AuthInputField from '../../components/AuthInptField';
-import axios from '../../services/api/axios';
 
-const BUSINESS_REGEX = /^[a-zA-Z0-9\s\-']{3,50}$/;
+const NAME_REGEX = /^[a-zA-Z0-9\s\-']{3,50}$/;
 
 function MerchantProfileUpdate() {
     const { merchantCode } = useParams();
     const axiosPrivate = useAxiosPrivate();
     const merchantService = new MerchantService(axiosPrivate);
     const dispatch = useDispatch();
+    const { merchantProfile } = useSelector((state) => state.merchant);
 
     const [countryList, setCountryList] = useState([]);
     const [showCountryListReload, setShowCountryListReload] = useState(false);
     const [stateList, setStateList] = useState([]);
-    const [showStateListReload, setShowStateListReload] = useState(false);
     const [cityList, setCityList] = useState([]);
-    const [showCityListReload, setShowCityListReload] = useState(false);
     const [industryList, setIndustryList] = useState([]);
     const [showIndustryListReload, setShowIndustryListReload] = useState(false);
     const [industryCategoryList, setIndustryCategoryList] = useState([]);
@@ -47,27 +45,47 @@ function MerchantProfileUpdate() {
 
 
     const [formData, setFormData] = useState({
-        merchantName: '',
-        merchantCode: '',
-        merchantAddress: '',
-        merchantCity: '',
-        merchantState: '',
-        postalCode: '',
+        merchantName: merchantProfile.merchantName ?? '',
+        merchantCode: merchantProfile.merchantCode ?? '',
+        merchantAddress: merchantProfile.address ?? '',
+        merchantCity: merchantProfile.city ?? '',
+        merchantState: merchantProfile.state ?? '',
+        postalCode: merchantProfile.postalCode ?? '',
         country: 'NG',
-        status: '',
-        isWhitelisted: false,
-        businessType: '',
-        registerationType: '',
+        status: merchantProfile.status ?? '',
+        isWhitelisted: merchantProfile.isWhitelisted === true ? 'True' : 'False' ?? false,
+        businessType: merchantProfile.businessType ?? '',
+        registerationType: merchantProfile.registrationType ?? '',
         industryCategoryId: 1,
     });
 
+    useEffect(() => {
+      const loadData = async () => {
+        if (merchantCode) {
+          await merchantService.fetchMerchantProfile(merchantCode, dispatch);
+        }
+      };
+      loadData();
+    }, [merchantCode, dispatch]);
+    
+    useEffect(() => {
+        getCountry();
+    }, [])
+    
+    useEffect(() => {
+        getIndustry();
+    }, [])
+
     const getCountry = async () => {
-        // e.preventDefault();
         try {
-            const response = await axios.get('api/country');
+            const response = await axiosPrivate.get('api/country');
             if (response.data.message === 'Successful') {
-                console.log('The new response is ', response.data);
                 setCountryList(response.data.responseData);
+
+                const selectedStateList = response.data.responseData
+                    .find(country => country.id === 'NG').states;
+        
+                setStateList(selectedStateList);
                 setShowCountryListReload(false);
             } else {
                 setShowCountryListReload(true);
@@ -78,44 +96,9 @@ function MerchantProfileUpdate() {
         }
     }
 
-    const getState = async () => {
-        // e.preventDefault();
-        try {
-            const response = await axios.get('api/state');
-            if (response.data.message === 'Successful') {
-                console.log('The new response is ', response.data);
-                setStateList(response.data.responseData);
-                setShowStateListReload(false);
-            } else {
-                setShowStateListReload(true);
-            }
-        } catch (err) {
-            console.log('Error printing State ', err.response);
-            setShowStateListReload(true);
-        }
-    }
-
-    const getCity = async () => {
-        // e.preventDefault();
-        try {
-            const response = await axios.get('api/city');
-            if (response.data.message === 'Successful') {
-                console.log('The new response is ', response.data);
-                setCityList(response.data.responseData);
-                setShowCityListReload(false);
-            } else {
-                setShowCityListReload(true);
-            }
-        } catch (err) {
-            console.log('Error printing city ', err.response);
-            setShowCityListReload(true);
-        }
-    }
-
     const getIndustry = async () => {
-        // e.preventDefault();
         try {
-            const response = await axios.get('api/industry');
+            const response = await axiosPrivate.get('api/industry');
             if (response.data.message === 'Successful') {
                 console.log('The new response is ', response.data);
                 setIndustryList(response.data.responseData);
@@ -131,7 +114,7 @@ function MerchantProfileUpdate() {
 
     const getIndustryCategories = async (id) => {
         try {
-            const response = await axios.get(`api/industry/categories/${id}`);
+            const response = await axiosPrivate.get(`api/industry/categories/${id}`);
             if (response.data.message === 'Successful') {
                 console.log('The new industry categories are ', response.data);
                 setIndustryCategoryList(response.data.responseData);
@@ -153,7 +136,18 @@ function MerchantProfileUpdate() {
         }));
     };
 
-    const handleCountryChange = () => {}
+    const handleCountryChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prevState) => ({
+            ...prevState,
+            [name]: value,
+        }));
+
+        const selectedStateList = countryList
+            .find(country => country.id === e.target.value).states;
+
+        setStateList(selectedStateList);
+    }
 
     const handleStateChange = () => {}
 
@@ -163,12 +157,14 @@ function MerchantProfileUpdate() {
 
     const handleWhitelistedChange = () => {}
 
-    const handleCategoryChange = () => {}
+    const handleIndustryChange = (e) => {
+        getIndustryCategories(e.target.value);
+    }
 
     useEffect(() => {
-        const result = BUSINESS_REGEX.test(formData.businessName);
+        const result = NAME_REGEX.test(formData.merchantName);
         setValidMerchantName(result);
-    }, [formData.businessName]);
+    }, [formData.merchantName]);
 
   useEffect(() => {
     const loadData = async () => {
@@ -190,7 +186,7 @@ function MerchantProfileUpdate() {
                 type='text'
                 validName={validMerchantName}
                 valueName={formData.merchantName}
-                id="businessName"
+                id="merchantName"
                 onChange={handleChange}
                 setOnFocus={setMerchantNameFocus}
                 nameFocus={merchantNameFocus}
@@ -250,8 +246,8 @@ function MerchantProfileUpdate() {
                     id="country"
                     name="country"
                     value={formData.country}
-                    onChange={(e) => handleCountryChange(e)}
-                    className="bg-transparent block text-sm text-gray-900 focus:outline-none w-full"
+                    onChange={handleCountryChange}
+                    className="w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
                     required
                 >
                     {countryList.map((country) => (
@@ -273,7 +269,7 @@ function MerchantProfileUpdate() {
                     name="state"
                     value={formData.state}
                     onChange={(e) => handleStateChange(e)}
-                    className="bg-transparent block text-sm text-gray-900 focus:outline-none w-full"
+                    className="w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
                     required
                 >
                     {stateList.map((state) => (
@@ -282,9 +278,6 @@ function MerchantProfileUpdate() {
                         </option>
                     ))}
                 </select>
-                {showStateListReload && <div className="w-full mt-2">
-                    <Link to='' onClick={getState} className='text-priColor text-xs text-right cursor'>Retry</Link>
-                </div>}
             </div>
             <div className="mb-6 w-full">
                 <label className="mb-1 lg:mb-2 flex items-center" htmlFor="city">
@@ -295,7 +288,7 @@ function MerchantProfileUpdate() {
                     name="city"
                     value={formData.city}
                     onChange={(e) => handleCityChange(e)}
-                    className="bg-transparent block text-sm text-gray-900 focus:outline-none w-full"
+                    className="w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
                     required
                 >
                     {cityList.map((city) => (
@@ -304,9 +297,6 @@ function MerchantProfileUpdate() {
                         </option>
                     ))}
                 </select>
-                {showCityListReload && <div className="w-full mt-2">
-                    <Link to='' onClick={getCity} className='text-priColor text-xs text-right cursor'>Retry</Link>
-                </div>}
             </div>
             <AuthInputField
                 label="Postal Code"
@@ -332,14 +322,11 @@ function MerchantProfileUpdate() {
                     name="status"
                     value={formData.status}
                     onChange={(e) => handleStatusChange(e)}
-                    className="bg-transparent block text-sm text-gray-900 focus:outline-none w-full"
+                    className="w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
                     required
                 >
-                    {/* {countryList.map((country) => (
-                        <option key={country.id} value={country.id}>
-                            {country.countryName}
-                        </option>
-                    ))} */}
+                <option value='active'>Active</option>
+                <option value='inactive'>Inactive</option>
                 </select>
             </div>
             <div className="mb-6 w-full">
@@ -351,14 +338,11 @@ function MerchantProfileUpdate() {
                     name="whitelisted"
                     value={formData.isWhitelisted}
                     onChange={(e) => handleWhitelistedChange(e)}
-                    className="bg-transparent block text-sm text-gray-900 focus:outline-none w-full"
+                    className="w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
                     required
                 >
-                    {/* {countryList.map((country) => (
-                        <option key={country.id} value={country.id}>
-                            {country.countryName}
-                        </option>
-                    ))} */}
+                    <option value='true'>True</option>
+                    <option value='false'>False</option>
                 </select>
             </div>
             <AuthInputField
@@ -399,8 +383,8 @@ function MerchantProfileUpdate() {
                     id="industry"
                     name="industry"
                     value={formData.industry}
-                    onChange={(e) => handleCategoryChange(e)}
-                    className="bg-transparent block text-sm text-gray-900 focus:outline-none w-full"
+                    onChange={(e) => handleIndustryChange(e)}
+                    className="w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
                     required
                 >
                     {industryList.map((industry) => (
@@ -421,7 +405,7 @@ function MerchantProfileUpdate() {
                         name="industryCategoryId"
                         value={formData.industryCategoryId}
                         onChange={handleChange}
-                        className="bg-transparent block text-sm text-gray-900 focus:outline-none w-full"
+                        className="w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
                         required
                     >
                         {industryCategoryList.map((industry) => (

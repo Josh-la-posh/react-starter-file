@@ -1,13 +1,23 @@
 import React from 'react';
 import DataTable from '../../../components/Table';
 import { dateFormatter } from '../../../utils/dateFormatter';
+import { Edit } from 'lucide-react';
+import SettlementService from '../../../services/api/settlementApi';
+import useAxiosPrivate from '../../../services/hooks/useAxiosPrivate';
+import { useDispatch } from 'react-redux';
+import { Link } from 'react-router-dom';
 
-const SettlementTable = ({filteredData}) => {
+const SettlementTable = ({filteredData, merchantCode}) => {
+    const axiosPrivate = useAxiosPrivate();
+    const dispatch = useDispatch();
+    const settlementservice = new SettlementService(axiosPrivate);
+    const pageNumber = 1;
+    const pageSize = 40;
     
     const columns = [
         {
             header: 'Batch Code',
-            accessor: 'batchCode',
+            accessor: 'id',
         },
         {
             header: 'Settlement Date',
@@ -19,10 +29,44 @@ const SettlementTable = ({filteredData}) => {
             ),
         },
         {
-            header: 'Status',
-            accessor: 'status',
+            header: 'Approaved',
+            accessor: 'isApproved',
+            render: (value) => (
+                <span 
+                    className={value === true ? 'text-priColor' : 'text-red-600'}
+                >
+                    {value === true ? 'True' : 'False'}
+                </span>
+            )
+        },
+        {
+            header: 'Completed',
+            accessor: 'isCompleted',
+            render: (value) => (
+                <span 
+                    className={value === true ? 'text-priColor' : 'text-red-600'}
+                >
+                    {value === true ? 'True' : 'False'}
+                </span>
+            )
+        },
+        {
+            header: '',
+            accessor: 'id',
+            render: (value) => (
+                <Link to='/settlement/batch/transaction'>
+                    <button onClick={() => handleClick(value)}>
+                        <Edit size={14} color='green'/>
+                    </button>
+                </Link>
+            )
         },
     ];
+
+    const handleClick = async (id) => {
+        await settlementservice.getSettlementBatchTransaction(merchantCode, pageNumber, pageSize, id, dispatch);
+        // console.log('The id is: ', id);
+    }
 
     return (
         <div className="">

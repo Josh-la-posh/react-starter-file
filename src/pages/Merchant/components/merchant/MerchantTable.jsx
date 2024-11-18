@@ -2,14 +2,10 @@ import React, { useState } from 'react';
 import ExportPopup from '../../../../utils/exportPopup';
 import DataTable from '../../../../components/Table';
 import { dateFormatter, timeFormatter } from '../../../../utils/dateFormatter';
-import CustomModal from '../../../../components/Modal';
 import useAxiosPrivate from '../../../../services/hooks/useAxiosPrivate';
-import { toast } from 'react-toastify';
-import { render } from '@testing-library/react';
 import { Link } from 'react-router-dom';
 
 const MerchantTable = ({filteredData, handleOpenModal, isExportPopupOpen, setIsExportPopupOpen}) => {
-    const axiosPrivate = useAxiosPrivate();
     const [selectedIndex, setSelectedIndex] = useState(null);
     
     const columns = [

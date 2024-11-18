@@ -22,6 +22,15 @@ const MerchantDocumentTable = ({filteredData, merchantCode}) => {
             ),
         },
         {
+            header: 'Document Name',
+            accessor: 'document',
+            render: (value) => (
+                <span >
+                    {value.documentName}
+                </span>
+            )
+        },
+        {
             header: 'Status',
             accessor: 'isActive',
             render: (value) => (

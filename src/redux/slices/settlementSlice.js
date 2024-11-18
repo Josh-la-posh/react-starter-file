@@ -5,6 +5,9 @@ const initialState = {
   settlementLoading: false,
   settlementError: null,
   settlement: [],
+  settlementTransactionLoading: false,
+  settlementTransactionError: null,
+  settlementTransaction: [],
   settlementConfigurationLoading: false,
   settlementConfigurationError: null,
   settlementConfiguration: [],
@@ -26,6 +29,18 @@ const settlementSlice = createSlice({
       state.settlement = action.payload;
     },
     settlementFailure: (state, action) => {
+      state.settlementLoading = false;
+      state.settlementError = action.payload;
+    },
+    settlementTransactionStart: (state) => {
+      state.settlementLoading = true;
+      state.settlementError = null;
+    },
+    settlementTransactionSuccess: (state, action) => {
+      state.settlementLoading = false;
+      state.settlement = action.payload;
+    },
+    settlementTransactionFailure: (state, action) => {
       state.settlementLoading = false;
       state.settlementError = action.payload;
     },
@@ -56,6 +71,6 @@ const settlementSlice = createSlice({
   },
 });
 
-export const { settlementStart, settlementSuccess, settlementFailure, settlementConfigurationStart, settlementConfigurationSuccess, settlementConfigurationFailure, settlementConfigurationDetailStart, settlementConfigurationDetailSuccess, settlementConfigurationDetailFailure } = settlementSlice.actions;
+export const { settlementStart, settlementSuccess, settlementFailure, settlementTransactionStart, settlementTransactionSuccess, settlementTransactionFailure, settlementConfigurationStart, settlementConfigurationSuccess, settlementConfigurationFailure, settlementConfigurationDetailStart, settlementConfigurationDetailSuccess, settlementConfigurationDetailFailure } = settlementSlice.actions;
 
 export default settlementSlice.reducer;

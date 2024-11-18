@@ -30,6 +30,7 @@ import MerchantProfileUpdate from '../pages/Merchant/ProfileUpdate';
 import MerchantDomain from '../pages/Merchant/MerchantDomain';
 import MerchantDocument from '../pages/Merchant/MerchantDocument';
 import MerchantCredential from '../pages/Merchant/MerchantCredentials';
+import SettlementBatchTransaction from '../pages/Settlement/SettlementBatchTransaction';
 
 const RoutesSystem = () => {
   return (
@@ -70,6 +71,7 @@ const RoutesSystem = () => {
           </Route>
           <Route path="/settlement" >
             <Route path='all' element={<AllSettlement />} />
+            <Route path='batch/transaction' element={<SettlementBatchTransaction />} />
             <Route path='bank' element={<SettlementBankAccount />} />
             <Route path='configuration' element={<SettlementConfiguration />} />
           </Route>

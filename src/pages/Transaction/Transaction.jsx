@@ -15,7 +15,7 @@ function TransactionPage() {
   const dispatch = useDispatch();
   const { transactions } = useSelector((state) => state.transaction);
   const [filteredData, setFilteredData] = useState(transactions);
-  const merchantCode = auth?.merchantCode;
+  const merchantCode = auth?.merchant.merchantCode;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedTransactionData, setSelectedTransactionData] = useState({});
   const [isExportPopupOpen, setIsExportPopupOpen] = useState(false);

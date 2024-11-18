@@ -27,7 +27,7 @@ const DataTable = ({ columns, data, rowsPerPageOptions, onIndexChange, actionBut
 
     return (
         <div className="">
-            <div className="overflow-x-auto" id={elementId}>
+            <div className="overflow-x-auto scrollbar-none" id={elementId}>
                 <table className="min-w-full rounded-lg divide-y-8">
                     <thead className="bg-[#F0F2F5]">
                         <tr>

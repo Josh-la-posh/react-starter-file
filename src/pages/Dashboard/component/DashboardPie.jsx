@@ -1,21 +1,21 @@
 import ReactApexChart from "react-apexcharts";
-import { processGraphData } from "../../../data/processedGraphData";
+import { processLumpsumData } from "../../../data/processedLumpsumData";
 
 function DashboardPie({graph, type}) {
     const {
-        finalGraphCount,
-        finalGraphVolume,
+        finalLumpsumCount,
+        finalLumpsumVolume,
         totalTransactionsCount
-    } = processGraphData(graph);
+    } = processLumpsumData(graph);
 
-    const pieSeries = 'Count' ? finalGraphCount : finalGraphVolume;
+    const pieSeries = type === 'Count' ? finalLumpsumCount : finalLumpsumVolume;
     const pieOptions = {
         chart: {
             type: 'donut',
             width: 350,
         },
         fill: {
-            colors: ['#00A049', '#0000FF', '#FF0000', '#FFFF00']
+            colors: ['#00A049', '#0000FF', '#FF0000', '#FFFF00', '#9C03C8', '#808080']
         },
         legend: {
             position: 'bottom',
@@ -23,7 +23,7 @@ function DashboardPie({graph, type}) {
             fontSize: '13px',
             width: 220           
         },
-        labels: ['Success', 'Processing', 'Failed', 'Pending'],
+        labels: ['Success', 'Processing', 'Failed', 'Pending', 'Otp', 'Cancel'],
         plotOptions: {
             pie: {
                 donut: {
@@ -40,15 +40,15 @@ function DashboardPie({graph, type}) {
                       show: true,
                       fontSize: '16px',
                       color: '#000',
-                      offsetY: 10,
                       formatter: () => `${totalTransactionsCount} Total`,
                     },
                     total: {
-                      show: true,
-                      label: totalTransactionsCount ?? 0,
-                      color: '#000',
-                      fontSize: '16px',
-                      formatter: () => totalTransactionsCount,
+                        show: true,
+                        offsetY: -10,
+                        label: 'Total',
+                        color: '#000',
+                        fontSize: '16px',
+                        formatter: () => totalTransactionsCount,
                     },
                   },
                 },

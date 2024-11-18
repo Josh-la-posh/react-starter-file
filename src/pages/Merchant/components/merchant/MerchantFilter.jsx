@@ -16,6 +16,10 @@ function MerchantFilter() {
             [name]: value
         }));
     }
+
+    const handleSearch = (e) => {
+        console.log('I dey work');
+    }
     
   return (
     <div className="flex justify-end gap-4">
@@ -25,18 +29,19 @@ function MerchantFilter() {
                     type="text"
                     value={formData.name}
                     onChange={handleChange}
-                    className="p-2 pl-8 border border-gray-300 rounded-lg focus:outline-none text-xs"
-                    placeholder="MErchant name"
+                    className="p-2 pl-4 border border-gray-300 rounded-lg focus:outline-none text-xs"
+                    placeholder="Merchant name"
                 />
-                <input
+                {/* <input
                     type="text"
                     value={formData.code}
                     onChange={handleChange}
-                    className="p-2 pl-8 border border-gray-300 rounded-lg focus:outline-none text-xs"
+                    className="p-2 pl-4 border border-gray-300 rounded-lg focus:outline-none text-xs"
                     placeholder="Merchant code"
-                />
+                /> */}
                 <button
                     className={`text-white border border-gray bg-priColor text-xs font-[600] py-2 px-2 rounded-sm flex justify-between items-center gap-2`}
+                    onClick={handleSearch}
                     >
                         Search
                 </button>

@@ -46,39 +46,39 @@ function MerchantProfile() {
             </div>
             <div className="flex">
                 <p className='flex-1'>Address:</p>
-                <span className='font-[400] ml-4 flex-1'>{merchantProfile.paymentReference}</span>
+                <span className='font-[400] ml-4 flex-1'>{merchantProfile.address ?? 'N/A'}</span>
             </div>
             <div className="flex">
                 <p className='flex-1'>City:</p>
-                <span className='font-[400] ml-4 flex-1'>{merchantProfile.city ?? 'Not Set'}</span>
+                <span className='font-[400] ml-4 flex-1'>{merchantProfile.city ?? 'N/A'}</span>
             </div>
             <div className="flex">
                 <p className='flex-1'>State:</p>
-                <span className='font-[400] ml-4 flex-1'>{merchantProfile.state ?? 'Not Set'}</span>
+                <span className='font-[400] ml-4 flex-1'>{merchantProfile.state ?? 'N/A'}</span>
             </div>
             <div className="flex">
                 <p className='flex-1'>Postal Code:</p>
-                <span className='font-[400] ml-4 flex-1'>{merchantProfile.postalCode}</span>
+                <span className='font-[400] ml-4 flex-1'>{merchantProfile.postalCode ?? 'N/A'}</span>
             </div>
             <div className="flex">
                 <p className='flex-1'>Country:</p>
-                <span className='font-[400] ml-4 flex-1'>{merchantProfile.countryCode}</span>
+                <span className='font-[400] ml-4 flex-1'>{merchantProfile.countryCode ?? 'N/A'}</span>
             </div>
             <div className="flex">
                 <p className='flex-1'>Status:</p>
-                <span className='font-[400] ml-4 flex-1'>{merchantProfile.status}</span>
+                <span className='font-[400] ml-4 flex-1'>{merchantProfile.status ?? 'N/A'}</span>
             </div>
             <div className="flex">
                 <p className='flex-1'>White Listed:</p>
-                <span className='font-[400] ml-4 flex-1'>{merchantProfile.isWhitelisted}</span>
+                <span className='font-[400] ml-4 flex-1'>{merchantProfile.isWhitelisted === true ? 'True' : 'False'}</span>
             </div>
             <div className="flex">
                 <p className='flex-1'>Business type:</p>
-                <span className='font-[400] ml-4 flex-1'>{merchantProfile.businessType}</span>
+                <span className='font-[400] ml-4 flex-1'>{merchantProfile.businessType ?? 'N/A'}</span>
             </div>
             <div className="flex">
                 <p className='flex-1'>Registration Type:</p>
-                <span className='font-[400] ml-4 flex-1'>{merchantProfile.registrationType}</span>
+                <span className='font-[400] ml-4 flex-1'>{merchantProfile.registrationType ?? 'N/A'}</span>
             </div>
         </div>
     </div>
