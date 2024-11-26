@@ -16,16 +16,16 @@ function AccountManagement() {
     return (
         <div className="mb-8 bg-white px-5 py-4">
             <h2 className="text-xl font-medium mb-4">Account Management</h2>
-            <div className="space-x-4">
+            <div className="flex flex-col md:flex-row gap-3">
                 <button 
                     onClick={handleDeactivate}
-                    className="py-2 px-4 bg-yellow-500 hover:bg-yellow-600 text-white rounded-md"
+                    className="py-3 px-8 bg-yellow-600 text-xs font-[500] rounded-md text-white"
                 >
                     Deactivate Account
                 </button>
                 <button 
                     onClick={handleDelete}
-                    className="py-2 px-4 bg-red-500 hover:bg-red-600 text-white rounded-md"
+                    className="py-3 px-8 bg-red-600 text-xs font-[500] rounded-md text-white"
                 >
                     Permanently Delete Account
                 </button>

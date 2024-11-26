@@ -13,9 +13,9 @@ function SecurityNotifications() {
     };
 
     return (
-        <div className="mb-8">
+        <div className="mb-8 bg-white px-5 py-4">
             <h2 className="text-xl font-medium mb-4">Security Notifications</h2>
-            <div className="space-y-4">
+            <div className="space-y-4 text-sm">
                 <div>
                     <label className="inline-flex items-center">
                         <input
@@ -23,7 +23,7 @@ function SecurityNotifications() {
                             name="loginAttempts"
                             checked={notifications.loginAttempts}
                             onChange={handleToggle}
-                            className="form-checkbox h-5 w-5 text-blue-600"
+                            className="form-checkbox h-3 w-3 text-priColor"
                         />
                         <span className="ml-2 text-gray-700">Notify on login attempts</span>
                     </label>
@@ -35,7 +35,7 @@ function SecurityNotifications() {
                             name="passwordChanges"
                             checked={notifications.passwordChanges}
                             onChange={handleToggle}
-                            className="form-checkbox h-5 w-5 text-blue-600"
+                            className="form-checkbox h-3 w-3 text-priColor"
                         />
                         <span className="ml-2 text-gray-700">Notify on password changes</span>
                     </label>
@@ -47,7 +47,7 @@ function SecurityNotifications() {
                             name="unusualActivity"
                             checked={notifications.unusualActivity}
                             onChange={handleToggle}
-                            className="form-checkbox h-5 w-5 text-blue-600"
+                            className="form-checkbox h-3 w-3 text-priColor"
                         />
                         <span className="ml-2 text-gray-700">Notify on unusual activity</span>
                     </label>

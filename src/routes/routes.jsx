@@ -31,6 +31,7 @@ import MerchantDomain from '../pages/Merchant/MerchantDomain';
 import MerchantDocument from '../pages/Merchant/MerchantDocument';
 import MerchantCredential from '../pages/Merchant/MerchantCredentials';
 import SettlementBatchTransaction from '../pages/Settlement/SettlementBatchTransaction';
+import ContactPage from '../pages/Settings/Contact';
 
 const RoutesSystem = () => {
   return (
@@ -81,6 +82,7 @@ const RoutesSystem = () => {
           <Route path='/settings' element={<SettingsLayout/>}>
             <Route path='/settings'>
               <Route path="profile" element={<ProfilePage />} />
+              <Route path="contact" element={<ContactPage />} />
               <Route path="security" element={<SecuritySettings />} />
               <Route path="notification" element={<NotificationSettings />} />
               <Route path="privacy" element={<PrivacySettings />} />

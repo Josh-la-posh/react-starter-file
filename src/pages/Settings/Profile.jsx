@@ -5,20 +5,33 @@ import useAxiosPrivate from '../../services/hooks/useAxiosPrivate';
 import useSettingsTitle from '../../services/hooks/useSettingsTitle';
 import UpdateInputField from '../../components/UpdateInputField';
 import { Mail, Phone, User } from 'lucide-react';
+import UserService from '../../services/api/userApi';
+import { useDispatch, useSelector } from 'react-redux';
 
 function ProfilePage() {
+    const { auth, setAuth } = useAuth();
   const { setAppTitle } = useTitle();
   const { setSettingsTitle } = useSettingsTitle();
   const axiosPrivate = useAxiosPrivate();
-  const { auth } = useAuth();
+  const userService = new UserService(axiosPrivate, auth, setAuth);
+  const dispatch = useDispatch();
+  const {usersLoading} = useSelector((state) => state.users);
   const [editing, setEditing] = useState(false);
+  const userDetails = auth?.data?.user;
+  const [errMsg, setErrMsg] = useState('');
 
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phone: ''
+    firstName: userDetails.firstName ?? '',
+    lastName: userDetails.lastName ?? '',
+    email: userDetails.email ?? '',
+    phone: userDetails.phoneNumber ?? ''
 });
+
+const updateUserData = async () => {
+    const userId = userDetails.id;
+    console.log('The id is: ', userId);
+    await userService.updateUserData(userId, formData, dispatch);
+};
 
 const handleChange = (e) => {
     const {name, value} = e.target;
@@ -30,8 +43,22 @@ const handleChange = (e) => {
 
 const handleSubmit = (e) => {
     e.preventDefault();
-    console.log('print valid result');
-    setEditing(false);
+    const v1 = formData.firstName;
+    const v2 = formData.lastName;
+    const v3 = formData.email;
+    const v4 = formData.phoneNumber;
+    
+    if (v1 !== '' && v2 !== '' && v3 !== '' ** v4 !== '') {
+        console.log('print valid result', formData);
+        updateUserData();
+        console.log('the data is ', usersLoading);
+        usersLoading === true ? setEditing(true) : setEditing(false);
+    } else {
+        setErrMsg('All fields must be field');
+        setTimeout(() => {
+            setErrMsg('');
+        }, 2000);
+    }
 }
 
   useEffect(() => {
@@ -106,6 +133,8 @@ const handleSubmit = (e) => {
                 </div>
                 
             </div>
+
+            <p className='text-red-800 text-sm mb-5'>{errMsg}</p>
             {editing ? (
                 <div className="flex gap-4">
                     <button
@@ -118,7 +147,7 @@ const handleSubmit = (e) => {
                     <button 
                         type='submit' 
                         className='bg-priColor px-8 py-3 rounded-sm text-white text-xs font-[500]'>
-                        Save Changes
+                        {usersLoading === true ? 'Updating ...' : 'Save Changes'}
                     </button>
                 
                 </div>

@@ -1,4 +1,4 @@
-import { merchantAccountFailure, merchantAccountStart, merchantAccountSuccess, merchantAddressFailure, merchantAddressStart, merchantContactFailure, merchantContactStart, merchantDocumentFailure, merchantDocumentStart, merchantDocumentSuccess, merchantDomainFailure, merchantDomainStart, merchantDomainSuccess, merchantFailure, merchantProfileFailure, merchantProfileStart, merchantProfileSuccess, merchantStart, merchantSuccess } from "../../redux/slices/merchantSlice";
+import { merchantAccountFailure, merchantAccountStart, merchantAccountSuccess, merchantAddressFailure, merchantAddressStart, merchantContactFailure, merchantContactStart, merchantContactSuccess, merchantDocumentFailure, merchantDocumentStart, merchantDocumentSuccess, merchantDomainFailure, merchantDomainStart, merchantDomainSuccess, merchantFailure, merchantProfileFailure, merchantProfileStart, merchantProfileSuccess, merchantStart, merchantSuccess } from "../../redux/slices/merchantSlice";
 
 class MerchantService {
     constructor(axiosPrivate) {
@@ -394,8 +394,9 @@ class MerchantService {
         const response = await this.axiosPrivate.get(
           `api/MerchantContact/${merchantCode}`
         );
-        console.log('merchant Contact fetched successfully ', response.data);
-        return response.data;
+        const data = response.data.responseData;
+        console.log('merchant Contact fetched successfully ', data);
+        dispatch(merchantContactSuccess(data));
       } catch (err) {
         if (!err.response) {
             dispatch(merchantContactFailure('No response from server'));

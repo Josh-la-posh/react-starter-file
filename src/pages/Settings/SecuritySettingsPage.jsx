@@ -33,10 +33,10 @@ function SecuritySettings() {
 
             {/* Api Key Management */}
 
-            <ApiKeyManagement />
+            {/* <ApiKeyManagement /> */}
 
             {/* Two-Factor Authentication Section */}
-            <section className="mb-8">
+            {/* <section className="mb-8">
                 <h2 className="text-xl font-medium mb-4">Two-Factor Authentication</h2>
                 <div className="flex items-center space-x-4">
                     <span className="text-gray-700">Enable Two-Factor Authentication</span>
@@ -47,17 +47,17 @@ function SecuritySettings() {
                         {twoFactorEnabled ? 'Disable' : 'Enable'}
                     </button>
                 </div>
-            </section>
+            </section> */}
 
             {/* Login Activity Section */}
-            <section className="mb-8">
+            {/* <section className="mb-8">
                 <h2 className="text-xl font-medium mb-4">Login Activity</h2>
                 <div className="text-gray-700">
                     <p>Last login: Oct 23, 2024, from Chrome on Windows.</p>
                     <p>Last failed login: Oct 22, 2024, from Safari on iOS.</p>
                     <button className="mt-2 py-2 px-4 bg-red-500 hover:bg-red-600 text-white rounded-md">Log out of all devices</button>
                 </div>
-            </section>
+            </section> */}
         </div>
     );
 }

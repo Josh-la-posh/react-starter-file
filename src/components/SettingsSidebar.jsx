@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import useSettingsTitle from '../services/hooks/useSettingsTitle';
-import { AlertCircle, Bell, Combine, Lock, LockKeyhole, LockOpen, MessageSquareX, User, Verified, Warehouse } from 'lucide-react';
+import { AlertCircle, Bell, BookUser, Combine, GroupIcon, Lock, LockKeyhole, LockOpen, MessageSquareX, User, Verified, Warehouse } from 'lucide-react';
 
 const SettingsSidebar = ({handleSettingsSidebar, isSettingsSidebarTextVisible}) => {
     const { settingsTitle, setSettingsTitle } = useSettingsTitle();
@@ -18,6 +18,12 @@ const SettingsSidebar = ({handleSettingsSidebar, isSettingsSidebarTextVisible}) 
                         <div>Profile</div>
                     </div>
                 </Link>
+                <Link to="/settings/contact" className={`block py-4 ${settingsTitle === 'Contact' ? 'text-priColor border-r-4 border-priColor transition duration-300 bg-priColor bg-opacity-10' : ''}`}>
+                    <div className={`flex items-center gap-2 pl-4`}>
+                        <BookUser size='15' />
+                        <div>Contact</div>
+                    </div>
+                </Link>
                 <Link to="/settings/security" className={`block py-4 ${settingsTitle === 'Security' ? 'text-priColor border-r-4 border-priColor transition duration-300 bg-priColor bg-opacity-10' : ''}`}>
                     <div className={`flex items-center gap-2 pl-4`}>
                         <LockKeyhole size='15' />
@@ -28,6 +34,12 @@ const SettingsSidebar = ({handleSettingsSidebar, isSettingsSidebarTextVisible}) 
                     <div className={`flex items-center gap-2 pl-4`}>
                         <Bell size='15' />
                         <div>Notification</div>
+                    </div>
+                </Link>
+                <Link to="/settings/team" className={`block py-4 ${settingsTitle === 'Team' ? 'text-priColor border-r-4 border-priColor transition duration-300 bg-priColor bg-opacity-10' : ''}`}>
+                    <div className={`flex items-center gap-2 pl-4`}>
+                        <GroupIcon size='15' />
+                        <div>Team</div>
                     </div>
                 </Link>
                 <Link to="/settings/privacy" className={`block py-4 ${settingsTitle === 'Privacy' ? 'text-priColor border-r-4 border-priColor transition duration-300 bg-priColor bg-opacity-10' : ''}`}>

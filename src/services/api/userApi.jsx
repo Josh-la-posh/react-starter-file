@@ -1,10 +1,12 @@
+import { toast } from "react-toastify";
 import { invoiceFailure, invoiceStart } from "../../redux/slices/invoiceSlice";
-import { usersFailure, usersStart } from "../../redux/slices/userSlice";
+import { usersFailure, usersStart, usersSuccess } from "../../redux/slices/userSlice";
 
 class userService {
-    constructor(axiosPrivate, auth) {
+    constructor(axiosPrivate, auth, setAuth) {
       this.axiosPrivate = axiosPrivate;
       this.auth = auth;
+      this.setAuth = setAuth;
     }
   
     async createUser(merchantCode, data, dispatch) {
@@ -116,15 +118,19 @@ class userService {
       }
     }
   
-    async updateUser(dispatch) {
+    async updateUserData(userId, formData, dispatch) {
         dispatch(usersStart());
       try {
         const response = await this.axiosPrivate.put(
           `api/Users/${userId}`,
-          JSON.stringify({data})
+          JSON.stringify(formData)
         );
-        console.log('User data has been updated ', response.data);
-        return response.data;
+        const data = response.data.responseData;
+        dispatch(usersSuccess(data));
+        this.setAuth(prev => {
+          return {...prev, firstName: data.firstName, lastName: data.lastName, email: data.email, phoneNumber: data.phoneNumber}
+        });
+        toast('success', 'Profile updated successfully');
       } catch (err) {
         if (!err.response) {
             dispatch(usersFailure('No response from server'));
@@ -135,7 +141,7 @@ class userService {
       }
     }
   
-    async activateUser(userId, dispatch) {
+    async activateUser(userId, data, dispatch) {
         dispatch(usersStart());
       try {
         const response = await this.axiosPrivate.put(
@@ -154,7 +160,7 @@ class userService {
       }
     }
   
-    async updateUser(dispatch) {
+    async updateUser(data, dispatch) {
         dispatch(usersStart());
       try {
         const response = await this.axiosPrivate.put(
