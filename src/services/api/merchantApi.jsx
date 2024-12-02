@@ -162,20 +162,20 @@ class MerchantService {
       }
     }
   
-    async addUserMerchant(data, dispatch) {
-        dispatch(merchantStart());
+    async addUserMerchant(formData) {
       try {
         const response = await this.axiosPrivate.post(
           'api/Merchant/adduser',
-          JSON.stringify({data})
+          JSON.stringify(formData)
         );
         console.log('merchant created successfully ', response.data);
-        return response.data;
+        toast('User added successfully');
       } catch (err) {
+        console.log(err);
         if (!err.response) {
-            dispatch(merchantFailure('No response from server'));
+            toast('No response from server');
         } else {
-            dispatch(merchantFailure('Failed to create merchant user. Try again.'));
+            toast('Failed to create merchant user. Try again.');
         }
       } finally {
       }

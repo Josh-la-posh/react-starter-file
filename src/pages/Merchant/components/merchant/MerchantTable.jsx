@@ -2,11 +2,22 @@ import React, { useState } from 'react';
 import ExportPopup from '../../../../utils/exportPopup';
 import DataTable from '../../../../components/Table';
 import { dateFormatter, timeFormatter } from '../../../../utils/dateFormatter';
-import useAxiosPrivate from '../../../../services/hooks/useAxiosPrivate';
 import { Link } from 'react-router-dom';
+import { Pen } from 'lucide-react';
+import CustomModal from '../../../../components/Modal';
+import MerchantService from '../../../../services/api/merchantApi';
+import { toast } from 'react-toastify';
+import useAxiosPrivate from '../../../../services/hooks/useAxiosPrivate';
 
-const MerchantTable = ({filteredData, handleOpenModal, isExportPopupOpen, setIsExportPopupOpen}) => {
+const MerchantTable = ({filteredData, handleOpenModal}) => {
+    const axiosPrivate = useAxiosPrivate();
+    const merchantService = new MerchantService(axiosPrivate);
     const [selectedIndex, setSelectedIndex] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [formData, setFormData] = useState({
+        userId : '',
+        merchantId : ''
+    });
     
     const columns = [
         {
@@ -82,60 +93,64 @@ const MerchantTable = ({filteredData, handleOpenModal, isExportPopupOpen, setIsE
             header: 'Status',
             accessor: 'status',
         },
-        // {
-        //     header: 'Action',
-        //     accessor: 'transactionStatus',
-        //     render: (id, row) => (
-        //         row.transactionStatus !== 'Successful' && 
-        //         <button
-        //             onClick={() => handleDispute(row)}
-        //             className='bg-red-700 text-white text-xs px-2 py-1 rounded-[4px]'
-        //         >
-        //             Dispute
-        //         </button>
-        //     ),
-        // },
+        {
+            header: 'Action',
+            accessor: 'id',
+            render: (id) => (
+                <button
+                    onClick={() => handleModalOpen(id)}
+                    className='p-2 rounded-sm border border-gray-200'
+                >
+                    <Pen size='14px' />
+                </button>
+            ),
+        },
     ];
 
-    // const submitDispute = async (e) => {
-    //     e.preventDefault();
-    //     setLoading(true);
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({
+            ...prev,
+            [name]: value
+        }));
+    }
 
+    const handleModalOpen = (id) => {
+        setIsModalOpen(true);
+        setFormData((prev) => ({
+            ...prev,
+            merchantId: id
+        }));
+    }
 
-    //     try {
-    //         const response = await axiosPrivate.post('',
-    //             JSON.stringify({paymentReference, description})
-    //         );
-    //         console.log(response);
-    //         const data = response.status;
-    //         if (data === 201) {
-    //             toast('Sent Successfully');
-    //             setPaymentReference('');
-    //             setIsDispute(false);
-    //         }
-    //     } catch (err) {
-    //         if (!err.status) {
-    //          setErrMsg('No Server Response');   
-    //         } else {
-    //             setErrMsg('Unable to send request at this time.')
-    //         }
-    //     } finally {
-    //         setLoading(false);
-    //     }
-
-    // }
-
-    // const handleDispute = (id) => {
-    //     setPaymentReference(id.paymentReference);
-    //     setIsDispute(true);
-    // };
+    const handleModalClose = () => {
+        setIsModalOpen(false);
+        setFormData({
+            userId: '',
+            merchantId: ''
+        });
+    }
 
     const getDataToParent = (id) => {
         handleOpenModal(filteredData[id]);
     }
+
+    const handleSubmit = (e) => {
+        const v1 = formData.userId;
+
+        if (v1 === '') {
+            toast('User Id cannot be empty');
+            return;
+        }
+        loadData();
+    }
     
     const handleSelectedRow = (index) => {
         setSelectedIndex(selectedIndex === index ? null : index);
+    };
+    
+    const loadData = async () => {
+        await merchantService.addUserMerchant(formData);
     };
 
     // const filteredSearchData = transactions.filter((row) => {
@@ -151,31 +166,33 @@ const MerchantTable = ({filteredData, handleOpenModal, isExportPopupOpen, setIsE
 
     return (
         <div className="">
-            {/* {
-                isDispute &&
+            {
+                isModalOpen &&
                 <CustomModal
-                    handleOpenModal={() => setIsDispute(false)}
+                    handleOpenModal={handleModalClose}
                 >
-                    <h2 className='mb-8'>Description</h2>
-                    {errMsg && <p>{errMsg}</p>}
-                    <textarea
-                        className='border w-full h-[200px] max-x-[500px] text-sm p-3'
-                        placeholder='Write something ...'
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                    />
-                    <div className="flex justify-end mt-8">
+                    <h2 className='mb-8'>New User</h2>
+
+                    <div className="flex mt-8 gap-3">
+                        <input
+                            type="text"
+                            name='userId'
+                            value={formData.userId}
+                            onChange={handleChange}
+                            className="p-2 border border-gray-300 rounded-md focus:outline-none text-xs"
+                            placeholder="User Id"
+                            required
+                        />
                         <button
-                            onClick={submitDispute}
-                            className='py-2 px-4 bg-priColor text-white rounded-[8px]'
-                            disabled={loading}
-                        >
-                                {loading ? 'Sending...' : 'Submit'}
-                            </button>
+                            className='text-white border border-gray bg-priColor text-xs font-[600] py-2 px-4 rounded-md flex justify-between items-center'
+                            onClick={handleSubmit}
+                            >
+                                Add
+                        </button>
                     </div>
 
                 </CustomModal>
-            } */}
+            }
 
             <DataTable
                 columns={columns}
