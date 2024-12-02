@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import AggregatorService from '../../services/api/aggregatorApi';
 import MerchantTable from './components/merchant/MerchantTable';
 import MerchantFilter from './components/merchant/MerchantFilter';
+import useAuth from '../../services/hooks/useAuth';
 
 function MerchantPage() {
   const { setAppTitle } = useTitle();
@@ -13,6 +14,10 @@ function MerchantPage() {
   const dispatch = useDispatch();
   const { aggregatorMerchants } = useSelector((state) => state.aggregator);
   const [filteredData, setFilteredData] = useState(aggregatorMerchants);
+
+  useEffect(() => {
+    setFilteredData(aggregatorMerchants);
+  }, [aggregatorMerchants]);
 
   useEffect(() => {
       setAppTitle('Merchant');
@@ -25,10 +30,14 @@ function MerchantPage() {
     loadData();
   }, [dispatch]);
 
+  const handleFilteredData = (newData) => {
+    setFilteredData(newData);
+  }
+
   return (
     <div className='space-y-6'>
-      <MerchantFilter />
-      <MerchantTable filteredData={aggregatorMerchants} />
+      <MerchantFilter handleFilteredData={handleFilteredData} />
+      <MerchantTable filteredData={filteredData} />
     </div>
   )
 }

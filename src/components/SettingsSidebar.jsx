@@ -1,11 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import useSettingsTitle from '../services/hooks/useSettingsTitle';
-import { AlertCircle, Bell, BookUser, Combine, GroupIcon, Lock, LockKeyhole, LockOpen, MessageSquareX, User, Verified, Warehouse } from 'lucide-react';
+import { Bell, BookUser, GroupIcon, LockKeyhole, User, Verified, Warehouse } from 'lucide-react';
 
 const SettingsSidebar = ({handleSettingsSidebar, isSettingsSidebarTextVisible}) => {
     const { settingsTitle, setSettingsTitle } = useSettingsTitle();
-    console.log('settings title: ', settingsTitle);
     return (
         <div className="">
             <div className="text-gray-800 text-2xl font-semibold mb-4">
@@ -36,25 +35,18 @@ const SettingsSidebar = ({handleSettingsSidebar, isSettingsSidebarTextVisible}) 
                         <div>Notification</div>
                     </div>
                 </Link>
-                <Link to="/settings/team" className={`block py-4 ${settingsTitle === 'Team' ? 'text-priColor border-r-4 border-priColor transition duration-300 bg-priColor bg-opacity-10' : ''}`}>
-                    <div className={`flex items-center gap-2 pl-4`}>
-                        <GroupIcon size='15' />
-                        <div>Team</div>
-                    </div>
-                </Link>
                 <Link to="/settings/privacy" className={`block py-4 ${settingsTitle === 'Privacy' ? 'text-priColor border-r-4 border-priColor transition duration-300 bg-priColor bg-opacity-10' : ''}`}>
                     <div className={`flex items-center gap-2 pl-4`}>
                         <Verified size='15' />
                         <div>Privacy</div>
                     </div>
                 </Link>
-                <Link to="/settings/user" className={`block py-4 ${settingsTitle === 'USer' ? 'text-priColor' : ''}`}>
-                    <div className={`flex items-center gap-2`}>
-                        <Warehouse size='18' />
-                        <div>User Management</div>
+                <Link to="/settings/user" className={`block py-4 ${settingsTitle === 'Team' ? 'text-priColor border-r-4 border-priColor transition duration-300 bg-priColor bg-opacity-10' : ''}`}>
+                    <div className={`flex items-center gap-2 pl-4`}>
+                        <GroupIcon size='15' />
+                        <div>Team</div>
                     </div>
                 </Link>
-                
             </nav>
         </div>
     );

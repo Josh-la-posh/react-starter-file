@@ -1,49 +1,60 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react'
+import useAuth from '../../services/hooks/useAuth';
+import useAxiosPrivate from '../../services/hooks/useAxiosPrivate';
+import UserService from '../../services/api/userApi';
+import { useDispatch, useSelector } from 'react-redux';
+import UserManagementTable from './component/UserManagementTable';
+import { Plus } from 'lucide-react';
+import AddUserForm from './component/AddUserForm';
+import useSettingsTitle from '../../services/hooks/useSettingsTitle';
 
-function UserManagementTable({ users, onDeactivate, onEditRole }) {
-    return (
-        <div className="p-6 bg-white rounded-lg shadow-lg max-w-5xl mx-auto">
-            <h1 className="text-2xl font-semibold mb-4 text-gray-800">User Management</h1>
+function UserManagement() {
+  const { setSettingsTitle } = useSettingsTitle();
+  const axiosPrivate = useAxiosPrivate();
+  const { auth } = useAuth();
+  const dispatch = useDispatch();
+  const { users } = useSelector((state) => state.users);
+  const merchantCode = auth?.merchant?.merchantCode;
+  const userService = new UserService(axiosPrivate, auth);
+  const pageNumber = 1;
+  const pageSize = 20;
 
-            <table className="min-w-full divide-y divide-gray-200">
-                <thead>
-                    <tr>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">User</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Role</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
-                    </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                    {users.map((user) => (
-                        <tr key={user.id}>
-                            <td className="px-6 py-4 whitespace-nowrap">{user.fullName}</td>
-                            <td className="px-6 py-4 whitespace-nowrap">{user.email}</td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                                <select
-                                    value={user.role}
-                                    onChange={(e) => onEditRole(user.id, e.target.value)}
-                                    className="rounded-md border-gray-300"
-                                >
-                                    <option value="customer">Customer</option>
-                                    <option value="admin">Admin</option>
-                                    <option value="manager">Manager</option>
-                                </select>
-                            </td>
-                            <td className="px-6 py-4 whitespace-nowrap">
-                                <button
-                                    onClick={() => onDeactivate(user.id)}
-                                    className="py-1 px-3 bg-red-500 hover:bg-red-600 text-white rounded-md"
-                                >
-                                    Deactivate
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
-                </tbody>
-            </table>
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    setSettingsTitle('Team');
+  }, []);
+
+  useEffect(() => {
+    const loadData = async () => {
+        console.log(merchantCode)
+      if (merchantCode) {
+        await userService.fetchUsersByMerchantCode(merchantCode, pageNumber, pageSize, dispatch);
+      }
+    };
+    loadData();
+  }, [merchantCode, dispatch]);
+
+  const handleModalOpen = () => {
+    setIsModalOpen(true);
+  }
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+  }
+
+  return (
+    <div>
+        <div className="bg-white p-3 flex justify-end mb-5">
+            <button onClick={handleModalOpen} className='flex items-center justify-center gap-2 bg-priColor text-xs text-white py-2 px-5 rounded-sm'>
+                <Plus size='16px' />
+                Add User
+            </button>
+            {isModalOpen === true && <AddUserForm handleModalClose={handleModalClose} />}
         </div>
-    );
+        <UserManagementTable filteredData={users}/>
+    </div>
+  )
 }
 
-export default UserManagementTable;
+export default UserManagement;

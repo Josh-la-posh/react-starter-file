@@ -21,7 +21,9 @@ const initialState = {
   merchantDomain: [],
   merchantProfileLoading: false,
   merchantProfileError: null,
-  merchantProfile: []
+  merchantProfile: [],
+  merchantBusinessTypes: [],
+  merchantRegistrationTypes: []
 };
 
 const merchantSlice = createSlice({
@@ -111,10 +113,16 @@ const merchantSlice = createSlice({
     merchantProfileFailure: (state, action) => {
       state.merchantProfileLoading = false;
       state.merchantProfileError = action.payload;
+    },
+    merchantBusinessTypesSucess: (state, action) => {
+      state.merchantBusinessTypes = action.payload;
+    },
+    merchantRegistrationTypesSucess: (state, action) => {
+      state.merchantRegistrationTypes = action.payload;
     }
   },
 });
 
-export const { merchantStart, merchantSuccess, merchantFailure, merchantDocumentStart, merchantDocumentSuccess, merchantDocumentFailure, merchantAccountStart, merchantAccountSuccess, merchantAccountFailure, merchantAddressStart, merchantAddressSuccess, merchantAddressFailure, merchantContactStart, merchantContactSuccess, merchantContactFailure, merchantDomainStart, merchantDomainSuccess, merchantDomainFailure, merchantProfileStart, merchantProfileSuccess, merchantProfileFailure } = merchantSlice.actions;
+export const { merchantStart, merchantSuccess, merchantFailure, merchantDocumentStart, merchantDocumentSuccess, merchantDocumentFailure, merchantAccountStart, merchantAccountSuccess, merchantAccountFailure, merchantAddressStart, merchantAddressSuccess, merchantAddressFailure, merchantContactStart, merchantContactSuccess, merchantContactFailure, merchantDomainStart, merchantDomainSuccess, merchantDomainFailure, merchantProfileStart, merchantProfileSuccess, merchantProfileFailure, merchantBusinessTypesSucess, merchantRegistrationTypesSucess } = merchantSlice.actions;
 
 export default merchantSlice.reducer;

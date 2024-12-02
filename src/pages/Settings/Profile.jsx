@@ -29,7 +29,6 @@ function ProfilePage() {
 
 const updateUserData = async () => {
     const userId = userDetails.id;
-    console.log('The id is: ', userId);
     await userService.updateUserData(userId, formData, dispatch);
 };
 
@@ -49,9 +48,7 @@ const handleSubmit = (e) => {
     const v4 = formData.phoneNumber;
     
     if (v1 !== '' && v2 !== '' && v3 !== '' ** v4 !== '') {
-        console.log('print valid result', formData);
         updateUserData();
-        console.log('the data is ', usersLoading);
         usersLoading === true ? setEditing(true) : setEditing(false);
     } else {
         setErrMsg('All fields must be field');

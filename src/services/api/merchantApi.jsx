@@ -1,4 +1,6 @@
-import { merchantAccountFailure, merchantAccountStart, merchantAccountSuccess, merchantAddressFailure, merchantAddressStart, merchantContactFailure, merchantContactStart, merchantContactSuccess, merchantDocumentFailure, merchantDocumentStart, merchantDocumentSuccess, merchantDomainFailure, merchantDomainStart, merchantDomainSuccess, merchantFailure, merchantProfileFailure, merchantProfileStart, merchantProfileSuccess, merchantStart, merchantSuccess } from "../../redux/slices/merchantSlice";
+import { toast } from "react-toastify";
+import { aggregatorFailure, aggregatorStart, aggregatorSuccess } from "../../redux/slices/aggregatorSlice";
+import { merchantAccountFailure, merchantAccountStart, merchantAccountSuccess, merchantAddressFailure, merchantAddressStart, merchantBusinessTypesSucess, merchantContactFailure, merchantContactStart, merchantContactSuccess, merchantDocumentFailure, merchantDocumentStart, merchantDocumentSuccess, merchantDomainFailure, merchantDomainStart, merchantDomainSuccess, merchantFailure, merchantProfileFailure, merchantProfileStart, merchantProfileSuccess, merchantRegistrationTypesSucess, merchantStart, merchantSuccess } from "../../redux/slices/merchantSlice";
 
 class MerchantService {
     constructor(axiosPrivate) {
@@ -179,20 +181,20 @@ class MerchantService {
       }
     }
   
-    async searchMerchantAggregator(data, aggregatorCode, dispatch) {
-        dispatch(merchantStart());
+    async searchMerchantAggregator(formData, aggregatorCode, dispatch) {
+        dispatch(aggregatorStart());
       try {
         const response = await this.axiosPrivate.post(
           `api/Merchant/search/${aggregatorCode}`,
-          JSON.stringify({data})
+          JSON.stringify({formData})
         );
-        console.log('merchant credential created successfully ', response.data);
-        return response.data;
+        const data = response.data.responseData;
+        dispatch(aggregatorSuccess(data));
       } catch (err) {
         if (!err.response) {
-            dispatch(merchantFailure('No response from server'));
+            dispatch(aggregatorFailure('No response from server'));
         } else {
-            dispatch(merchantFailure('Failed to create merchant. Try again.'));
+            dispatch(aggregatorFailure('Failed to create merchant. Try again.'));
         }
       } finally {
       }
@@ -367,20 +369,22 @@ class MerchantService {
       }
     }
   
-    async updateMerchantAddress(merchantCode, data, dispatch) {
-        dispatch(merchantAddressStart());
+    async updateMerchantAddress(merchantCode, formData, dispatch) {
+        dispatch(merchantProfileStart());
       try {
         const response = await this.axiosPrivate.put(
           `api/MerchantAddress/${merchantCode}`,
-          JSON.stringify({data})
+          JSON.stringify(formData)
         );
-        console.log('merchant address updated successfully ', response.data);
-        return response.data;
+        toast('Merchant profile updated successfully');
+        const data = response.data.responseData;
+        console.log(data);
+        dispatch(merchantProfileSuccess(data));
       } catch (err) {
         if (!err.response) {
-            dispatch(merchantAddressFailure('No response from server'));
+            dispatch(merchantProfileFailure('No response from server'));
         } else {
-            dispatch(merchantAddressFailure('Failed to update merchant address. Try again.'));
+            dispatch(merchantProfileFailure('Failed to update merchant address. Try again.'));
         }
       } finally {
       }
@@ -505,20 +509,15 @@ class MerchantService {
     // merchant profile
   
     async fetchMerchantProfileBusinessType(dispatch) {
-        dispatch(merchantProfileStart());
+        // dispatch(merchantProfileStart());
       try {
         const response = await this.axiosPrivate.get(
           `api/MerchantProfile/business-type`
         );
-        console.log('merchant profile business type fetched successfully ', response.data);
-        return response.data;
+        const data = response.data.responseData;
+        dispatch(merchantBusinessTypesSucess(data));
       } catch (err) {
-        if (!err.response) {
-            dispatch(merchantProfileFailure('No response from server'));
-        } else {
-            dispatch(merchantProfileFailure('Failed to fetch merchant profile business type. Try again.'));
-        }
-      } finally {
+        toast('Couldn\'t fetch business types');
       }
     }
   
@@ -528,28 +527,26 @@ class MerchantService {
         const response = await this.axiosPrivate.get(
           'api/MerchantProfile/registration-type'
         );
-        console.log('merchant profile registration type fetched successfully ', response.data);
-        return response.data;
+        const data = response.data.responseData;
+        dispatch(merchantRegistrationTypesSucess(data));
       } catch (err) {
-        if (!err.response) {
-            dispatch(merchantProfileFailure('No response from server'));
-        } else {
-            dispatch(merchantProfileFailure('Failed to fetch merchant registration business type. Try again.'));
-        }
-      } finally {
+        toast('Couldn\'t fetch registration types');
       }
     }
   
-    async updateMerchantProfile(merchantCode, data, dispatch) {
+    async updateMerchantProfile(merchantCode, formData, addressData, dispatch, navigate) {
         dispatch(merchantProfileStart());
+        console.log(merchantCode, formData)
       try {
         const response = await this.axiosPrivate.put(
           `api/MerchantProfile/${merchantCode}`,
-          JSON.stringify({data})
+          JSON.stringify(formData)
         );
-        console.log('merchant Profile updated successfully ', response.data);
-        return response.data;
+        const data = response.data.responseData;
+        await this.updateMerchantAddress(merchantCode, addressData, dispatch);
+        navigate(-1);
       } catch (err) {
+        console.log('E no gree work oooo, ', err.response)
         if (!err.response) {
             dispatch(merchantProfileFailure('No response from server'));
         } else {

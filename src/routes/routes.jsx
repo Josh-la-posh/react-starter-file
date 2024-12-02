@@ -32,6 +32,7 @@ import MerchantDocument from '../pages/Merchant/MerchantDocument';
 import MerchantCredential from '../pages/Merchant/MerchantCredentials';
 import SettlementBatchTransaction from '../pages/Settlement/SettlementBatchTransaction';
 import ContactPage from '../pages/Settings/Contact';
+import UserManagement from '../pages/Settings/UserManagement';
 
 const RoutesSystem = () => {
   return (
@@ -65,7 +66,7 @@ const RoutesSystem = () => {
             <Route path='' element={<MerchantPage />} />
             <Route path='addNew' element={<AddMerchantPage />} />
             <Route path='profile/:merchantCode' element={<MerchantProfile />} />
-            <Route path='profile/update' element={<MerchantProfileUpdate />} />
+            <Route path='profile/update/:merchantCode' element={<MerchantProfileUpdate />} />
             <Route path='domain/:merchantCode' element={<MerchantDomain />} />
             <Route path='document/:merchantCode' element={<MerchantDocument />} />
             <Route path='credential' element={<MerchantCredential />} />
@@ -86,7 +87,7 @@ const RoutesSystem = () => {
               <Route path="security" element={<SecuritySettings />} />
               <Route path="notification" element={<NotificationSettings />} />
               <Route path="privacy" element={<PrivacySettings />} />
-              {/* <Route path="user" element={<UserManagementTable />} /> */}
+              <Route path="user" element={<UserManagement />} />
             </Route>
           </Route>
 

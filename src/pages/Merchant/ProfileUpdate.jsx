@@ -2,62 +2,99 @@ import React, { useEffect, useState } from 'react';
 import useAxiosPrivate from '../../services/hooks/useAxiosPrivate';
 import { useDispatch, useSelector } from 'react-redux';
 import MerchantService from '../../services/api/merchantApi';
-import { Link, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import AuthInputField from '../../components/AuthInptField';
 
 const NAME_REGEX = /^[a-zA-Z0-9\s\-']{3,50}$/;
 
 function MerchantProfileUpdate() {
     const { merchantCode } = useParams();
+    const navigate = useNavigate();
     const axiosPrivate = useAxiosPrivate();
     const merchantService = new MerchantService(axiosPrivate);
     const dispatch = useDispatch();
+    const { 
+        merchantBusinessTypes,
+        merchantRegistrationTypes 
+        } = useSelector((state) => state.merchant);
     const { merchantProfile } = useSelector((state) => state.merchant);
 
-    const [countryList, setCountryList] = useState([]);
-    const [showCountryListReload, setShowCountryListReload] = useState(false);
-    const [stateList, setStateList] = useState([]);
-    const [cityList, setCityList] = useState([]);
+    // profile updte
+
+    const [registrationTypes, setRegistrationTypes] = useState(merchantRegistrationTypes);
+    const [businessTypes, setBusinessTypes] = useState(merchantBusinessTypes);
     const [industryList, setIndustryList] = useState([]);
     const [showIndustryListReload, setShowIndustryListReload] = useState(false);
     const [industryCategoryList, setIndustryCategoryList] = useState([]);
     const [showIndustryCategoryListReload, setShowIndustryCategoryListReload] = useState(false);
     const [showIndustryCategories, setShowIndustryCategories] = useState(false);
-    const [industryId, setIndustryId] = useState(null);
 
-    const [validMerchantName, setValidMerchantName] = useState(false);
-    const [merchantNameFocus, setMerchantNameFocus] = useState(false);
+    // address update
 
-    const [validMerchantCode, setValidMerchantCode] = useState(false);
-    const [merchantCodeFocus, setMerchantCodeFocus] = useState(false);
+    const [countryList, setCountryList] = useState([]);
+    const [showCountryListReload, setShowCountryListReload] = useState(false);
+    const [stateList, setStateList] = useState([]);
+    const [cityList, setCityList] = useState([]);
+
+    // profile data
+    const [validBusinessDescription, setValidBusinessDescription] = useState(false);
+    const [businessDescriptionFocus, setBusinessDescriptionFocus] = useState(false);
+
+    const [validReturnUrl, setValidReturnUrl] = useState(false);
+    const [returnUrlFocus, setReturnUrlFocus] = useState(false);
+
+    const [validNotificationUrl, setValidNotificationUrl] = useState(false);
+    const [notificationUrlFocus, setNotificationUrlFocus] = useState(false);
+
+    const [validMerchantMCC, setValidMerchantMCC] = useState(false);
+    const [merchantMCCFocus, setMerchantMCCFocus] = useState(false);
+
+    // address data
 
     const [validMerchantAddress, setValidMerchantAddress] = useState(false);
     const [merchantAddressFocus, setMerchantAddressFocus] = useState(false);
 
+    const [validMerchantCity, setValidMerchantCity] = useState(false);
+    const [merchantCityFocus, setMerchantCityFocus] = useState(false);
+
     const [validPostalCode, setValidPostalCode] = useState(false);
     const [postalCodeFocus, setPostalCodeFocus] = useState(false);
 
-    const [validBusinessType, setValidBusinessType] = useState(false);
-    const [businessTypeFocus, setBusinessTypeFocus] = useState(false);
-
-    const [validRegistrationType, setValidRegistrationType] = useState(false);
-    const [registrationTypeFocus, setRegistrationTypeFocus] = useState(false);
-
-
-    const [formData, setFormData] = useState({
-        merchantName: merchantProfile.merchantName ?? '',
-        merchantCode: merchantProfile.merchantCode ?? '',
+    const [addressData, setAddressData] = useState({
         merchantAddress: merchantProfile.address ?? '',
         merchantCity: merchantProfile.city ?? '',
         merchantState: merchantProfile.state ?? '',
         postalCode: merchantProfile.postalCode ?? '',
-        country: 'NG',
-        status: merchantProfile.status ?? '',
-        isWhitelisted: merchantProfile.isWhitelisted === true ? 'True' : 'False' ?? false,
-        businessType: merchantProfile.businessType ?? '',
-        registerationType: merchantProfile.registrationType ?? '',
-        industryCategoryId: 1,
+    })
+
+    const [formData, setFormData] = useState({
+        businessDescription: merchantProfile.businessDescription ?? '',
+        industryCategoryId: merchantProfile.industryCategoryId ?? 1,
+        businessType: merchantProfile.businessType ?? 'None',
+        registrationType: merchantProfile.registrationType ?? 'None',
+        returnUrl: merchantProfile.returnUrl ?? '',
+        notificationUrl: merchantProfile.notificationUrl ?? '',
+        merchantMCC: merchantProfile.merchantMCC ?? '',
     });
+
+    useEffect(() => {
+        setAddressData({
+            merchantAddress: merchantProfile.address ?? '',
+            merchantCity: merchantProfile.city ?? '',
+            merchantState: merchantProfile.state ?? '',
+            postalCode: merchantProfile.postalCode ?? '',
+        })
+
+        setFormData({
+            businessDescription: merchantProfile.businessDescription ?? '',
+            industryCategoryId: merchantProfile.industryCategoryId ?? 1,
+            businessType: merchantProfile.businessType ?? 'None',
+            registerationType: merchantProfile.registrationType ?? 'None',
+            returnUrl: merchantProfile.returnUrl ?? '',
+            notificationUrl: merchantProfile.notificationUrl ?? '',
+            merchantMCC: merchantProfile.merchantMCC ?? '',
+        })
+    }, [merchantProfile])
 
     useEffect(() => {
       const loadData = async () => {
@@ -75,6 +112,14 @@ function MerchantProfileUpdate() {
     useEffect(() => {
         getIndustry();
     }, [])
+    
+    useEffect(() => {
+        setRegistrationTypes(merchantRegistrationTypes);
+    }, [merchantRegistrationTypes])
+    
+    useEffect(() => {
+        setBusinessTypes(merchantBusinessTypes);
+    }, [merchantBusinessTypes])
 
     const getCountry = async () => {
         try {
@@ -91,7 +136,6 @@ function MerchantProfileUpdate() {
                 setShowCountryListReload(true);
             }
         } catch (err) {
-            console.log('Error printing country ', err.response);
             setShowCountryListReload(true);
         }
     }
@@ -100,14 +144,14 @@ function MerchantProfileUpdate() {
         try {
             const response = await axiosPrivate.get('api/industry');
             if (response.data.message === 'Successful') {
-                console.log('The new response is ', response.data);
-                setIndustryList(response.data.responseData);
+                const result = response.data.responseData;
+                setIndustryList(result);
+                getIndustryCategories(result[0].id)
                 setShowIndustryListReload(false);
             } else {
                 setShowIndustryListReload(true);
             }
         } catch (err) {
-            console.log('Error printing industry ', err.response);
             setShowIndustryListReload(true);
         }
     }
@@ -116,17 +160,48 @@ function MerchantProfileUpdate() {
         try {
             const response = await axiosPrivate.get(`api/industry/categories/${id}`);
             if (response.data.message === 'Successful') {
-                console.log('The new industry categories are ', response.data);
-                setIndustryCategoryList(response.data.responseData);
+                const result = response.data.responseData;
+                setIndustryCategoryList(result);
+                
+                setFormData((prevState) => ({
+                    ...prevState,
+                    industryCategoryId: result[0].id,
+                }));
+                setShowIndustryCategories(true);
                 setShowIndustryCategoryListReload(false);
             } else {
                 setShowIndustryCategoryListReload(true);
+                setShowIndustryCategories(false);
             }
         } catch (err) {
-            console.log('Error printing industry categories ', err.response);
             setShowIndustryCategoryListReload(true);
+            setShowIndustryCategories(false);
         }
     }
+    
+    useEffect(() => {
+        getBusinessType();
+    }, [])
+    
+    useEffect(() => {
+        getRegistrationType();
+    }, [])
+
+    const getBusinessType = () => {
+        merchantService.fetchMerchantProfileBusinessType(dispatch);
+    }
+
+    const getRegistrationType = () => {
+        merchantService.fetchMerchantProfileRegistrationType(dispatch);
+    }
+
+    const handleAddressChange = (e) => {
+        const { name, value } = e.target;
+        setAddressData((prevState) => ({
+            ...prevState,
+            [name]: value,
+        }));
+    };
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -153,18 +228,75 @@ function MerchantProfileUpdate() {
 
     const handleCityChange = () => {}
 
-    const handleStatusChange = () => {}
+    const handleStatusChange = (e) => {
+        const { name, value } = e.target;
+    
+        setFormData((prevState) => ({
+            ...prevState,
+            [name]: value,
+        }));
+    }
 
-    const handleWhitelistedChange = () => {}
+    const handleWhitelistedChange = (e) => {
+        const { name, value } = e.target;
+    
+        var result;
+
+        if (value === 'true') {
+            result = true;
+        } else {
+            result = false;
+        }
+        setFormData((prevState) => ({
+            ...prevState,
+            [name]: result,
+        }));
+        
+    }
 
     const handleIndustryChange = (e) => {
         getIndustryCategories(e.target.value);
+        var result = parseInt(e.target.value)
+        setFormData((prevState) => ({
+            ...prevState,
+            industryCategoryId: result,
+        }));
     }
 
     useEffect(() => {
-        const result = NAME_REGEX.test(formData.merchantName);
-        setValidMerchantName(result);
-    }, [formData.merchantName]);
+        const result = addressData?.merchantAddress?.length > 3;
+        setValidMerchantAddress(result);
+    }, [addressData.merchantAddress]);
+
+    useEffect(() => {
+        const result = addressData?.merchantCity?.length > 1;
+        setValidMerchantCity(result);
+    }, [addressData.merchantCity]);
+
+    useEffect(() => {
+        const result = addressData?.postalCode?.length > 3;
+        setValidPostalCode(result);
+    }, [addressData.postalCode]);
+
+    useEffect(() => {
+        const result = formData?.businessDescription?.length > 3;
+        setValidBusinessDescription(result);
+    }, [formData.businessDescription]);
+
+    useEffect(() => {
+        const result = formData?.returnUrl?.length > 3;
+        setValidReturnUrl(result);
+    }, [formData.returnUrl]);
+
+    useEffect(() => {
+        const result = formData?.notificationUrl?.length > 3;
+        setValidNotificationUrl(result);
+    }, [formData.notificationUrl]);
+
+    useEffect(() => {
+        const result = formData?.merchantMCC?.length > 3;
+        setValidMerchantMCC(result);
+    }, [formData.merchantMCC]);
 
   useEffect(() => {
     const loadData = async () => {
@@ -175,248 +307,269 @@ function MerchantProfileUpdate() {
     loadData();
   }, [merchantCode, dispatch]);
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    merchantService.updateMerchantProfile(merchantCode, formData, addressData, dispatch, navigate)
+  }
+
   return (
     <div className="py-10 px-5 bg-white h-full">
         <div className="mb-12 flex justify-between items-center">
             <p className='text-base font-[600]'>Update Merchant Profile</p>
         </div>
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5 text-sm font-medium text-gray-700">
-            <AuthInputField
-                label="Merchant Name"
-                type='text'
-                validName={validMerchantName}
-                valueName={formData.merchantName}
-                id="merchantName"
-                onChange={handleChange}
-                setOnFocus={setMerchantNameFocus}
-                nameFocus={merchantNameFocus}
-                errNote={(
-                    <>
-                        Merchant name is required.
-                        <br />
-                        Merchant name must be between 3 and 50 characters.
-                        <br />
-                        Merchant name can only contain letters, numbers, spaces, hyphens, and apostrophes.
-                        <br />
-                        Merchant name cannot start or end with a space.
-                    </>
-                )}
-            />
-            <AuthInputField
-                label="Merchant Code"
-                type='text'
-                validName={validMerchantCode}
-                valueName={formData.merchantCode}
-                id="merchantCode"
-                onChange={handleChange}
-                setOnFocus={setMerchantCodeFocus}
-                nameFocus={merchantCodeFocus}
-                errNote={(
-                    <>
-                        Merchant code is required.
-                        <br />
-                        Merchant code must be between 3 and 50 characters.
-                        <br />
-                        Merchant code can only contain letters, numbers, spaces, hyphens, and apostrophes.
-                        <br />
-                        Merchant code cannot start or end with a space.
-                    </>
-                )}
-            />
-            <AuthInputField
-                label="Address"
-                type='text'
-                validName={validMerchantAddress}
-                valueName={formData.merchantAddress}
-                id="address"
-                onChange={handleChange}
-                setOnFocus={setMerchantAddressFocus}
-                nameFocus={merchantAddressFocus}
-                errNote={(
-                    <>
-                        Address is required.
-                    </>
-                )}
-            />
-            <div className="mb-6 w-full">
-                <label className="mb-1 lg:mb-2 flex items-center" htmlFor="country">
-                    Country
-                </label>
-                <select
-                    id="country"
-                    name="country"
-                    value={formData.country}
-                    onChange={handleCountryChange}
-                    className="w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
-                    required
-                >
-                    {countryList.map((country) => (
-                        <option key={country.id} value={country.id}>
-                            {country.countryName}
-                        </option>
-                    ))}
-                </select>
-                {showCountryListReload && <div className="w-full mt-2">
-                    <Link to='' onClick={getCountry} className='text-priColor text-xs text-right cursor'>Retry</Link>
-                </div>}
-            </div>
-            <div className="mb-6 w-full">
-                <label className="mb-1 lg:mb-2 flex items-center" htmlFor="state">
-                    State
-                </label>
-                <select
-                    id="state"
-                    name="state"
-                    value={formData.state}
-                    onChange={(e) => handleStateChange(e)}
-                    className="w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
-                    required
-                >
-                    {stateList.map((state) => (
-                        <option key={state.id} value={state.id}>
-                            {state.stateName}
-                        </option>
-                    ))}
-                </select>
-            </div>
-            <div className="mb-6 w-full">
-                <label className="mb-1 lg:mb-2 flex items-center" htmlFor="city">
-                    City
-                </label>
-                <select
-                    id="city"
-                    name="city"
-                    value={formData.city}
-                    onChange={(e) => handleCityChange(e)}
-                    className="w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
-                    required
-                >
-                    {cityList.map((city) => (
-                        <option key={city.id} value={city.id}>
-                            {city.cityName}
-                        </option>
-                    ))}
-                </select>
-            </div>
-            <AuthInputField
-                label="Postal Code"
-                type='text'
-                validName={validPostalCode}
-                valueName={formData.postalCode}
-                id="postalCode"
-                onChange={handleChange}
-                setOnFocus={setPostalCodeFocus}
-                nameFocus={postalCodeFocus}
-                errNote={(
-                    <>
-                        Postal code is required.
-                    </>
-                )}
-            />
-            <div className="mb-6 w-full">
-                <label className="mb-1 lg:mb-2 flex items-center" htmlFor="status">
-                    Status
-                </label>
-                <select
-                    id="status"
-                    name="status"
-                    value={formData.status}
-                    onChange={(e) => handleStatusChange(e)}
-                    className="w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
-                    required
-                >
-                <option value='active'>Active</option>
-                <option value='inactive'>Inactive</option>
-                </select>
-            </div>
-            <div className="mb-6 w-full">
-                <label className="mb-1 lg:mb-2 flex items-center" htmlFor="whitelisted">
-                    White Listed
-                </label>
-                <select
-                    id="whitelisted"
-                    name="whitelisted"
-                    value={formData.isWhitelisted}
-                    onChange={(e) => handleWhitelistedChange(e)}
-                    className="w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
-                    required
-                >
-                    <option value='true'>True</option>
-                    <option value='false'>False</option>
-                </select>
-            </div>
-            <AuthInputField
-                label="Business Type"
-                type='text'
-                validName={validBusinessType}
-                valueName={formData.businessType}
-                id="businessType"
-                onChange={handleChange}
-                setOnFocus={setBusinessTypeFocus}
-                nameFocus={businessTypeFocus}
-                errNote={(
-                    <>
-                        Business type is required.
-                    </>
-                )}
-            />
-            <AuthInputField
-                label="Registration Type"
-                type='text'
-                validName={validRegistrationType}
-                valueName={formData.registerationType}
-                id="registrationType"
-                onChange={handleChange}
-                setOnFocus={setRegistrationTypeFocus}
-                nameFocus={registrationTypeFocus}
-                errNote={(
-                    <>
-                        Registration type is required.
-                    </>
-                )}
-            />
-            <div className="mb-6 w-full">
-                <label className="mb-1 lg:mb-2 flex items-center" htmlFor="industry">
-                    Industry
-                </label>
-                <select
-                    id="industry"
-                    name="industry"
-                    value={formData.industry}
-                    onChange={(e) => handleIndustryChange(e)}
-                    className="w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
-                    required
-                >
-                    {industryList.map((industry) => (
-                        <option key={industry.id} value={industry.id}>
-                            {industry.industryName}
-                        </option>
-                    ))}
-                </select>
-            </div>
-            {
-                industryId !== null &&
-                <div className="mb-6 w-full">
-                    <label className="mb-1 lg:mb-2 flex items-center" htmlFor="industryCategoryId">
-                        Industry Category
+        <form onSubmit={handleSubmit}>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5 text-sm font-medium text-gray-700">
+                <AuthInputField
+                    label="Business Description"
+                    type='text'
+                    validName={validBusinessDescription}
+                    valueName={formData.businessDescription}
+                    id="businessDescription"
+                    onChange={handleChange}
+                    setOnFocus={setBusinessDescriptionFocus}
+                    nameFocus={businessDescriptionFocus}
+                    errNote={(
+                        <>
+                            Business description is required.
+                        </>
+                    )}
+                />
+                <AuthInputField
+                    label="Address"
+                    type='text'
+                    validName={validMerchantAddress}
+                    valueName={addressData.merchantAddress}
+                    id="merchantAddress"
+                    onChange={handleAddressChange}
+                    setOnFocus={setMerchantAddressFocus}
+                    nameFocus={merchantAddressFocus}
+                    errNote={(
+                        <>
+                            Address is required.
+                        </>
+                    )}
+                />
+                {/* <div className="mb-6 w-full">
+                    <label className="mb-1 lg:mb-2 flex items-center" htmlFor="country">
+                        Country
                     </label>
                     <select
-                        id="industryCategoryId"
-                        name="industryCategoryId"
-                        value={formData.industryCategoryId}
-                        onChange={handleChange}
+                        id="country"
+                        name="country"
+                        value={formData.country}
+                        onChange={handleCountryChange}
                         className="w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
                         required
                     >
-                        {industryCategoryList.map((industry) => (
-                            <option key={industry.id} value={industry.id}>
-                                {industry.categoryName}
+                        {countryList.map((country) => (
+                            <option key={country.id} value={country.id}>
+                                {country.countryName}
+                            </option>
+                        ))}
+                    </select>
+                    {showCountryListReload && <div className="w-full mt-2">
+                        <Link to='' onClick={getCountry} className='text-priColor text-xs text-right cursor'>Retry</Link>
+                    </div>}
+                </div> */}
+                <div className="mb-6 w-full">
+                    <label className="mb-1 lg:mb-2 flex items-center" htmlFor="state">
+                        State
+                    </label>
+                    <select
+                        id="state"
+                        name="state"
+                        value={addressData.state}
+                        onChange={(e) => handleStateChange(e)}
+                        className="w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
+                        required
+                    >
+                        {stateList.map((state) => (
+                            <option key={state.id} value={state.id}>
+                                {state.stateName}
                             </option>
                         ))}
                     </select>
                 </div>
-            }
-        </div>
+                {/* <div className="mb-6 w-full">
+                    <label className="mb-1 lg:mb-2 flex items-center" htmlFor="city">
+                        City
+                    </label>
+                    <select
+                        id="city"
+                        name="city"
+                        value={formData.city}
+                        onChange={(e) => handleCityChange(e)}
+                        className="w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
+                        required
+                    >
+                        {cityList.map((city) => (
+                            <option key={city.id} value={city.id}>
+                                {city.cityName}
+                            </option>
+                        ))}
+                    </select>
+                </div> */}
+                <AuthInputField
+                    label="City"
+                    type='text'
+                    validName={validMerchantCity}
+                    valueName={addressData.merchantCity}
+                    id="merchantCity"
+                    onChange={handleAddressChange}
+                    setOnFocus={setMerchantCityFocus}
+                    nameFocus={merchantCityFocus}
+                    errNote={(
+                        <>
+                            City is required.
+                        </>
+                    )}
+                />
+                <AuthInputField
+                    label="Postal Code"
+                    type='text'
+                    validName={validPostalCode}
+                    valueName={addressData.postalCode}
+                    id="postalCode"
+                    onChange={handleAddressChange}
+                    setOnFocus={setPostalCodeFocus}
+                    nameFocus={postalCodeFocus}
+                    errNote={(
+                        <>
+                            Postal code is required.
+                        </>
+                    )}
+                />
+                <AuthInputField
+                    label="Return Url"
+                    type='text'
+                    validName={validReturnUrl}
+                    valueName={formData.returnUrl}
+                    id="returnUrl"
+                    onChange={handleChange}
+                    setOnFocus={setReturnUrlFocus}
+                    nameFocus={returnUrlFocus}
+                    errNote={(
+                        <>
+                            Return Url is required.
+                        </>
+                    )}
+                />
+                <AuthInputField
+                    label="Notification Url"
+                    type='text'
+                    validName={validNotificationUrl}
+                    valueName={formData.notificationUrl}
+                    id="notificationUrl"
+                    onChange={handleChange}
+                    setOnFocus={setNotificationUrlFocus}
+                    nameFocus={notificationUrlFocus}
+                    errNote={(
+                        <>
+                            Notification Url is required.
+                        </>
+                    )}
+                />
+                <AuthInputField
+                    label="Merchant MCC"
+                    type='text'
+                    validName={validMerchantMCC}
+                    valueName={formData.merchantMCC}
+                    id="merchantMCC"
+                    onChange={handleChange}
+                    setOnFocus={setMerchantMCCFocus}
+                    nameFocus={merchantMCCFocus}
+                    errNote={(
+                        <>
+                            Merchant MCC is required.
+                        </>
+                    )}
+                />
+                <div className="mb-6 w-full">
+                    <label className="mb-1 lg:mb-2 flex items-center" htmlFor="businessType">
+                        Business Type
+                    </label>
+                    <select
+                        id="businessType"
+                        name="businessType"
+                        value={formData.businessType}
+                        onChange={handleChange}
+                        className="w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
+                        required
+                    >
+                        {businessTypes.map((reg, index) => (
+                            <option key={index} value={reg}>
+                                {reg}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                <div className="mb-6 w-full">
+                    <label className="mb-1 lg:mb-2 flex items-center" htmlFor="registerationType">
+                        Registration Type
+                    </label>
+                    <select
+                        id="registerationType"
+                        name="registerationType"
+                        value={formData.registerationType}
+                        onChange={handleChange}
+                        className="w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
+                        required
+                    >
+                        {registrationTypes.map((reg, index) => (
+                            <option key={index} value={reg}>
+                                {reg}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                <div className="mb-6 w-full">
+                    <label className="mb-1 lg:mb-2 flex items-center" htmlFor="industry">
+                        Industry
+                    </label>
+                    <select
+                        id="industry"
+                        name="industry"
+                        value={formData.industry}
+                        onChange={(e) => handleIndustryChange(e)}
+                        className="w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
+                        required
+                    >
+                        {industryList.map((industry) => (
+                            <option key={industry.id} value={industry.id}>
+                                {industry.industryName}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                {
+                    showIndustryCategories &&
+                    <div className="mb-6 w-full">
+                        <label className="mb-1 lg:mb-2 flex items-center" htmlFor="industryCategoryId">
+                            Industry Category
+                        </label>
+                        <select
+                            id="industryCategoryId"
+                            name="industryCategoryId"
+                            value={formData.industryCategoryId}
+                            onChange={handleChange}
+                            className="w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
+                            required
+                        >
+                            {industryCategoryList.map((industry) => (
+                                <option key={industry.id} value={industry.id}>
+                                    {industry.categoryName}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                }
+            </div>
+            <div className="flex justify-end">
+                <button type='submit ' className='text-white bg-priColor px-4 py-2 text-sm rounded-sm'>
+                    Update
+                </button>
+            </div>
+        </form>
     </div>
   )
 }

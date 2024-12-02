@@ -31,18 +31,17 @@ export const processLumpsumData = (lumpsum) => {
 
     const lumpsumVolume = lumpsum && Array.isArray(lumpsum)
         ? lumpsum.map((item) => {
+            const successfulVolume = item.transactionStatus === 'Successful' ? item.transactionVolume : 0;
             
-            const successfulVolume = item.transactionStatus === 'Successful' ? item.transactinoVolume : 0;
+            const processingVolume = item.transactionStatus === 'Processing' ? item.transactionVolume : 0;
             
-            const processingVolume = item.transactionStatus === 'Processing' ? item.transactinoVolume : 0;
+            const failedVolume = item.transactionStatus === 'Failed' ? item.transactionVolume : 0;
             
-            const failedVolume = item.transactionStatus === 'Failed' ? item.transactinoVolume : 0;
+            const pendingVolume = item.transactionStatus === 'Pending' ? item.transactionVolume : 0;
             
-            const pendingVolume = item.transactionStatus === 'Pending' ? item.transactinoVolume : 0;
+            const otpVolume = item.transactionStatus === 'Otp' ? item.transactionVolume : 0;
             
-            const otpVolume = item.transactionStatus === 'Otp' ? item.transactinoVolume : 0;
-            
-            const cancelVolume = item.transactionStatus === 'Cancel' ? item.transactinoVolume : 0;
+            const cancelVolume = item.transactionStatus === 'Cancel' ? item.transactionVolume : 0;
             
 
             return {

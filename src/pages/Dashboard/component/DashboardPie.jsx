@@ -37,13 +37,13 @@ function DashboardPie({graph, type}) {
                       offsetY: -10,
                     },
                     value: {
-                      show: true,
+                      show: false,
                       fontSize: '16px',
                       color: '#000',
                       formatter: () => `${totalTransactionsCount} Total`,
                     },
                     total: {
-                        show: true,
+                        show: false,
                         offsetY: -10,
                         label: 'Total',
                         color: '#000',

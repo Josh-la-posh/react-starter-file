@@ -42,6 +42,16 @@ function ContactPage() {
     });
 
     useEffect(() => {
+        setFormData({
+            disputeEmail: merchantContact.disputeEmail ?? '',
+            supportEmail: merchantContact.supportEmail ?? '',
+            businessEmail: merchantContact.businessEmail ?? '',
+            contactEmail: merchantContact.contactEmail ?? '',
+        });
+    }, [merchantContact]);
+    
+
+    useEffect(() => {
         setSettingsTitle('Contact');
     }, []);
 

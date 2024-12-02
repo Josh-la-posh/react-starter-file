@@ -183,7 +183,7 @@ const MerchantTable = ({filteredData, handleOpenModal, isExportPopupOpen, setIsE
                 rowsPerPageOptions={[5, 10, 20, 50]}
                 onIndexChange={handleSelectedRow}
                 selectedIndex={selectedIndex}
-                displayActionButton={true}
+                displayActionButton={false}
                 elementId='MerchantTable'
                 actionButton={
                     <>
@@ -205,12 +205,6 @@ const MerchantTable = ({filteredData, handleOpenModal, isExportPopupOpen, setIsE
                     }
                     </>
                 }
-            />
-            <ExportPopup
-                isOpen={isExportPopupOpen}
-                onClose={() => setIsExportPopupOpen(false)}
-                data={filteredData}
-                elementId='MerchantTable'
             />
         </div>
     );

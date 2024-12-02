@@ -8,7 +8,7 @@ function UpdateInputField({ label, type, valueName, id, onChange, icon, disabled
                 {label}
             </label>
             <div className="relative mt-1 w-full pl-9 pr-3 py-2 border border-gray-300 rounded-md">
-                <div className="absolute top-3 left-3">
+                <div className="absolute top-2 left-3">
                     {icon}
                 </div>
                 <input
@@ -18,7 +18,7 @@ function UpdateInputField({ label, type, valueName, id, onChange, icon, disabled
                     value={valueName}
                     onChange={onChange}
                     disabled={disabled}
-                    className="bg-transparent block text-base text-gray-900 focus:outline-none w-full"
+                    className="bg-transparent block text-sm text-gray-900 focus:outline-none w-full"
                 />
             </div>
         </div>

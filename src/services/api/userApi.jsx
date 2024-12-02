@@ -1,5 +1,4 @@
 import { toast } from "react-toastify";
-import { invoiceFailure, invoiceStart } from "../../redux/slices/invoiceSlice";
 import { usersFailure, usersStart, usersSuccess } from "../../redux/slices/userSlice";
 
 class userService {
@@ -17,7 +16,6 @@ class userService {
           JSON.stringify({data})
         );
         console.log('User created ', response.data);
-        return response.data;
       } catch (err) {
         if (!err.response) {
             dispatch(usersFailure('No response from server'));
@@ -34,8 +32,9 @@ class userService {
         const response = await this.axiosPrivate.get(
           `api/Users/bymerchant/${merchantCode}?pageSize=${pageSize}&pageNumber=${pageNumber}`
         );
-        console.log('This is the user data ', response.data);
-        return response.data;
+        console.log('This is the user data ', response.data.responseData.data);
+        const data = response.data.responseData.data;
+        dispatch(usersSuccess(data));
       } catch (err) {
         if (!err.response) {
             dispatch(usersFailure('No response from server'));
@@ -141,12 +140,12 @@ class userService {
       }
     }
   
-    async activateUser(userId, data, dispatch) {
+    async activateUser(userId, merchantCode, dispatch) {
         dispatch(usersStart());
       try {
         const response = await this.axiosPrivate.put(
           `api/Users/activate`,
-          JSON.stringify({data})
+          JSON.stringify({userId, merchantCode})
         );
         console.log('User data has been activated ', response.data);
         return response.data;
@@ -160,12 +159,12 @@ class userService {
       }
     }
   
-    async updateUser(data, dispatch) {
+    async deactivateUser(userId, merchantCode, dispatch) {
         dispatch(usersStart());
       try {
         const response = await this.axiosPrivate.put(
           `api/Users/deactivate`,
-          JSON.stringify({data})
+          JSON.stringify({userId, merchantCode})
         );
         console.log('User data has been deactivated ', response.data);
         return response.data;
