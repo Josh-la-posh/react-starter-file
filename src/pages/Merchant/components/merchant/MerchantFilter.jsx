@@ -92,13 +92,6 @@ function MerchantFilter() {
                     Search
             </button>
         }
-        <Link
-            to='/merchants/addNew'
-            className={`text-white border border-gray bg-priColor text-xs font-[600] py-2 px-2 rounded-sm flex justify-between items-center gap-2`}
-            >
-                <Plus size='14' />
-                Add
-        </Link>
     </div>
   )
 }
