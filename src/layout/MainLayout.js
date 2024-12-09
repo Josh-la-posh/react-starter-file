@@ -20,7 +20,7 @@ const MainLayout = () => {
     <TitleProvider>
         <div className="w-full h-svh max-h-svh bg-gray-100 relative">
         {openSidebar && (
-          <div className='fixed top-0 left-0 w-48 z-20 block md:hidden'>
+          <div className='fixed top-0 left-0 w-48 z-50 block md:hidden'>
             <Sidebar handleSidebar={handleSidebar} isSidebarTextVisible={isSidebarTextVisible}/>
             <button
               className="absolute top-4 right-0 text-white"
@@ -30,7 +30,7 @@ const MainLayout = () => {
             </button>
           </div>
         )}
-        <div className={`fixed top-0 left-0 ${isSidebarTextVisible ? 'w-48 lg:w-64' : 'w-20'} z-20 hidden md:block`}>
+        <div className={`fixed top-0 left-0 ${isSidebarTextVisible ? 'w-48 lg:w-64' : 'w-20'} z-50 hidden md:block`}>
           <Sidebar handleSidebar={handleSidebar} isSidebarTextVisible={isSidebarTextVisible}/>
         </div>
         <div className={`h-full relative overflow-hidden ${isSidebarTextVisible ? 'md:ml-48 lg:ml-64' : 'ml-20'} bg-[#f7f7f7]`}>

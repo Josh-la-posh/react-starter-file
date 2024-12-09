@@ -33,7 +33,7 @@ function AllSettlementPage() {
 
   return (
     <div className='space-y-4'>
-      <SettlementFilter />
+      {/* <SettlementFilter /> */}
       <SettlementTable filteredData={settlement} merchantCode={merchantCode}/>
     </div>
   )

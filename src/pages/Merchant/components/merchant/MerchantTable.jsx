@@ -45,18 +45,18 @@ const MerchantTable = ({filteredData, handleOpenModal}) => {
                 </Link>
             )
         },
-        {
-            header: 'Domain',
-            accessor: 'merchantCode',
-            render: (id) => (
-                <Link
-                    to={`/merchants/domain/${id}`}
-                    className='text-priColor'
-                >
-                    Domain
-                </Link>
-            )
-        },
+        // {
+        //     header: 'Domain',
+        //     accessor: 'merchantCode',
+        //     render: (id) => (
+        //         <Link
+        //             to={`/merchants/domain/${id}`}
+        //             className='text-priColor'
+        //         >
+        //             Domain
+        //         </Link>
+        //     )
+        // },
         {
             header: 'Document',
             accessor: 'merchantCode',

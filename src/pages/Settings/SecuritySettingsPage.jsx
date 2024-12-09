@@ -1,20 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import useSettingsTitle from '../../services/hooks/useSettingsTitle';
 import ChangePassword from './component/security/ChangePassword';
 import AccountManagement from './component/security/AccountManagement';
 import SecurityNotifications from './component/security/SecurityNotification';
 import ApiKeyManagement from './component/security/ApiKeyManagement';
+import useSettingsTitle from '../../services/hooks/useSettingsTitle';
+import useTitle from '../../services/hooks/useTitle';
 
 function SecuritySettings() {
     const [twoFactorEnabled, setTwoFactorEnabled] = useState(false);
     const { setSettingsTitle } = useSettingsTitle();
+    const { setAppTitle } = useTitle();
 
     const handle2FAToggle = () => {
         setTwoFactorEnabled(!twoFactorEnabled);
     };
 
     useEffect(() => {
-        // setAppTitle('Settings');
+        setAppTitle('Settings');
         setSettingsTitle('Security');
     }, []);
 
@@ -36,6 +38,7 @@ function SecuritySettings() {
             {/* <ApiKeyManagement /> */}
 
             {/* Two-Factor Authentication Section */}
+
             {/* <section className="mb-8">
                 <h2 className="text-xl font-medium mb-4">Two-Factor Authentication</h2>
                 <div className="flex items-center space-x-4">

@@ -68,15 +68,15 @@ const handleSubmit = (e) => {
         <p className='text-gray-500 text-sm font-[500]'>This information will be displayed publicly so be careful what you share.</p> */}
 
         <div className="flex items-center space-x-16">
-            <div className='h-24 w-24 rounded-full bg-gray-500'></div>
-            <div className="flex space-x-3">
+            <div className='h-20 w-20 rounded-full bg-gray-500 text-white font-[800] text-xl flex justify-center items-center'>{formData.firstName[0]} {formData.lastName[0]}</div>
+            {/* <div className="flex space-x-3">
                 <button type='submit' className='bg-priColor p-2 rounded-sm text-white text-[9px] font-[500]'>
                     Upload New
                 </button>
                 <button type='submit' className='bg-gray-300 p-2 rounded-sm text-black text-[9px] font-[500]'>
                     Delete avatar
                 </button>
-            </div>
+            </div> */}
         </div>
 
         <form onSubmit={handleSubmit} className='mt-8'>

@@ -7,6 +7,7 @@ import MerchantService from '../../services/api/merchantApi';
 import useAxiosPrivate from '../../services/hooks/useAxiosPrivate';
 import useAuth from '../../services/hooks/useAuth';
 import { useDispatch, useSelector } from 'react-redux';
+import useTitle from '../../services/hooks/useTitle';
 
 const EMAIL_REGEX = /^[a-zA-Z][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
@@ -16,6 +17,7 @@ function ContactPage() {
     const dispatch = useDispatch();
     const { merchantContact } = useSelector((state) => state.merchant);
     const { setSettingsTitle } = useSettingsTitle();
+    const { setAppTitle } = useTitle();
     const axiosPrivate = useAxiosPrivate();
     const merchantService = new MerchantService(axiosPrivate);
     const merchantCode = auth?.merchant?.merchantCode;
@@ -52,6 +54,7 @@ function ContactPage() {
     
 
     useEffect(() => {
+        setAppTitle('Settings');
         setSettingsTitle('Contact');
     }, []);
 

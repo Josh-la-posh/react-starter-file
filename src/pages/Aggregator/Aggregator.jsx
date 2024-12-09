@@ -1,20 +1,21 @@
 import React, { useEffect, useState } from 'react'
 import useTitle from '../../services/hooks/useTitle';
-import useAuth from '../../services/hooks/useAuth';
 import useAxiosPrivate from '../../services/hooks/useAxiosPrivate';
+import { useDispatch, useSelector } from 'react-redux';
 import AggregatorService from '../../services/api/aggregatorApi';
-import { useDispatch } from 'react-redux';
-import MerchantSelector from '../../components/MerchantSelector';
+import AggregatorProfile from './component/AggregatorProfile';
 
 function Aggregator() {
   const { setAppTitle } = useTitle();
   const axiosPrivate = useAxiosPrivate();
-  const { auth } = useAuth();
+  const aggregatorService = new AggregatorService(axiosPrivate);
   const dispatch = useDispatch();
-  const merchants = auth?.data?.merchants || [];
-  const [merchant, setMerchant] = useState(merchants[0] || {});
-  const merchantCode = merchant.merchantCode;
-  const aggregatorService = new AggregatorService(axiosPrivate, auth);
+  const { aggregator } = useSelector((state) => state.aggregator);
+  const [aggregatorData, setAggregatorData] = useState(aggregator);
+
+  useEffect(() => {
+    setAggregatorData(aggregator);
+  }, [aggregator]);
 
   useEffect(() => {
       setAppTitle('Aggregator');
@@ -22,20 +23,14 @@ function Aggregator() {
 
   useEffect(() => {
     const loadData = async () => {
-      if (merchantCode) {
         await aggregatorService.fetchAggregator(dispatch);
-      }
     };
     loadData();
-  }, [dispatch, aggregatorService]);
-
-  const handleMerchantChange = (selectedMerchant) => {
-    setMerchant(selectedMerchant);
-  };
+  }, [dispatch]);
   
   return (
     <div>
-      <MerchantSelector merchants={merchants} onMerchantChange={handleMerchantChange} />
+      <AggregatorProfile  aggregatorData={aggregatorData}/>
     </div>
   )
 }

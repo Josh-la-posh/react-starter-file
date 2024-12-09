@@ -14,6 +14,7 @@ function UserManagement() {
   const { auth } = useAuth();
   const dispatch = useDispatch();
   const { users } = useSelector((state) => state.users);
+  const [filteredData, setFilteredData] = useState(users);
   const merchantCode = auth?.merchant?.merchantCode;
   const userService = new UserService(axiosPrivate, auth);
   const pageNumber = 1;
@@ -24,6 +25,10 @@ function UserManagement() {
   useEffect(() => {
     setSettingsTitle('Team');
   }, []);
+
+  useEffect(() => {
+    setFilteredData(users);
+  }, [users]);
 
   useEffect(() => {
     const loadData = async () => {
@@ -52,7 +57,7 @@ function UserManagement() {
             </button>
             {isModalOpen === true && <AddUserForm handleModalClose={handleModalClose} />}
         </div>
-        <UserManagementTable filteredData={users}/>
+        <UserManagementTable filteredData={filteredData}/>
     </div>
   )
 }

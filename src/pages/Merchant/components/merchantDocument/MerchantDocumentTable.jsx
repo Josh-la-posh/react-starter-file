@@ -44,9 +44,9 @@ const MerchantDocumentTable = ({filteredData, merchantCode}) => {
         {
             header: 'Action',
             accessor: 'documentId',
-            render: (row) => (
+            render: (id) => (
                 <button
-                    onClick={() => handleDelete(row)}
+                    onClick={() => handleDelete(id)}
                     className='bg-red-700 text-white text-xs px-2 py-1 rounded-[4px]'
                 >
                     Delete

@@ -35,7 +35,7 @@ const SettingsSidebar = ({handleSettingsSidebar, isSettingsSidebarTextVisible}) 
                         <div>Notification</div>
                     </div>
                 </Link>
-                <Link to="/settings/privacy" className={`block py-4 ${settingsTitle === 'Privacy' ? 'text-priColor border-r-4 border-priColor transition duration-300 bg-priColor bg-opacity-10' : ''}`}>
+                <Link to="/settings/privacy" className={`block py-4 ${settingsTitle === 'Privacy Settings' ? 'text-priColor border-r-4 border-priColor transition duration-300 bg-priColor bg-opacity-10' : ''}`}>
                     <div className={`flex items-center gap-2 pl-4`}>
                         <Verified size='15' />
                         <div>Privacy</div>

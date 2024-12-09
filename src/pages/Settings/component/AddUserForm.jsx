@@ -17,10 +17,10 @@ function AddUserForm({handleModalClose}) {
     const [isLoading, setIsLoading] = useState(false);
 
     const [formData, setFormData] = useState({
-        firstName: userDetails.firstName ?? '',
-        lastName: userDetails.lastName ?? '',
-        email: userDetails.email ?? '',
-        phone: userDetails.phoneNumber ?? ''
+        firstName: '',
+        lastName: '',
+        email: '',
+        phone: ''
     });
     
     const handleChange = (e) => {

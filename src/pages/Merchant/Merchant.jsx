@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import AggregatorService from '../../services/api/aggregatorApi';
 import MerchantTable from './components/merchant/MerchantTable';
 import MerchantFilter from './components/merchant/MerchantFilter';
-import useAuth from '../../services/hooks/useAuth';
 
 function MerchantPage() {
   const { setAppTitle } = useTitle();

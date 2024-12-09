@@ -1,6 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import useSettingsTitle from '../../services/hooks/useSettingsTitle';
+import useTitle from '../../services/hooks/useTitle';
 
 function PrivacySettings() {
+    const { setSettingsTitle } = useSettingsTitle();
+    const { setAppTitle } = useTitle();
     const [dataSharing, setDataSharing] = useState(false);
     const [activityVisibility, setActivityVisibility] = useState({
         transactionHistory: false,
@@ -12,6 +16,11 @@ function PrivacySettings() {
         performance: false,
         marketing: false,
     });
+
+    useEffect(() => {
+        setAppTitle('Settings');
+        setSettingsTitle('Privacy Settings');
+    }, []);
 
     const handleActivityChange = (e) => {
         setActivityVisibility({
@@ -130,7 +139,7 @@ function PrivacySettings() {
                 <h2 className="text-xl font-medium mb-4">Download My Data</h2>
                 <button
                     onClick={handleDownloadData}
-                    className="w-full py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white rounded-md"
+                    className="w-full py-2 px-4 bg-priColor text-white rounded-md"
                 >
                     Download Data
                 </button>
@@ -149,7 +158,7 @@ function PrivacySettings() {
 
             {/* Privacy Policy Link */}
             <section className="mt-8">
-                <a href="/privacy-policy" className="text-blue-500 underline">
+                <a href="/privacy-policy" className="text-priColor underline">
                     Read our Privacy Policy
                 </a>
             </section>

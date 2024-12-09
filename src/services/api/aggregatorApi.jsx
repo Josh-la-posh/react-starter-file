@@ -1,4 +1,4 @@
-import { aggregatorBankFailure, aggregatorBankStart, aggregatorDocumentFailure, aggregatorDocumentStart, aggregatorFailure, aggregatorMerchantFailure, aggregatorMerchantStart, aggregatorMerchantSuccess, aggregatorStart } from "../../redux/slices/aggregatorSlice";
+import { aggregatorBankFailure, aggregatorBankStart, aggregatorDocumentFailure, aggregatorDocumentStart, aggregatorFailure, aggregatorMerchantFailure, aggregatorMerchantStart, aggregatorMerchantSuccess, aggregatorStart, aggregatorSuccess } from "../../redux/slices/aggregatorSlice";
 
 class AggregatorService {
     constructor(axiosPrivate) {
@@ -13,8 +13,9 @@ class AggregatorService {
         const response = await this.axiosPrivate.get(
           'api/Aggregator',
         );
-        console.log('This is the aggregator data ', response.data);
-        return response.data;
+        const data = response.data.responseData;
+        console.log('This is the aggregator data ', response.data.responseData);
+        dispatch(aggregatorSuccess(data));
       } catch (err) {
         if (!err.response) {
             dispatch(aggregatorFailure('No response from server'));

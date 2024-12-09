@@ -71,7 +71,7 @@ const UserManagementTable = ({filteredData}) => {
 
     const handleAction = (row) => {
         const id = row.id;
-        row.isActive === true 
+        row.isActive === false 
             ? activateAccount(id, merchantCode, dispatch) 
             : deactivateAccount(id, merchantCode, dispatch);
     }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import useAuth from '../../services/hooks/useAuth';
 import { useSelector } from 'react-redux';
 import SettlementBatchTransactionTable from './components/SettlementBatchTransactionTable';

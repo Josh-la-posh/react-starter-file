@@ -54,6 +54,12 @@ function MerchantFilter() {
     
   return (
     <div className="flex justify-end gap-4">
+        <Link
+            to='/aggregator/all'
+            className='text-white border border-gray bg-priColor text-xs font-[600] py-2 px-2 rounded-sm flex justify-between items-center gap-2'
+            >
+                View Aggregator
+        </Link>
         { canSearch &&
             <div className ="flex items-center justify-center gap-2">
                 <input

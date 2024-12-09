@@ -1,5 +1,6 @@
 import { toast } from "react-toastify";
 import { usersFailure, usersStart, usersSuccess } from "../../redux/slices/userSlice";
+import { useEffect } from "react";
 
 class userService {
     constructor(axiosPrivate, auth, setAuth) {
@@ -148,7 +149,8 @@ class userService {
           JSON.stringify({userId, merchantCode})
         );
         console.log('User data has been activated ', response.data);
-        return response.data;
+        toast('User data has been activated');
+        // await this.fetchUsersByMerchantCode(merchantCode, '40', '1', dispatch);
       } catch (err) {
         if (!err.response) {
             dispatch(usersFailure('No response from server'));
@@ -167,7 +169,8 @@ class userService {
           JSON.stringify({userId, merchantCode})
         );
         console.log('User data has been deactivated ', response.data);
-        return response.data;
+        toast('User data has been deactivated');
+        // this.fetchUsersByMerchantCode(merchantCode, '40', '1', dispatch);
       } catch (err) {
         if (!err.response) {
             dispatch(usersFailure('No response from server'));

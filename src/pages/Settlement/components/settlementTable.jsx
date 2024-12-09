@@ -1,6 +1,6 @@
 import React from 'react';
 import DataTable from '../../../components/Table';
-import { dateFormatter } from '../../../utils/dateFormatter';
+import { dateFormatter, timeFormatter } from '../../../utils/dateFormatter';
 import { Edit } from 'lucide-react';
 import SettlementService from '../../../services/api/settlementApi';
 import useAxiosPrivate from '../../../services/hooks/useAxiosPrivate';
@@ -29,6 +29,15 @@ const SettlementTable = ({filteredData, merchantCode}) => {
             ),
         },
         {
+            header: 'Settlement Time',
+            accessor: 'createdDate',
+            render: (value) => (
+                <span>
+                    {timeFormatter(value)}
+                </span>
+            ),
+        },
+        {
             header: 'Approaved',
             accessor: 'isApproved',
             render: (value) => (
@@ -53,9 +62,9 @@ const SettlementTable = ({filteredData, merchantCode}) => {
         {
             header: '',
             accessor: 'id',
-            render: (value) => (
+            render: (id) => (
                 <Link to='/settlement/batch/transaction'>
-                    <button onClick={() => handleClick(value)}>
+                    <button onClick={() => handleClick(id)}>
                         <Edit size={14} color='green'/>
                     </button>
                 </Link>
@@ -64,8 +73,8 @@ const SettlementTable = ({filteredData, merchantCode}) => {
     ];
 
     const handleClick = async (id) => {
+        console.log('The id is: ', id);
         await settlementservice.getSettlementBatchTransaction(merchantCode, pageNumber, pageSize, id, dispatch);
-        // console.log('The id is: ', id);
     }
 
     return (
