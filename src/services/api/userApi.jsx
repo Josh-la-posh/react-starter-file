@@ -1,5 +1,5 @@
 import { toast } from "react-toastify";
-import { usersFailure, usersStart, usersSuccess } from "../../redux/slices/userSlice";
+import { aggregatorUserFailure, aggregatorUserStart, aggregatorUserSuccess, usersFailure, usersStart, usersSuccess } from "../../redux/slices/userSlice";
 import { useEffect } from "react";
 
 class userService {
@@ -47,18 +47,19 @@ class userService {
     }
   
     async fetchUsersMerchantByAggregatorCode(aggregatorCode, pageNumber, pageSize, dispatch) {
-        dispatch(usersStart());
+        dispatch(aggregatorUserStart());
       try {
         const response = await this.axiosPrivate.get(
           `api/Users/merchant/${aggregatorCode}?pageSize=${pageSize}&pageNumber=${pageNumber}`
         );
         console.log('This is the user data ', response.data);
-        return response.data;
+        const data = response.data.responseData;
+        dispatch(aggregatorUserSuccess(data));
       } catch (err) {
         if (!err.response) {
-            dispatch(usersFailure('No response from server'));
+            dispatch(aggregatorUserFailure('No response from server'));
         } else {
-            dispatch(usersFailure('Failed to load users. Try again.'));
+            dispatch(aggregatorUserFailure('Failed to load users. Try again.'));
         }
       } finally {
       }
@@ -127,6 +128,8 @@ class userService {
         );
         const data = response.data.responseData;
         dispatch(usersSuccess(data));
+
+        console.log('user details: ', data);
         this.setAuth(prev => {
           return {...prev, firstName: data.firstName, lastName: data.lastName, email: data.email, phoneNumber: data.phoneNumber}
         });

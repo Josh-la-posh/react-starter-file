@@ -27,6 +27,17 @@ function ProfilePage() {
     phone: userDetails.phoneNumber ?? ''
 });
 
+useEffect(() => {
+    setFormData({
+        firstName: userDetails.firstName ?? '',
+        lastName: userDetails.lastName ?? '',
+        email: userDetails.email ?? '',
+        phone: userDetails.phoneNumber ?? ''
+    })
+
+    console.log('new user name: ', userDetails.firstName);
+}, [userDetails, auth])
+
 const updateUserData = async () => {
     const userId = userDetails.id;
     await userService.updateUserData(userId, formData, dispatch);

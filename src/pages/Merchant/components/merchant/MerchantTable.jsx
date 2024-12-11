@@ -69,18 +69,18 @@ const MerchantTable = ({filteredData, handleOpenModal}) => {
                 </Link>
             )
         },
-        {
-            header: 'Credentials',
-            accessor: '',
-            render: (id) => (
-                <Link
-                    to='/merchants/credential'
-                    className='text-priColor'
-                >
-                    Credentials
-                </Link>
-            )
-        },
+        // {
+        //     header: 'Credentials',
+        //     accessor: '',
+        //     render: (id) => (
+        //         <Link
+        //             to='/merchants/credential'
+        //             className='text-priColor'
+        //         >
+        //             Credentials
+        //         </Link>
+        //     )
+        // },
         {
             header: 'Business Type',
             accessor: 'businessType',

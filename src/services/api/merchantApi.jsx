@@ -1,6 +1,6 @@
 import { toast } from "react-toastify";
-import { aggregatorFailure, aggregatorStart, aggregatorSuccess } from "../../redux/slices/aggregatorSlice";
-import { merchantAccountFailure, merchantAccountStart, merchantAccountSuccess, merchantAddressFailure, merchantAddressStart, merchantBusinessTypesSucess, merchantContactFailure, merchantContactStart, merchantContactSuccess, merchantDocumentFailure, merchantDocumentStart, merchantDocumentSuccess, merchantDomainFailure, merchantDomainStart, merchantDomainSuccess, merchantFailure, merchantProfileFailure, merchantProfileStart, merchantProfileSuccess, merchantRegistrationTypesSucess, merchantStart, merchantSuccess } from "../../redux/slices/merchantSlice";
+import { aggregatorFailure, aggregatorMerchantFailure, aggregatorMerchantStart, aggregatorMerchantSuccess, aggregatorStart, aggregatorSuccess } from "../../redux/slices/aggregatorSlice";
+import { merchantAccountFailure, merchantAccountStart, merchantAccountSuccess, merchantAddressFailure, merchantAddressStart, merchantBusinessTypesSucess, merchantContactFailure, merchantContactStart, merchantContactSuccess, merchantDocumentFailure, merchantDocumentStart, merchantDocumentSuccess, merchantDocumentTypeFailure, merchantDocumentTypeStart, merchantDocumentTypeSuccess, merchantDomainFailure, merchantDomainStart, merchantDomainSuccess, merchantFailure, merchantProfileFailure, merchantProfileStart, merchantProfileSuccess, merchantRegistrationTypesSucess, merchantStart, merchantSuccess } from "../../redux/slices/merchantSlice";
 
 class MerchantService {
     constructor(axiosPrivate) {
@@ -10,29 +10,30 @@ class MerchantService {
     // merchant document
   
     async fetchMerchantDocumentTypes(dispatch) {
-        dispatch(merchantDocumentStart());
+        dispatch(merchantDocumentTypeStart());
       try {
         const response = await this.axiosPrivate.get(
-          'api/MerchantDocuments/document-types',
+          'api/MechantDocuments/document-types',
         );
         console.log('merchant document fetched successfully ', response.data);
-        return response.data;
+        const data = response.data.responseData;
+        dispatch(merchantDocumentTypeSuccess(data));
       } catch (err) {
         if (!err.response) {
-            dispatch(merchantDocumentFailure('No response from server'));
+            dispatch(merchantDocumentTypeFailure('No response from server'));
         } else {
-            dispatch(merchantDocumentFailure('Failed to fetch merchant data. Try again.'));
+            dispatch(merchantDocumentTypeFailure('Failed to fetch merchant data. Try again.'));
         }
       } finally {
       }
     }
   
-    async createMerchantDocument(merchantCode, documentId, data, dispatch) {
+    async createMerchantDocument(merchantCode, documentId, fileData, dispatch) {
         dispatch(merchantDocumentStart());
       try {
         const response = await this.axiosPrivate.post(
           `api/MerchantDocuments/${merchantCode}/document-type/${documentId}`,
-          JSON.stringify({data})
+          JSON.stringify(fileData)
         );
         console.log('Merchant document created ', response.data);
         return response.data;
@@ -84,19 +85,19 @@ class MerchantService {
       }
     }
   
-    async downloadMerchantDocument(Id, dispatch) {
-        dispatch(merchantDocumentStart());
+    async downloadMerchantDocument(Id) {
+        // dispatch(merchantDocumentStart());
       try {
         const response = await this.axiosPrivate.get(
-          `api/MerchantDocuments/download/${Id}`,
+          `api/MechantDocuments/download/${Id}`,
         );
         console.log('merchant document fetched successfully ', response.data);
         return response.data;
       } catch (err) {
         if (!err.response) {
-            dispatch(merchantDocumentFailure('No response from server'));
+            // dispatch(merchantDocumentFailure('No response from server'));
         } else {
-            dispatch(merchantDocumentFailure('Failed to fetch merchant data. Try again.'));
+            // dispatch(merchantDocumentFailure('Failed to fetch merchant data. Try again.'));
         }
       } finally {
       }
@@ -182,19 +183,24 @@ class MerchantService {
     }
   
     async searchMerchantAggregator(formData, aggregatorCode, dispatch) {
-        dispatch(aggregatorStart());
+        // dispatch(aggregatorStart());
+        dispatch(aggregatorMerchantStart());
       try {
         const response = await this.axiosPrivate.post(
           `api/Merchant/search/${aggregatorCode}`,
-          JSON.stringify({formData})
+          JSON.stringify(formData)
         );
         const data = response.data.responseData;
-        dispatch(aggregatorSuccess(data));
+        console.log('Fetched data: ', data);
+        // dispatch(aggregatorSuccess(data));
+        dispatch(aggregatorMerchantSuccess(data));
       } catch (err) {
         if (!err.response) {
-            dispatch(aggregatorFailure('No response from server'));
+            // dispatch(aggregatorFailure('No response from server'));
+            dispatch(aggregatorMerchantFailure('No response from server'));
         } else {
-            dispatch(aggregatorFailure('Failed to create merchant. Try again.'));
+            // dispatch(aggregatorFailure('Failed to create merchant. Try again.'));
+            dispatch(aggregatorMerchantFailure('Failed to create merchant. Try again.'));
         }
       } finally {
       }

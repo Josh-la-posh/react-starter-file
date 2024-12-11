@@ -39,16 +39,16 @@ const TransactionTable = ({filteredData, handleOpenModal, isExportPopupOpen, set
             accessor: 'paymentReference',
         },
         {
-            header: 'Name',
-            accessor: 'customerName',
+            header: 'Virtual Acct No',
+            accessor: 'accountNumber',
             render: (value) => (
-                <span className='font-medimu text-gray-900'>
+                <span className='font-medium text-gray-900'>
                     {value}
                 </span>
             ),
         },
         {
-            header: 'Amount',
+            header: 'Amount (₦)',
             accessor: 'amount',
         },
         {

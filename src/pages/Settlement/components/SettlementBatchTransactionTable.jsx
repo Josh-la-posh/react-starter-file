@@ -1,11 +1,10 @@
 import React from 'react';
 import DataTable from '../../../components/Table';
 import { dateFormatter } from '../../../utils/dateFormatter';
-import { Edit } from 'lucide-react';
 import SettlementService from '../../../services/api/settlementApi';
 import useAxiosPrivate from '../../../services/hooks/useAxiosPrivate';
 import { useDispatch } from 'react-redux';
-import { render } from '@testing-library/react';
+import SettlementCard from './SettlementCard';
     
 const columns = [
     {
@@ -18,15 +17,15 @@ const columns = [
         ),
     },
     {
-        header: 'Amount',
+        header: 'Amount (₦)',
         accessor: 'amountCollected',
     },
     {
-        header: 'Transaction Fee',
+        header: 'Transaction Fee (₦)',
         accessor: 'merchantCharge',
     },
     {
-        header: 'Amount Payable',
+        header: 'Amount Payable (₦)',
         accessor: 'amountPayable',
     },
     {
@@ -34,8 +33,8 @@ const columns = [
         accessor: 'paymentReference',
     },
     {
-        header: 'Amount',
-        accessor: 'amount',
+        header: 'Stamp Duty (₦)',
+        accessor: 'N/A',
     },
     {
         header: 'Status',
@@ -62,12 +61,24 @@ const SettlementBatchTransactionTable = ({filteredData, merchantCode}) => {
         amountPayable: `${row.amountCollected - (row.merchantCharge + row.customerCharge)}`,
     }));
 
+    const totalAmount = filteredData.reduce((sum, amount) => (sum + amount.amountCollected), 0)
+    const totalFees = filteredData.reduce((sum, fee) => sum + fee.merchantCharge, 0);
+    // const amountPayable = totalAmount - totalFees;
+    const stampDuty = 50;
+    const amountPayable = totalAmount - (totalFees + stampDuty);
+
     const handleClick = async (id) => {
         await settlementservice.getSettlementBatchTransaction(merchantCode, pageNumber, pageSize, id, dispatch);
     }
 
     return (
         <div className="">
+            <div className="mb-8 flex justify-around w-full space-x-12">
+                <SettlementCard className='flex-1' title='Total Amount' amount={`₦${totalAmount}`} newColor='bg-blue-800' />
+                <SettlementCard title='Stamp Duty' amount={`₦${stampDuty}`} newColor='bg-red-600' />
+                <SettlementCard title='Total Fees' amount={`₦${totalFees}`} newColor='bg-gray-500' />
+                <SettlementCard title='Total Amount Payable' amount={`₦${amountPayable}`} newColor='bg-green-800' />
+            </div>
 
             <DataTable
                 columns={columns}

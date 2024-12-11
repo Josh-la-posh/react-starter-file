@@ -29,6 +29,7 @@ class SettlementService {
     async getSettlementBatchTransaction(merchantCode, pageNumber, pageSize, id, dispatch) {
         dispatch(settlementTransactionStart());
       try {
+        console.log('The id is: ', id);
         const response = await this.axiosPrivate.post(
           `api/Settlement/batch/${id}/transactions?merchantCode=${merchantCode}&pageNumber=${pageNumber}&pageSize=${pageSize}`,
           JSON.stringify({merchantCode})

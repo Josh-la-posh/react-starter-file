@@ -3,7 +3,8 @@ import useTitle from '../../services/hooks/useTitle';
 import useAxiosPrivate from '../../services/hooks/useAxiosPrivate';
 import { useDispatch, useSelector } from 'react-redux';
 import MerchantService from '../../services/api/merchantApi';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { ArrowLeft } from 'lucide-react';
 
 function MerchantProfile() {
     const { merchantCode } = useParams();
@@ -11,6 +12,7 @@ function MerchantProfile() {
     const axiosPrivate = useAxiosPrivate();
     const merchantService = new MerchantService(axiosPrivate);
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const { merchantProfile } = useSelector((state) => state.merchant);
 
     useEffect(() => {
@@ -28,6 +30,7 @@ function MerchantProfile() {
 
     return (
         <div className="p-5">
+            <button onClick={() => navigate(-1)} className='text-priColor mb-5 flex items-center gap-2 text-xs'><ArrowLeft size={'14px'}/> Go Back</button>
             <div className="mb-8 flex justify-between items-center">
                 <p className='text-lg'>Merchant ({merchantProfile.merchantName})</p>
                 <Link to={`/merchants/profile/update/${merchantCode}`} className='bg-priColor text-xs text-white py-2 px-5 rounded-md'>
@@ -55,6 +58,10 @@ function MerchantProfile() {
                 <div className="flex">
                     <p className='flex-1'>State:</p>
                     <span className='font-[400] ml-4 flex-1'>{merchantProfile.state ?? 'N/A'}</span>
+                </div>
+                <div className="flex">
+                    <p className='flex-1'>Phone Number:</p>
+                    <span className='font-[400] ml-4 flex-1'>{merchantProfile.phoneNumber ?? 'N/A'}</span>
                 </div>
                 <div className="flex">
                     <p className='flex-1'>Postal Code:</p>

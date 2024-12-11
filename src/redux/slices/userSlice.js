@@ -3,7 +3,10 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   usersLoading: false,
   usersError: null,
-  users: []
+  users: [],
+  aggregatorUserLoading: false,
+  aggregatorUserError: null,
+  aggregatorUser: []
 };
 
 const usersSlice = createSlice({
@@ -21,10 +24,22 @@ const usersSlice = createSlice({
     usersFailure: (state, action) => {
       state.usersLoading = false;
       state.usersError = action.payload;
+    },
+    aggregatorUserStart: (state) => {
+      state.aggregatorUserLoading = true;
+      state.aggregatorUserError = null;
+    },
+    aggregatorUserSuccess: (state, action) => {
+      state.aggregatorUserLoading = false;
+      state.aggregatorUser = action.payload;
+    },
+    aggregatorUserFailure: (state, action) => {
+      state.aggregatorUserLoading = false;
+      state.aggregatorUserError = action.payload;
     }
   },
 });
 
-export const { usersStart, usersSuccess, usersFailure } = usersSlice.actions;
+export const { usersStart, usersSuccess, usersFailure, aggregatorUserStart, aggregatorUserSuccess, aggregatorUserFailure } = usersSlice.actions;
 
 export default usersSlice.reducer;

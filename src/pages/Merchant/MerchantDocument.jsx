@@ -3,8 +3,10 @@ import useTitle from '../../services/hooks/useTitle';
 import useAxiosPrivate from '../../services/hooks/useAxiosPrivate';
 import { useDispatch, useSelector } from 'react-redux';
 import MerchantService from '../../services/api/merchantApi';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import MerchantDocumentTable from './components/merchantDocument/MerchantDocumentTable';
+import { ArrowLeft } from 'lucide-react';
+import MerchantDocumentFilter from './components/merchantDocument/MerchantDocumentFilter';
 
 function MerchantDocument() {
   const { merchantCode } = useParams();
@@ -28,6 +30,7 @@ function MerchantDocument() {
 
   return (
     <div>
+      <MerchantDocumentFilter />
       <MerchantDocumentTable filteredData={merchantDocument} merchantCode={merchantCode} />
     </div>
   )

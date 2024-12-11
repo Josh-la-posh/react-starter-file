@@ -1,6 +1,7 @@
 import React from 'react';
 import CustomModal from '../../../components/Modal';
 import { dateFormatter } from '../../../utils/dateFormatter';
+import { Cloud } from 'lucide-react';
 
 function TransactionForm({ handleCloseModal, data }) {
   return (
@@ -24,7 +25,11 @@ function TransactionForm({ handleCloseModal, data }) {
         </div>
         <div className="flex-1">
             <div className="flex justify-end">
+              <div className="flex gap-5">
                 <button className='text-white text-xs bg-priColor py-3 px-6 rounded-md'>Resend Notification</button>
+                <button className='text-priColor text-xs rounded-md flex items-center justify-center gap-2 hover:bg-priColor hover:bg-opacity-[0.56] p-3 hover:text-[#121212]'><Cloud size={'15px'}/> Download Receipt</button>
+              </div>
+                
             </div>
             <div className="mt-4 text-gray-600">
                 <p className='mb-3'>Transaction Logs</p>

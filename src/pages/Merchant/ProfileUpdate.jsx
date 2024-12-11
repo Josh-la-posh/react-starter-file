@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import MerchantService from '../../services/api/merchantApi';
 import { useNavigate, useParams } from 'react-router-dom';
 import AuthInputField from '../../components/AuthInptField';
+import { ArrowLeft } from 'lucide-react';
 
 const NAME_REGEX = /^[a-zA-Z0-9\s\-']{3,50}$/;
 
@@ -313,263 +314,266 @@ function MerchantProfileUpdate() {
   }
 
   return (
-    <div className="py-10 px-5 bg-white h-full">
-        <div className="mb-12 flex justify-between items-center">
-            <p className='text-base font-[600]'>Update Merchant Profile</p>
-        </div>
-        <form onSubmit={handleSubmit}>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5 text-sm font-medium text-gray-700">
-                <AuthInputField
-                    label="Business Description"
-                    type='text'
-                    validName={validBusinessDescription}
-                    valueName={formData.businessDescription}
-                    id="businessDescription"
-                    onChange={handleChange}
-                    setOnFocus={setBusinessDescriptionFocus}
-                    nameFocus={businessDescriptionFocus}
-                    errNote={(
-                        <>
-                            Business description is required.
-                        </>
-                    )}
-                />
-                <AuthInputField
-                    label="Address"
-                    type='text'
-                    validName={validMerchantAddress}
-                    valueName={addressData.merchantAddress}
-                    id="merchantAddress"
-                    onChange={handleAddressChange}
-                    setOnFocus={setMerchantAddressFocus}
-                    nameFocus={merchantAddressFocus}
-                    errNote={(
-                        <>
-                            Address is required.
-                        </>
-                    )}
-                />
-                {/* <div className="mb-6 w-full">
-                    <label className="mb-1 lg:mb-2 flex items-center" htmlFor="country">
-                        Country
-                    </label>
-                    <select
-                        id="country"
-                        name="country"
-                        value={formData.country}
-                        onChange={handleCountryChange}
-                        className="w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
-                        required
-                    >
-                        {countryList.map((country) => (
-                            <option key={country.id} value={country.id}>
-                                {country.countryName}
-                            </option>
-                        ))}
-                    </select>
-                    {showCountryListReload && <div className="w-full mt-2">
-                        <Link to='' onClick={getCountry} className='text-priColor text-xs text-right cursor'>Retry</Link>
-                    </div>}
-                </div> */}
-                <div className="mb-6 w-full">
-                    <label className="mb-1 lg:mb-2 flex items-center" htmlFor="state">
-                        State
-                    </label>
-                    <select
-                        id="state"
-                        name="state"
-                        value={addressData.state}
-                        onChange={(e) => handleStateChange(e)}
-                        className="w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
-                        required
-                    >
-                        {stateList.map((state) => (
-                            <option key={state.id} value={state.id}>
-                                {state.stateName}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-                {/* <div className="mb-6 w-full">
-                    <label className="mb-1 lg:mb-2 flex items-center" htmlFor="city">
-                        City
-                    </label>
-                    <select
-                        id="city"
-                        name="city"
-                        value={formData.city}
-                        onChange={(e) => handleCityChange(e)}
-                        className="w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
-                        required
-                    >
-                        {cityList.map((city) => (
-                            <option key={city.id} value={city.id}>
-                                {city.cityName}
-                            </option>
-                        ))}
-                    </select>
-                </div> */}
-                <AuthInputField
-                    label="City"
-                    type='text'
-                    validName={validMerchantCity}
-                    valueName={addressData.merchantCity}
-                    id="merchantCity"
-                    onChange={handleAddressChange}
-                    setOnFocus={setMerchantCityFocus}
-                    nameFocus={merchantCityFocus}
-                    errNote={(
-                        <>
-                            City is required.
-                        </>
-                    )}
-                />
-                <AuthInputField
-                    label="Postal Code"
-                    type='text'
-                    validName={validPostalCode}
-                    valueName={addressData.postalCode}
-                    id="postalCode"
-                    onChange={handleAddressChange}
-                    setOnFocus={setPostalCodeFocus}
-                    nameFocus={postalCodeFocus}
-                    errNote={(
-                        <>
-                            Postal code is required.
-                        </>
-                    )}
-                />
-                <AuthInputField
-                    label="Return Url"
-                    type='text'
-                    validName={validReturnUrl}
-                    valueName={formData.returnUrl}
-                    id="returnUrl"
-                    onChange={handleChange}
-                    setOnFocus={setReturnUrlFocus}
-                    nameFocus={returnUrlFocus}
-                    errNote={(
-                        <>
-                            Return Url is required.
-                        </>
-                    )}
-                />
-                <AuthInputField
-                    label="Notification Url"
-                    type='text'
-                    validName={validNotificationUrl}
-                    valueName={formData.notificationUrl}
-                    id="notificationUrl"
-                    onChange={handleChange}
-                    setOnFocus={setNotificationUrlFocus}
-                    nameFocus={notificationUrlFocus}
-                    errNote={(
-                        <>
-                            Notification Url is required.
-                        </>
-                    )}
-                />
-                <AuthInputField
-                    label="Merchant MCC"
-                    type='text'
-                    validName={validMerchantMCC}
-                    valueName={formData.merchantMCC}
-                    id="merchantMCC"
-                    onChange={handleChange}
-                    setOnFocus={setMerchantMCCFocus}
-                    nameFocus={merchantMCCFocus}
-                    errNote={(
-                        <>
-                            Merchant MCC is required.
-                        </>
-                    )}
-                />
-                <div className="mb-6 w-full">
-                    <label className="mb-1 lg:mb-2 flex items-center" htmlFor="businessType">
-                        Business Type
-                    </label>
-                    <select
-                        id="businessType"
-                        name="businessType"
-                        value={formData.businessType}
+    <div className="">   
+        <button onClick={() => navigate(-1)} className='text-priColor mb-5 flex items-center gap-2 text-xs'><ArrowLeft size={'14px'}/> Go Back</button>
+        <div className="py-10 px-5 bg-white h-full">
+            <div className="mb-12 flex justify-between items-center">
+                <p className='text-base font-[600]'>Update Merchant Profile</p>
+            </div>
+            <form onSubmit={handleSubmit}>
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5 text-sm font-medium text-gray-700">
+                    <AuthInputField
+                        label="Business Description"
+                        type='text'
+                        validName={validBusinessDescription}
+                        valueName={formData.businessDescription}
+                        id="businessDescription"
                         onChange={handleChange}
-                        className="w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
-                        required
-                    >
-                        {businessTypes.map((reg, index) => (
-                            <option key={index} value={reg}>
-                                {reg}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-                <div className="mb-6 w-full">
-                    <label className="mb-1 lg:mb-2 flex items-center" htmlFor="registerationType">
-                        Registration Type
-                    </label>
-                    <select
-                        id="registerationType"
-                        name="registerationType"
-                        value={formData.registerationType}
-                        onChange={handleChange}
-                        className="w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
-                        required
-                    >
-                        {registrationTypes.map((reg, index) => (
-                            <option key={index} value={reg}>
-                                {reg}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-                <div className="mb-6 w-full">
-                    <label className="mb-1 lg:mb-2 flex items-center" htmlFor="industry">
-                        Industry
-                    </label>
-                    <select
-                        id="industry"
-                        name="industry"
-                        value={formData.industry}
-                        onChange={(e) => handleIndustryChange(e)}
-                        className="w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
-                        required
-                    >
-                        {industryList.map((industry) => (
-                            <option key={industry.id} value={industry.id}>
-                                {industry.industryName}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-                {
-                    showIndustryCategories &&
-                    <div className="mb-6 w-full">
-                        <label className="mb-1 lg:mb-2 flex items-center" htmlFor="industryCategoryId">
-                            Industry Category
+                        setOnFocus={setBusinessDescriptionFocus}
+                        nameFocus={businessDescriptionFocus}
+                        errNote={(
+                            <>
+                                Business description is required.
+                            </>
+                        )}
+                    />
+                    <AuthInputField
+                        label="Address"
+                        type='text'
+                        validName={validMerchantAddress}
+                        valueName={addressData.merchantAddress}
+                        id="merchantAddress"
+                        onChange={handleAddressChange}
+                        setOnFocus={setMerchantAddressFocus}
+                        nameFocus={merchantAddressFocus}
+                        errNote={(
+                            <>
+                                Address is required.
+                            </>
+                        )}
+                    />
+                    {/* <div className="mb-6 w-full">
+                        <label className="mb-1 lg:mb-2 flex items-center" htmlFor="country">
+                            Country
                         </label>
                         <select
-                            id="industryCategoryId"
-                            name="industryCategoryId"
-                            value={formData.industryCategoryId}
-                            onChange={handleChange}
+                            id="country"
+                            name="country"
+                            value={formData.country}
+                            onChange={handleCountryChange}
                             className="w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
                             required
                         >
-                            {industryCategoryList.map((industry) => (
-                                <option key={industry.id} value={industry.id}>
-                                    {industry.categoryName}
+                            {countryList.map((country) => (
+                                <option key={country.id} value={country.id}>
+                                    {country.countryName}
+                                </option>
+                            ))}
+                        </select>
+                        {showCountryListReload && <div className="w-full mt-2">
+                            <Link to='' onClick={getCountry} className='text-priColor text-xs text-right cursor'>Retry</Link>
+                        </div>}
+                    </div> */}
+                    <div className="mb-6 w-full">
+                        <label className="mb-1 lg:mb-2 flex items-center" htmlFor="state">
+                            State
+                        </label>
+                        <select
+                            id="state"
+                            name="state"
+                            value={addressData.state}
+                            onChange={(e) => handleStateChange(e)}
+                            className="w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
+                            required
+                        >
+                            {stateList.map((state) => (
+                                <option key={state.id} value={state.id}>
+                                    {state.stateName}
                                 </option>
                             ))}
                         </select>
                     </div>
-                }
-            </div>
-            <div className="flex justify-end">
-                <button type='submit ' className='text-white bg-priColor px-4 py-2 text-sm rounded-sm'>
-                    Update
-                </button>
-            </div>
-        </form>
+                    {/* <div className="mb-6 w-full">
+                        <label className="mb-1 lg:mb-2 flex items-center" htmlFor="city">
+                            City
+                        </label>
+                        <select
+                            id="city"
+                            name="city"
+                            value={formData.city}
+                            onChange={(e) => handleCityChange(e)}
+                            className="w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
+                            required
+                        >
+                            {cityList.map((city) => (
+                                <option key={city.id} value={city.id}>
+                                    {city.cityName}
+                                </option>
+                            ))}
+                        </select>
+                    </div> */}
+                    <AuthInputField
+                        label="City"
+                        type='text'
+                        validName={validMerchantCity}
+                        valueName={addressData.merchantCity}
+                        id="merchantCity"
+                        onChange={handleAddressChange}
+                        setOnFocus={setMerchantCityFocus}
+                        nameFocus={merchantCityFocus}
+                        errNote={(
+                            <>
+                                City is required.
+                            </>
+                        )}
+                    />
+                    <AuthInputField
+                        label="Postal Code"
+                        type='text'
+                        validName={validPostalCode}
+                        valueName={addressData.postalCode}
+                        id="postalCode"
+                        onChange={handleAddressChange}
+                        setOnFocus={setPostalCodeFocus}
+                        nameFocus={postalCodeFocus}
+                        errNote={(
+                            <>
+                                Postal code is required.
+                            </>
+                        )}
+                    />
+                    <AuthInputField
+                        label="Return Url"
+                        type='text'
+                        validName={validReturnUrl}
+                        valueName={formData.returnUrl}
+                        id="returnUrl"
+                        onChange={handleChange}
+                        setOnFocus={setReturnUrlFocus}
+                        nameFocus={returnUrlFocus}
+                        errNote={(
+                            <>
+                                Return Url is required.
+                            </>
+                        )}
+                    />
+                    <AuthInputField
+                        label="Notification Url"
+                        type='text'
+                        validName={validNotificationUrl}
+                        valueName={formData.notificationUrl}
+                        id="notificationUrl"
+                        onChange={handleChange}
+                        setOnFocus={setNotificationUrlFocus}
+                        nameFocus={notificationUrlFocus}
+                        errNote={(
+                            <>
+                                Notification Url is required.
+                            </>
+                        )}
+                    />
+                    <AuthInputField
+                        label="Merchant MCC"
+                        type='text'
+                        validName={validMerchantMCC}
+                        valueName={formData.merchantMCC}
+                        id="merchantMCC"
+                        onChange={handleChange}
+                        setOnFocus={setMerchantMCCFocus}
+                        nameFocus={merchantMCCFocus}
+                        errNote={(
+                            <>
+                                Merchant MCC is required.
+                            </>
+                        )}
+                    />
+                    <div className="mb-6 w-full">
+                        <label className="mb-1 lg:mb-2 flex items-center" htmlFor="businessType">
+                            Business Type
+                        </label>
+                        <select
+                            id="businessType"
+                            name="businessType"
+                            value={formData.businessType}
+                            onChange={handleChange}
+                            className="w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
+                            required
+                        >
+                            {businessTypes.map((reg, index) => (
+                                <option key={index} value={reg}>
+                                    {reg}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="mb-6 w-full">
+                        <label className="mb-1 lg:mb-2 flex items-center" htmlFor="registerationType">
+                            Registration Type
+                        </label>
+                        <select
+                            id="registerationType"
+                            name="registerationType"
+                            value={formData.registerationType}
+                            onChange={handleChange}
+                            className="w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
+                            required
+                        >
+                            {registrationTypes.map((reg, index) => (
+                                <option key={index} value={reg}>
+                                    {reg}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    <div className="mb-6 w-full">
+                        <label className="mb-1 lg:mb-2 flex items-center" htmlFor="industry">
+                            Industry
+                        </label>
+                        <select
+                            id="industry"
+                            name="industry"
+                            value={formData.industry}
+                            onChange={(e) => handleIndustryChange(e)}
+                            className="w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
+                            required
+                        >
+                            {industryList.map((industry) => (
+                                <option key={industry.id} value={industry.id}>
+                                    {industry.industryName}
+                                </option>
+                            ))}
+                        </select>
+                    </div>
+                    {
+                        showIndustryCategories &&
+                        <div className="mb-6 w-full">
+                            <label className="mb-1 lg:mb-2 flex items-center" htmlFor="industryCategoryId">
+                                Industry Category
+                            </label>
+                            <select
+                                id="industryCategoryId"
+                                name="industryCategoryId"
+                                value={formData.industryCategoryId}
+                                onChange={handleChange}
+                                className="w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
+                                required
+                            >
+                                {industryCategoryList.map((industry) => (
+                                    <option key={industry.id} value={industry.id}>
+                                        {industry.categoryName}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                    }
+                </div>
+                <div className="flex justify-end">
+                    <button type='submit ' className='text-white bg-priColor px-4 py-2 text-sm rounded-sm'>
+                        Update
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
   )
 }
