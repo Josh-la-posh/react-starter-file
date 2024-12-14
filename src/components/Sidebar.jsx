@@ -5,7 +5,52 @@ import { ArrowLeftRight, Combine, Handshake, Headset, LayoutDashboard, LogOut, M
 import Logo from "../assets/logo.jpg"
 
 const Sidebar = ({handleSidebar, isSidebarTextVisible}) => {
-    const { appTitle, setAppTitle } = useTitle();
+    const { appTitle } = useTitle();
+
+    const sidebarItems = [
+        {
+            id: 1,
+            icon: <LayoutDashboard size={isSidebarTextVisible ? '18' : '22'} />,
+            title: 'Dashboard',
+            url: '/',
+            openSidebar: true
+        },
+        {
+            id: 2,
+            icon: <Warehouse size={isSidebarTextVisible ? '18' : '22'} />,
+            title: 'Merchant',
+            url: '/merchants/profile',
+            openSidebar: false
+        },
+        {
+            id: 3,
+            icon: <Handshake size={isSidebarTextVisible ? '18' : '22'} />,
+            title: 'Settlements',
+            url: '/settlement/all',
+            openSidebar: true
+        },
+        {
+            id: 4,
+            icon: <ArrowLeftRight size={isSidebarTextVisible ? '18' : '22'} />,
+            title: 'Transaction',
+            url: '/transactions',
+            openSidebar: true
+        },
+        {
+            id: 5,
+            icon: <Settings size={isSidebarTextVisible ? '18' : '22'} />,
+            title: 'Settings',
+            url: '/settings/profile',
+            openSidebar: false
+        },
+        {
+            id: 5,
+            icon: <Headset size={isSidebarTextVisible ? '18' : '22'} />,
+            title: 'Help Center',
+            url: '/help-center',
+            openSidebar: true
+        },
+    ]
 
     return (
         <div className="relative h-[100vh] flex flex-col text-sm lg:text-[14px] bg-white shadow-lg pb-2">
@@ -13,66 +58,16 @@ const Sidebar = ({handleSidebar, isSidebarTextVisible}) => {
                 <img src={Logo} alt="Logo" className="max-h-fit max-w-[85%]" />
             </div>
             <nav className={`flex-1 my-2 ${isSidebarTextVisible ? 'pl-6' : ''} overflow-y-auto scrollbar-none`}>
-                <Link to="/" onClick={() => handleSidebar(true)} className={`block py-4 ${appTitle === 'Dashboard' ? 'text-priColor' : ''}`}>
-                    <div className={`flex items-center ${isSidebarTextVisible ? '' : 'justify-center'} gap-2`}>
-                        <LayoutDashboard size={isSidebarTextVisible ? '18' : '22'} />
-                        <div className={isSidebarTextVisible ? 'block' : 'hidden'}>Dashboard</div>
-                    </div>
-                </Link>
-                {/* <Link to="/customers" onClick={() => handleSidebar(true)} className={`block py-4 ${appTitle === 'Customers' ? 'text-priColor' : ''}`}>
-                    <div className={`flex items-center ${isSidebarTextVisible ? '' : 'justify-center'} gap-2`}>
-                        <User size={isSidebarTextVisible ? '18' : '22'} />
-                        <div className={isSidebarTextVisible ? 'block' : 'hidden'}>Customer</div>
-                    </div>
-                </Link> */}
-                {/* <Link to="/disputes" onClick={() => handleSidebar(true)} className={`block py-4 ${appTitle === 'Disputes' ? 'text-priColor' : ''}`}>
-                    <div className={`flex items-center ${isSidebarTextVisible ? '' : 'justify-center'} gap-2`}>
-                        <MessageSquareX size={isSidebarTextVisible ? '18' : '22'} />
-                        <div className={isSidebarTextVisible ? 'block' : 'hidden'}>Dispute</div>
-                    </div>
-                </Link> */}
-                {/* <Link to="/aggregator/all" onClick={() => handleSidebar(true)} className={`block py-4 ${appTitle === 'Aggregator' ? 'text-priColor' : ''}`}>
-                    <div className={`flex items-center ${isSidebarTextVisible ? '' : 'justify-center'} gap-2`}>
-                        <Combine size={isSidebarTextVisible ? '18' : '22'} />
-                        <div className={isSidebarTextVisible ? 'block' : 'hidden'}>Aggregator</div>
-                    </div>
-                </Link> */}
-                <Link to="/merchants" onClick={() => handleSidebar(true)} className={`block py-4 ${appTitle === 'Merchant' ? 'text-priColor' : ''}`}>
-                    <div className={`flex items-center ${isSidebarTextVisible ? '' : 'justify-center'} gap-2`}>
-                        <Warehouse size={isSidebarTextVisible ? '18' : '22'} />
-                        <div className={isSidebarTextVisible ? 'block' : 'hidden'}>Merchant</div>
-                    </div>
-                </Link>
-                <Link to="/settlement/all" onClick={() => handleSidebar(true)} className={`block py-4 ${appTitle === 'Settlement' ? 'text-priColor' : ''}`}>
-                    <div className={`flex items-center ${isSidebarTextVisible ? '' : 'justify-center'} gap-2`}>
-                        <Handshake size={isSidebarTextVisible ? '18' : '22'} />
-                        <div className={isSidebarTextVisible ? 'block' : 'hidden'}>Settlement</div>
-                    </div>
-                </Link>
-                {/* <Link to="/invoices" onClick={() => handleSidebar(true)} className={`block py-4 ${appTitle === 'Invoices' ? 'text-priColor' : ''}`}>
-                    <div className={`flex items-center ${isSidebarTextVisible ? '' : 'justify-center'} gap-2`}>
-                        <ScrollText size={isSidebarTextVisible ? '18' : '22'} />
-                        <div className={isSidebarTextVisible ? 'block' : 'hidden'}>Invoice</div>
-                    </div>
-                </Link> */}
-                <Link to="/transactions" onClick={() => handleSidebar(true)} className={`block py-4 ${appTitle === 'Transaction' ? 'text-priColor' : ''}`}>
-                    <div className={`flex items-center ${isSidebarTextVisible ? '' : 'justify-center'} gap-2`}>
-                        <ArrowLeftRight size={isSidebarTextVisible ? '18' : '22'} />
-                        <div className={isSidebarTextVisible ? 'block' : 'hidden'}>Transaction</div>
-                    </div>
-                </Link>
-                <Link to="/settings/profile" onClick={() => handleSidebar(false)} className={`block py-4 ${appTitle === 'Settings' ? 'text-priColor' : ''}`}>
-                <div className={`flex items-center ${isSidebarTextVisible ? '' : 'justify-center'} gap-2`}>
-                        <Settings size={isSidebarTextVisible ? '18' : '22'} />
-                        <div className={isSidebarTextVisible ? 'block' : 'hidden'}>Settings</div>
-                    </div>
-                </Link>
-                <Link to="/help-center" onClick={() => handleSidebar(true)} className={`block py-4 ${appTitle === 'Help Center' ? 'text-priColor' : ''}`}>
-                    <div className={`flex items-center ${isSidebarTextVisible ? '' : 'justify-center'} gap-2`}>
-                        <Headset size={isSidebarTextVisible ? '18' : '22'} />
-                        <div className={isSidebarTextVisible ? 'block' : 'hidden'}>Help Center</div>
-                    </div>
-                </Link>
+                {
+                    sidebarItems.map((item) => (
+                        <Link to={item.url} onClick={() => handleSidebar(item.openSidebar)} className={`block py-4 ${appTitle === item.title ? 'text-priColor' : ''}`}>
+                            <div className={`flex items-center ${isSidebarTextVisible ? '' : 'justify-center'} gap-2`}>
+                                {item.icon}
+                                <div className={isSidebarTextVisible ? 'block' : 'hidden'}>{item.title}</div>
+                            </div>
+                        </Link>
+                    ))
+                }
             </nav>
             <nav className={`flex-shrink-0 ${isSidebarTextVisible ? 'pl-6' : ''}`}>
                 <Link to="/login" className="block py-2 hover:bg-priColor">

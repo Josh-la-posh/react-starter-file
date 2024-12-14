@@ -3,14 +3,16 @@ import useTitle from '../../services/hooks/useTitle';
 import useAxiosPrivate from '../../services/hooks/useAxiosPrivate';
 import { useDispatch, useSelector } from 'react-redux';
 import MerchantService from '../../services/api/merchantApi';
-import { useNavigate, useParams } from 'react-router-dom';
 import MerchantDocumentTable from './components/merchantDocument/MerchantDocumentTable';
-import { ArrowLeft } from 'lucide-react';
 import MerchantDocumentFilter from './components/merchantDocument/MerchantDocumentFilter';
+import useAuth from '../../services/hooks/useAuth';
+import useSettingsTitle from '../../services/hooks/useSettingsTitle';
 
 function MerchantDocument() {
-  const { merchantCode } = useParams();
+  const { auth } = useAuth();
+  const merchantCode = auth?.merchant?.merchantCode;
   const { setAppTitle } = useTitle();
+  const { setSettingsTitle } = useSettingsTitle();
   const axiosPrivate = useAxiosPrivate();
   const merchantService = new MerchantService(axiosPrivate);
   const dispatch = useDispatch();
@@ -18,7 +20,8 @@ function MerchantDocument() {
   const [filteredData, setFilteredData] = useState(merchantDocument);
 
   useEffect(() => {
-      setAppTitle('Merchant Document');
+      setAppTitle('Merchant');
+      setSettingsTitle('Document');
   }, []);
 
   useEffect(() => {

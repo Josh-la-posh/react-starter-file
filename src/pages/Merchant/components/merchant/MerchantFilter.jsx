@@ -35,16 +35,6 @@ function MerchantFilter() {
             toast('Fields cannot be empty');
             return;
         }
-
-        // if (v1 === '' && v2 !== '') {
-        //     toast('Merchant name cannot be empty');
-        //     return;
-        // }
-
-        // if (v1 !== '' && v2 === '') {
-        //     toast('Merchant code cannot be empty');
-        //     return;
-        // }
         loadData();
     }
     
@@ -54,15 +44,8 @@ function MerchantFilter() {
     };
     
   return (
-    <div className="flex justify-between items-center">
-        <button onClick={() => navigate(-1)} className='text-priColor flex items-center gap-2 text-xs'><ArrowLeft size={'14px'}/> Go Back</button>
+    <div className="bg-white flex justify-end items-center pb-6 pt-2 pr-4">
         <div className="flex gap-4">
-            <Link
-                to='/aggregator/all'
-                className='text-white border border-gray bg-priColor text-xs font-[600] py-2 px-2 rounded-sm flex justify-between items-center gap-2'
-                >
-                    View Aggregator
-            </Link>
             { canSearch &&
                 <div className ="flex items-center justify-center gap-2">
                     <input
@@ -72,7 +55,6 @@ function MerchantFilter() {
                         onChange={handleChange}
                         className="p-2 pl-4 border border-gray-300 rounded-lg focus:outline-none text-xs"
                         placeholder="Merchant name"
-                        // required
                     />
                     <input
                         type="text"
@@ -81,7 +63,6 @@ function MerchantFilter() {
                         onChange={handleChange}
                         className="p-2 pl-4 border border-gray-300 rounded-lg focus:outline-none text-xs"
                         placeholder="Merchant code"
-                        // required
                     />
                     <button
                         className={`text-white border border-gray bg-priColor text-xs font-[600] py-2 px-2 rounded-sm flex justify-between items-center gap-2`}

@@ -1,11 +1,10 @@
-import { ArrowLeft, Plus, Search } from 'lucide-react';
+import { Plus, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import useAxiosPrivate from '../../../../services/hooks/useAxiosPrivate';
 import MerchantService from '../../../../services/api/merchantApi';
 import { useDispatch, useSelector } from 'react-redux';
-import useAuth from '../../../../services/hooks/useAuth';
 import { toast } from 'react-toastify';
+import useAuth from '../../../../services/hooks/useAuth';
 
 function MerchantDocumentFilter() {
     const { auth } = useAuth();
@@ -13,46 +12,24 @@ function MerchantDocumentFilter() {
     const merchantService = new MerchantService(axiosPrivate);
     const { merchantDocumentType } = useSelector((state) => state.merchant);
     const dispatch = useDispatch();
-    const navigate = useNavigate();
     const [documents, setDocuments] = useState(merchantDocumentType);
     const [canUpload, setCanUpload] = useState(false);
-    const [formData, setFormData] = useState({
-        documents : '',
-        merchantCode : ''
-    });
+    const [file, setFile] = useState(null);
+    const [documentId, setDocumentId] = useState('');
+
+    const handleFileCharge = (e) => {
+        const selectedFile = e.target.files[0];
+        setFile(selectedFile);
+    }
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        console.log(e.target.value);
-        setFormData((prev) => ({
-            ...prev,
-            [name]: value
-        }));
+        setDocumentId(value);
     }
 
     useEffect(() => {
         setDocuments(merchantDocumentType);
     }, [merchantDocumentType])
-
-    const handleUpload = (e) => {
-        const v1 = formData.merchantName;
-        const v2 = formData.merchantCode;
-
-        if (v1 === '' && v2 === '') {
-            toast('Fields cannot be empty');
-            return;
-        }
-
-        if (v1 === '' && v2 !== '') {
-            toast('Merchant name cannot be empty');
-            return;
-        }
-
-        if (v1 !== '' && v2 === '') {
-            toast('Merchant code cannot be empty');
-            return;
-        }
-    }
 
     useEffect(() => {
         loadDocument();
@@ -62,54 +39,67 @@ function MerchantDocumentFilter() {
         await merchantService.fetchMerchantDocumentTypes(dispatch);
     }
 
-    const uploadDocument = async (documentId) => {
-        await merchantService.createMerchantDocument('tes0000449', documentId, formData, dispatch);
+    const uploadDocument = async () => {
+        if (!file) {
+            alert('Please select a file first!');
+            return;
+        }
+        const merchantCode = auth?.merchant?.merchantCode;
+        const formData = new FormData();
+        formData.append("file", file);
+        await merchantService.createMerchantDocument(merchantCode, documentId, formData, dispatch);
     }
     
   return (
-    <div className="flex justify-between items-center mb-5">
-        <button onClick={() => navigate(-1)} className='text-priColor flex items-center gap-2 text-xs'><ArrowLeft size={'14px'}/> Go Back</button>
-        <div className="flex gap-4">
-            { canUpload &&
-                <div className ="flex items-center justify-center gap-2">
-                    <select name="" id="documents" value={documents} onChange={handleChange}>
-                        {
-                            documents.map(document => {
-                                return (
-                                    <option value={document.id} className='text-xs'>
-                                        {document.documentName}
-                                    </option>
-                                )
-                            })
-                        }
-                    </select>
-                    <input
-                        type="text"
-                        name='merchantCode'
-                        value={formData.merchantCode}
-                        onChange={handleChange}
-                        className="p-2 pl-4 border border-gray-300 rounded-lg focus:outline-none text-xs"
-                        placeholder="Merchant code"
-                        required
-                    />
+    <div className="flex justify-end items-center mb-5">
+        <div className="">
+            {/* {file && <p>Selected file: {file.name}</p>} */}
+            <div className="flex items-center gap-4">
+                { canUpload &&
+                    <div className ="flex items-center justify-center gap-2">
+                        <div className="flex flex-col md:flex-row items-start md:items-center gap-2">
+                            <select name="" id="documents" value={documents.id} onChange={handleChange} className='px-2 py-2 outline-none text-xs'>
+                                {
+                                    documents.map(document => {
+                                        return (
+                                            <option value={document.id} className='text-xs'>
+                                                {document.documentName}
+                                            </option>
+                                        )
+                                    })
+                                }
+                            </select>
+                            <input 
+                                type="file"
+                                accept='image/*, .pdf'
+                                onChange={handleFileCharge}
+                                className='text-xs'
+                            />
+                        </div>
+                        <button
+                            className={`text-white border border-gray bg-priColor text-xs font-[600] py-2 px-2 rounded-sm flex justify-between items-center gap-2`}
+                            onClick={uploadDocument}
+                            >
+                                Upload
+                        </button>
+                    </div>
+                }
+                {
+                    canUpload === false ?
                     <button
-                        className={`text-white border border-gray bg-priColor text-xs font-[600] py-2 px-2 rounded-sm flex justify-between items-center gap-2`}
-                        onClick={handleUpload}
+                        onClick={() => setCanUpload(true)}
+                        className={`w-9 h-9 text-white flex justify-center items-center bg-priColor text-xs font-[600] rounded-full shadow-xl`}
                         >
-                            Upload
+                            <Plus size='22px' />
                     </button>
-                </div>
-            }
-            {
-                canUpload === false &&
-                <button
-                    onClick={() => setCanUpload(true)}
-                    className={`text-white border border-gray bg-priColor text-xs font-[600] py-2 px-2 rounded-sm flex justify-between items-center gap-2`}
-                    >
-                        <Plus size='14' />
-                        Upload
-                </button>
-            }
+                    : <button
+                        onClick={() => setCanUpload(false)}
+                        className={`w-4 h-4 text-white flex justify-center items-center bg-priColor text-xs font-[600] rounded-full shadow-xl`}
+                        >
+                            <X size='12px' />
+                    </button>
+                }
+            </div>
         </div>
     </div>
   )

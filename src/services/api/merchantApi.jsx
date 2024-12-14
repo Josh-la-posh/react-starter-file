@@ -1,6 +1,6 @@
 import { toast } from "react-toastify";
 import { aggregatorFailure, aggregatorMerchantFailure, aggregatorMerchantStart, aggregatorMerchantSuccess, aggregatorStart, aggregatorSuccess } from "../../redux/slices/aggregatorSlice";
-import { merchantAccountFailure, merchantAccountStart, merchantAccountSuccess, merchantAddressFailure, merchantAddressStart, merchantBusinessTypesSucess, merchantContactFailure, merchantContactStart, merchantContactSuccess, merchantDocumentFailure, merchantDocumentStart, merchantDocumentSuccess, merchantDocumentTypeFailure, merchantDocumentTypeStart, merchantDocumentTypeSuccess, merchantDomainFailure, merchantDomainStart, merchantDomainSuccess, merchantFailure, merchantProfileFailure, merchantProfileStart, merchantProfileSuccess, merchantRegistrationTypesSucess, merchantStart, merchantSuccess } from "../../redux/slices/merchantSlice";
+import { merchantAccountFailure, merchantAccountStart, merchantAccountSuccess, merchantAddressFailure, merchantAddressStart, merchantBusinessTypesSucess, merchantContactFailure, merchantContactStart, merchantContactSuccess, merchantCredentialsFailure, merchantCredentialsStart, merchantCredentialsSuccess, merchantDocumentFailure, merchantDocumentStart, merchantDocumentSuccess, merchantDocumentTypeFailure, merchantDocumentTypeStart, merchantDocumentTypeSuccess, merchantDomainFailure, merchantDomainStart, merchantDomainSuccess, merchantFailure, merchantProfileFailure, merchantProfileStart, merchantProfileSuccess, merchantRegistrationTypesSucess, merchantStart, merchantSuccess } from "../../redux/slices/merchantSlice";
 
 class MerchantService {
     constructor(axiosPrivate) {
@@ -124,21 +124,20 @@ class MerchantService {
 
     // merchant
   
-    async fetchMercahntDetails(merchantCode, dispatch) {
-        dispatch(merchantStart());
+    async fetchMercahntCredentials(merchantCode, dispatch) {
+        dispatch(merchantCredentialsStart());
       try {
         const response = await this.axiosPrivate.get(
           `api/Merchant/credentials/${merchantCode}`
         );
-        const data = response.data;
-        // dispatch(merchantSuccess(data));
-        console.log('merchant data: ', data);
-        return response.data;
+        const data = response.data.responseData;
+        console.log("credential data: ", data);
+        dispatch(merchantCredentialsSuccess(data));
       } catch (err) {
         if (!err.response) {
-            dispatch(merchantFailure('No response from server'));
+            dispatch(merchantCredentialsFailure('No response from server'));
         } else {
-            dispatch(merchantFailure('Failed to fetch merchant data. Try again.'));
+            dispatch(merchantCredentialsFailure('Failed to fetch merchant data. Try again.'));
         }
       } finally {
       }
@@ -169,14 +168,14 @@ class MerchantService {
           'api/Merchant/adduser',
           JSON.stringify(formData)
         );
-        console.log('merchant created successfully ', response.data);
         toast('User added successfully');
       } catch (err) {
         console.log(err);
         if (!err.response) {
-            toast('No response from server');
+          toast('No response from server');
         } else {
-            toast('Failed to create merchant user. Try again.');
+          const errMsg = err.response.data.message;
+          toast(errMsg);
         }
       } finally {
       }

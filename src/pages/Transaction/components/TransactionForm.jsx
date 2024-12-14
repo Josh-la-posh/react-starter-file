@@ -1,9 +1,46 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import CustomModal from '../../../components/Modal';
 import { dateFormatter } from '../../../utils/dateFormatter';
 import { Cloud } from 'lucide-react';
+import axios from 'axios';
+import useAxiosPrivate from '../../../services/hooks/useAxiosPrivate';
+import TransactionService from '../../../services/api/transactionApi';
+import { useDispatch } from 'react-redux';
 
 function TransactionForm({ handleCloseModal, data }) {
+  const axiosPrivate = useAxiosPrivate();
+  const dispatch = useDispatch();
+  const [viewResponse, setViewResponse] = useState(false);
+  const [transactionJsonData, setTransactionJsonData] = useState([]);
+  const [transactionData, settransactionData] = useState(data);
+  const transactionService = new TransactionService(axiosPrivate);
+
+  useEffect(() => {
+    settransactionData(data);
+  }, [data])
+
+  useEffect(() => {
+    fetchTransactionJson()
+  }, [])
+  
+  const downloadTransaction = async () => {
+    const transactionId = transactionData?.id;
+    await transactionService.fetchTransactionReceipt(transactionId, dispatch);
+  };
+
+  const fetchTransactionJson = async () => {
+    const id = transactionData?.paymentReference;
+    try {
+      const response = await axios.get(`https://api.pelpay.ng/api/WebHook/payment/${id}`);
+      const data = response.data;
+      // transactionJsonData.push(data);
+      setTransactionJsonData(response.data);
+      console.log('new responsr: ', transactionJsonData);
+    } catch (e) {
+      console.log('the resulting error is: ', e);
+    }
+  }
+
   return (
     <CustomModal handleOpenModal={handleCloseModal} width=' w-[90%] md:w-[70%]'>
       <div className="mb-8">
@@ -24,10 +61,10 @@ function TransactionForm({ handleCloseModal, data }) {
             <p>Status: <span className='font-[400]'>{data.transactionStatus}</span></p>
         </div>
         <div className="flex-1">
-            <div className="flex justify-end">
+            <div className="flex justify-between">
               <div className="flex gap-5">
                 <button className='text-white text-xs bg-priColor py-3 px-6 rounded-md'>Resend Notification</button>
-                <button className='text-priColor text-xs rounded-md flex items-center justify-center gap-2 hover:bg-priColor hover:bg-opacity-[0.56] p-3 hover:text-[#121212]'><Cloud size={'15px'}/> Download Receipt</button>
+                <button onClick={downloadTransaction} className='text-priColor text-xs rounded-md flex items-center justify-center gap-2 hover:bg-priColor hover:bg-opacity-[0.56] p-3 hover:text-[#121212]'><Cloud size={'15px'}/> Download Receipt</button>
               </div>
                 
             </div>
@@ -39,6 +76,38 @@ function TransactionForm({ handleCloseModal, data }) {
                     <li className='text-sm font-[700]'>Callback Sent Response Code: <span className='font-[400]'>{data.isNotified === true ? '200' : '400'}</span></li>
                 </ul>
             </div>
+
+            { 
+              viewResponse === true 
+              ? (
+                  <div className="overflow-hidden w-full">
+                    <button onClick={() => setViewResponse(false)} className='text-priColor text-md font-[400] mt-6'>
+                      Close
+                    </button>
+
+                    <div className="overflow-hidden mt-8 p-4 w-[60%] h-[40%] bg-gray-300">
+                      {/* <ul>
+                        {
+                          Object.entries(
+                            transactionJsonData).map(([key, value]) => (
+                              <div key={key} className=''>
+                                {key}: {value}
+                              </div>
+                            ))
+                        }
+                      </ul> */}
+                      <pre className='overflow-scroll'>
+                        {JSON.stringify(transactionJsonData, null, 2)}
+                      </pre>
+                    </div>
+                  </div>
+                )
+                : (
+                  <button onClick={() => setViewResponse(true)} className='text-priColor text-md font-[400] mt-6'>
+                    View Response
+                  </button>
+                )
+            }
         </div>
       </div>
     </CustomModal>

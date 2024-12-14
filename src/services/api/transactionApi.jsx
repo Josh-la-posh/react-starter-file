@@ -1,9 +1,26 @@
+import { toast } from "react-toastify";
 import { transactionFailure, transactionStart, transactionSuccess } from "../../redux/slices/transactionSlice";
 
 class TransactionService {
     constructor(axiosPrivate, auth) {
       this.axiosPrivate = axiosPrivate;
       this.auth = auth;
+    }
+  
+    async downloadTransactionReceipt(merchantCode, pageNumber, pageSize, env) {
+      try {
+        const response = await this.axiosPrivate.post(
+          `api/Transaction/search/download?merchantCode=${merchantCode}&pageNumber=${pageNumber}&pageSize=${pageSize}&env=${env}`
+        );
+        toast('Transations downloaded successfully');
+      } catch (err) {
+        if (!err.response) {
+            toast('No response from server');
+        } else {
+            toast('Failed to download transactions data. Try again.');
+        }
+      } finally {
+      }
     }
   
     async fetchtransactionsByPaymentReference(merchantCode, paymentReference, env, dispatch) {
@@ -98,19 +115,18 @@ class TransactionService {
       }
     }
   
-    async fetchtransactionReceipt(transactionId, dispatch) {
-        dispatch(transactionStart());
+    async fetchTransactionReceipt(transactionId) {
       try {
         const response = await this.axiosPrivate.get(
           `api/Transaction/receipt/${transactionId}`
         );
         console.log('This is the transaction receipt ', response.data);
-        return response.data;
+        toast('Transaction receipt downloaded successfully');
       } catch (err) {
         if (!err.response) {
-            dispatch(transactionFailure('No response from server'));
+            toast('No response from server');
         } else {
-            dispatch(transactionFailure('Failed to load Customer transaction receipt. Try again.'));
+            toast('Failed to download transaction receipt. Try again.');
         }
       } finally {
       }

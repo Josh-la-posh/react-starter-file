@@ -84,18 +84,19 @@ class userService {
     }
   
     async fetchUserByAggregatorCode(aggregatorCode, pageNumber, pageSize, dispatch) {
-        dispatch(usersStart());
+        dispatch(aggregatorUserStart());
       try {
         const response = await this.axiosPrivate.get(
           `api/Users/byaggregator/${aggregatorCode}?pageSize=${pageSize}&pageNumber=${pageNumber}`
         );
-        console.log('This is the user data ', response.data);
-        return response.data;
+        const data = response.data.responseData.data;
+        console.log('This is the aggregator user data ', data);
+        dispatch(aggregatorUserSuccess(data));
       } catch (err) {
         if (!err.response) {
-            dispatch(usersFailure('No response from server'));
+            dispatch(aggregatorUserFailure('No response from server'));
         } else {
-            dispatch(usersFailure('Failed to load users. Try again.'));
+            dispatch(aggregatorUserFailure('Failed to load users. Try again.'));
         }
       } finally {
       }

@@ -30,11 +30,11 @@ const MainLayout = () => {
             </button>
           </div>
         )}
-        <div className={`fixed top-0 left-0 ${isSidebarTextVisible ? 'w-48 lg:w-64' : 'w-20'} z-50 hidden md:block`}>
+        <div className={`fixed top-0 left-0 ${isSidebarTextVisible && openSidebar ? 'w-48' : isSidebarTextVisible && !openSidebar ? 'w-48' : !isSidebarTextVisible && openSidebar ? 'w-0' : 'w-20'} z-50 hidden md:block`}>
           <Sidebar handleSidebar={handleSidebar} isSidebarTextVisible={isSidebarTextVisible}/>
         </div>
-        <div className={`h-full relative overflow-hidden ${isSidebarTextVisible ? 'md:ml-48 lg:ml-64' : 'ml-20'} bg-[#f7f7f7]`}>
-          <div className={`bg-white z-10 p-4 border-b border-gray-300 h-16 w-full fixed top-0 right-0 left-0 ${isSidebarTextVisible ? 'md:pl-48 lg:pl-64' : 'pl-20'}`}>
+        <div className={`h-full relative overflow-hidden ${isSidebarTextVisible ? 'md:ml-48' : 'ml-20'} bg-[#f7f7f7]`}>
+          <div className={`bg-white z-10 p-4 border-b border-gray-300 h-16 w-full fixed top-0 right-0 left-0 ${isSidebarTextVisible ? 'md:pl-48' : 'pl-20'}`}>
             <Header setOpenSidebar={setOpenSidebar} openSidebar={openSidebar} setIsSidebarTextVisible={setIsSidebarTextVisible} />
           </div>
           <main className="pt-20 pb-5 px-5 h-full overflow-hidden">

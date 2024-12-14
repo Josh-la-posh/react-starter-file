@@ -3,20 +3,59 @@ import useTitle from '../../services/hooks/useTitle';
 import useAxiosPrivate from '../../services/hooks/useAxiosPrivate';
 import { useDispatch, useSelector } from 'react-redux';
 import MerchantService from '../../services/api/merchantApi';
-import { Link, useNavigate, useParams } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
+import UserService from '../../services/api/userApi';
+import { Link } from 'react-router-dom';
+import useAuth from '../../services/hooks/useAuth';
+import useSettingsTitle from '../../services/hooks/useSettingsTitle';
+import { Plus, X } from 'lucide-react';
+import { toast } from 'react-toastify';
 
 function MerchantProfile() {
-    const { merchantCode } = useParams();
+    const { auth } = useAuth();
+    const merchantCode = auth?.merchant?.merchantCode;
     const { setAppTitle } = useTitle();
+    const { setSettingsTitle } = useSettingsTitle();
     const axiosPrivate = useAxiosPrivate();
     const merchantService = new MerchantService(axiosPrivate);
+    const userService = new UserService(axiosPrivate);
     const dispatch = useDispatch();
-    const navigate = useNavigate();
+    const { aggregatorUser } = useSelector((state) => state.users);
+    const [users, setUsers] = useState(aggregatorUser);    
+    const [canAddUser, setCanAddUser] = useState(false);
     const { merchantProfile } = useSelector((state) => state.merchant);
+    const [isExpanded, setIsExpanded] = useState(false);
+    const [formData, setFormData] = useState({
+        userId : '',
+        merchantId : ''
+    });
+        
+    useEffect(() => {
+        setFormData((prev) => ({
+            ...prev,
+            merchantId: auth?.merchant?.id
+        }))
+    }, [auth])
+        
+    useEffect(() => {
+        setUsers(aggregatorUser);
+    }, [aggregatorUser])
 
     useEffect(() => {
-        setAppTitle('Merchant Profile');
+        fetchUsers();
+    }, [])
+
+    const handleUserChange = (e) => {
+        const {value} = e.target;
+
+        setFormData((prev) => ({
+            ...prev,
+            userId: value
+        }))
+    }
+
+    useEffect(() => {
+        setAppTitle('Merchant');
+        setSettingsTitle('Profile')
     }, []);
 
     useEffect(() => {
@@ -27,17 +66,85 @@ function MerchantProfile() {
         };
         loadData();
     }, [merchantCode, dispatch]);
+    
+    const handleSubmit = (e) => {
+        const v1 = formData.userId;
+
+        if (v1 === '') {
+            toast('User Id cannot be empty');
+            return;
+        }
+        addMerchant();
+    }
+    
+    const addMerchant = async () => {
+        await merchantService.addUserMerchant(formData);
+    };
+    
+    const fetchUsers = async () => {
+        const aggregatorCode = auth?.data?.aggregator?.aggregatorCode;
+        await userService.fetchUserByAggregatorCode(aggregatorCode, 1, 20, dispatch);
+    };
 
     return (
-        <div className="p-5">
-            <button onClick={() => navigate(-1)} className='text-priColor mb-5 flex items-center gap-2 text-xs'><ArrowLeft size={'14px'}/> Go Back</button>
+        <div className="bg-white p-5">
             <div className="mb-8 flex justify-between items-center">
-                <p className='text-lg'>Merchant ({merchantProfile.merchantName})</p>
-                <Link to={`/merchants/profile/update/${merchantCode}`} className='bg-priColor text-xs text-white py-2 px-5 rounded-md'>
-                    Update profile
-                </Link>
+                <p className='text-md'>Merchant ({merchantProfile.merchantName})</p>
+                {
+                    isExpanded && <div className="flex items-center gap-4">
+                        <div className="flex justify-end">
+                            { canAddUser &&
+                                <div className ="flex items-center justify-center gap-2">
+                                    <select id='users' value={users.id} onChange={handleUserChange} className='flex-grow text-xs px-4 py-2 outline-gray-400' defaultValue='Select User'>
+                                        {
+                                            users &&
+                                            users.map((user) =>
+                                            (<option key={user.id} value={user.id} className='text-xs max-w-fit'>
+                                                {user.firstName} {user.lastName}
+                                            </option>)
+                                            )
+                                        }
+                                    </select>
+                                    <button
+                                        className='text-white border border-gray bg-priColor text-xs font-[600]  py-2 px-5 rounded-md flex justify-between items-center'
+                                        onClick={handleSubmit}
+                                        >
+                                            Add
+                                    </button>
+                                </div>
+                            }
+                            {
+                                canAddUser === false &&
+                                <button
+                                    onClick={() => setCanAddUser(true)}
+                                    className={`text-white border border-gray bg-priColor text-xs font-[600] py-2 px-5 rounded-md flex justify-between items-center gap-2`}
+                                    >
+                                        <Plus size='14' />
+                                        Add User
+                                </button>
+                            }
+                        </div>
+                        <Link to={`/merchants/profile/update/${merchantCode}`} className='bg-priColor text-xs text-white py-2 px-5 rounded-md text-center'>
+                            Update profile
+                        </Link>
+                        <button
+                            onClick={() => setIsExpanded(false)}
+                            className={`w-4 h-4 text-white flex justify-center items-center bg-priColor text-xs font-[600] rounded-full shadow-xl`}
+                            >
+                                <X size='12px' />
+                        </button>
+                    </div>
+                }
+                {!isExpanded &&
+                    <button
+                        onClick={() => setIsExpanded(true)}
+                        className={`w-9 h-9 text-white flex justify-center items-center bg-priColor text-xs font-[600] rounded-full shadow-xl`}
+                        >
+                            <Plus size='22px' />
+                    </button>
+                }
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 text-base font-[700] text-gray-600">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 text-sm font-[700] text-gray-600">
                 {/* <div className="flex">
                     <p className='flex-1'>Merchant Name:</p>
                     <span className='font-[400] ml-4 flex-1'>{merchantProfile.merchantName}</span>

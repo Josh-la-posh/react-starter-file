@@ -21,7 +21,7 @@ function AllSettlementPage() {
   const pageSize = 40;
 
   useEffect(() => {
-      setAppTitle('Settlement History');
+      setAppTitle('Settlements');
   }, []);
 
   useEffect(() => {

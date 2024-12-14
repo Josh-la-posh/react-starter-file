@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ExportPopup from '../../../../utils/exportPopup';
 import DataTable from '../../../../components/Table';
 import { dateFormatter, timeFormatter } from '../../../../utils/dateFormatter';
@@ -6,12 +6,20 @@ import { Link } from 'react-router-dom';
 import { Pen } from 'lucide-react';
 import CustomModal from '../../../../components/Modal';
 import MerchantService from '../../../../services/api/merchantApi';
+import UserService from '../../../../services/api/userApi';
 import { toast } from 'react-toastify';
 import useAxiosPrivate from '../../../../services/hooks/useAxiosPrivate';
+import { useDispatch, useSelector } from 'react-redux';
+import useAuth from '../../../../services/hooks/useAuth';
 
 const MerchantTable = ({filteredData, handleOpenModal}) => {
+    const { auth } = useAuth();
     const axiosPrivate = useAxiosPrivate();
     const merchantService = new MerchantService(axiosPrivate);
+    const userService = new UserService(axiosPrivate);
+    const dispatch = useDispatch();
+    const { aggregatorUser } = useSelector((state) => state.users);
+    const [users, setUsers] = useState(aggregatorUser);
     const [selectedIndex, setSelectedIndex] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [formData, setFormData] = useState({
@@ -69,18 +77,18 @@ const MerchantTable = ({filteredData, handleOpenModal}) => {
                 </Link>
             )
         },
-        // {
-        //     header: 'Credentials',
-        //     accessor: '',
-        //     render: (id) => (
-        //         <Link
-        //             to='/merchants/credential'
-        //             className='text-priColor'
-        //         >
-        //             Credentials
-        //         </Link>
-        //     )
-        // },
+        {
+            header: 'Credentials',
+            accessor: 'merchantCode',
+            render: (id) => (
+                <Link
+                    to={`/merchants/credential/${id}`}
+                    className='text-priColor'
+                >
+                    Credentials
+                </Link>
+            )
+        },
         {
             header: 'Business Type',
             accessor: 'businessType',
@@ -107,12 +115,21 @@ const MerchantTable = ({filteredData, handleOpenModal}) => {
         },
     ];
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
+    useEffect(() => {
+        setUsers(aggregatorUser);
+    }, [aggregatorUser])
+
+    useEffect(() => {
+        fetchUsers();
+    }, [])
+
+    const handleUserChange = (e) => {
+        const {value} = e.target;
+
         setFormData((prev) => ({
             ...prev,
-            [name]: value
-        }));
+            userId: value
+        }))
     }
 
     const handleModalOpen = (id) => {
@@ -152,17 +169,11 @@ const MerchantTable = ({filteredData, handleOpenModal}) => {
     const loadData = async () => {
         await merchantService.addUserMerchant(formData);
     };
-
-    // const filteredSearchData = transactions.filter((row) => {
-    //     const rowValues = Object.values(row).map(val => (val || '').toString().toLowerCase());
-    //     const matchesSearch = search
-    //         ? rowValues.some(val => val.includes(search.toLowerCase()))
-    //         : true;
-    //     const matchesStatus = filterStatus
-    //         ? row.status === filterStatus
-    //         : true;
-    //     return matchesSearch && matchesStatus;
-    // });
+    
+    const fetchUsers = async () => {
+        const aggregatorCode = auth?.data?.aggregator?.aggregatorCode;
+        await userService.fetchUserByAggregatorCode(aggregatorCode, 1, 20, dispatch);
+    };
 
     return (
         <div className="">
@@ -174,17 +185,18 @@ const MerchantTable = ({filteredData, handleOpenModal}) => {
                     <h2 className='mb-8'>New User</h2>
 
                     <div className="flex mt-8 gap-3">
-                        <input
-                            type="text"
-                            name='userId'
-                            value={formData.userId}
-                            onChange={handleChange}
-                            className="p-2 border border-gray-300 rounded-md focus:outline-none text-xs"
-                            placeholder="User Id"
-                            required
-                        />
+                        <select id='users' value={users.id} onChange={handleUserChange} className='flex-grow px-4 py-2 outline-gray-400' defaultValue='Select User'>
+                            {
+                                users &&
+                                users.map((user) =>
+                                 (<option key={user.id} value={user.id} className='text-xs max-w-fit'>
+                                    {user.firstName} {user.lastName}
+                                </option>)
+                                )
+                            }
+                        </select>
                         <button
-                            className='text-white border border-gray bg-priColor text-xs font-[600] py-2 px-4 rounded-md flex justify-between items-center'
+                            className='text-white border border-gray bg-priColor text-xs font-[600] py-2 px-5 rounded-md flex justify-between items-center'
                             onClick={handleSubmit}
                             >
                                 Add

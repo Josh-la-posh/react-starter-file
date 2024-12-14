@@ -7,6 +7,9 @@ const initialState = {
   merchantDocumentLoading: false,
   merchantDocumentError: null,
   merchantDocument: [],
+  merchantCredentialsLoading: false,
+  merchantCredentialsError: null,
+  merchantCredentials: {},
   merchantAccountLoading: false,
   merchantAccountError: null,
   merchantAccount: [],
@@ -134,10 +137,22 @@ const merchantSlice = createSlice({
     },
     merchantRegistrationTypesSucess: (state, action) => {
       state.merchantRegistrationTypes = action.payload;
-    }
+    },
+    merchantCredentialsStart: (state) => {
+      state.merchantCredentialsLoading = true;
+      state.merchantCredentialsError = null;
+    },
+    merchantCredentialsSuccess: (state, action) => {
+      state.merchantCredentialsLoading = false;
+      state.merchantCredentials = action.payload;
+    },
+    merchantCredentialsFailure: (state, action) => {
+      state.merchantCredentialsLoading = false;
+      state.merchantCredentialsError = action.payload;
+    },
   },
 });
 
-export const { merchantStart, merchantSuccess, merchantFailure, merchantDocumentStart, merchantDocumentSuccess, merchantDocumentFailure, merchantDocumentTypeStart, merchantDocumentTypeSuccess, merchantDocumentTypeFailure, merchantAccountStart, merchantAccountSuccess, merchantAccountFailure, merchantAddressStart, merchantAddressSuccess, merchantAddressFailure, merchantContactStart, merchantContactSuccess, merchantContactFailure, merchantDomainStart, merchantDomainSuccess, merchantDomainFailure, merchantProfileStart, merchantProfileSuccess, merchantProfileFailure, merchantBusinessTypesSucess, merchantRegistrationTypesSucess } = merchantSlice.actions;
+export const { merchantStart, merchantSuccess, merchantFailure, merchantDocumentStart, merchantDocumentSuccess, merchantDocumentFailure, merchantDocumentTypeStart, merchantDocumentTypeSuccess, merchantDocumentTypeFailure, merchantAccountStart, merchantAccountSuccess, merchantAccountFailure, merchantAddressStart, merchantAddressSuccess, merchantAddressFailure, merchantContactStart, merchantContactSuccess, merchantContactFailure, merchantDomainStart, merchantDomainSuccess, merchantDomainFailure, merchantProfileStart, merchantProfileSuccess, merchantProfileFailure, merchantBusinessTypesSucess, merchantRegistrationTypesSucess, merchantCredentialsStart, merchantCredentialsSuccess, merchantCredentialsFailure } = merchantSlice.actions;
 
 export default merchantSlice.reducer;

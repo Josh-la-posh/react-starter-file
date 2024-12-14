@@ -162,8 +162,7 @@ function MerchantProfileUpdate() {
             const response = await axiosPrivate.get(`api/industry/categories/${id}`);
             if (response.data.message === 'Successful') {
                 const result = response.data.responseData;
-                setIndustryCategoryList(result);
-                
+                setIndustryCategoryList(result);      
                 setFormData((prevState) => ({
                     ...prevState,
                     industryCategoryId: result[0].id,

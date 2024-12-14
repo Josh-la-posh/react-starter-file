@@ -5,9 +5,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import AggregatorService from '../../services/api/aggregatorApi';
 import MerchantTable from './components/merchant/MerchantTable';
 import MerchantFilter from './components/merchant/MerchantFilter';
+import useSettingsTitle from '../../services/hooks/useSettingsTitle';
 
 function MerchantPage() {
   const { setAppTitle } = useTitle();
+  const { setSettingsTitle } = useSettingsTitle();
   const axiosPrivate = useAxiosPrivate();
   const aggregatorService = new AggregatorService(axiosPrivate);
   const dispatch = useDispatch();
@@ -20,6 +22,7 @@ function MerchantPage() {
 
   useEffect(() => {
       setAppTitle('Merchant');
+      setSettingsTitle('Merchant');
   }, []);
 
   useEffect(() => {
@@ -34,7 +37,7 @@ function MerchantPage() {
   }
 
   return (
-    <div className='space-y-6'>
+    <div className='bg-white py-4'>
       <MerchantFilter handleFilteredData={handleFilteredData} />
       <MerchantTable filteredData={filteredData} />
     </div>

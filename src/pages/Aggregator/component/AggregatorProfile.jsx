@@ -2,7 +2,7 @@ import React from 'react'
 
 function AggregatorProfile({aggregatorData}) {
   return (
-    <div className='bg-white p-5 grid grid-cols-1 md:grid-cols-2 gap-4'>
+    <div className='bg-white p-5 grid grid-cols-1 md:grid-cols-2 text-xs md:text-sm gap-4'>
         <div className="font-[500]">
             Aggregator Name: 
             <span className='ml-3 font-[400]'>
