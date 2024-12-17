@@ -6,6 +6,7 @@ import MerchantService from '../../services/api/merchantApi';
 import { Eye } from 'lucide-react';
 import useAuth from '../../services/hooks/useAuth';
 import useSettingsTitle from '../../services/hooks/useSettingsTitle';
+import PaymentForm from './components/merchantCredential/PaymentForm';
 
 function MerchantCredential() {
   const { auth } = useAuth();
@@ -20,6 +21,7 @@ function MerchantCredential() {
   const [userData, setUserData] = useState(credential);
   const [viewSecret, setViewSecret] = useState(false);
   const [viewKey, setViewKey] = useState({});
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
       setAppTitle('Merchant');
@@ -44,6 +46,11 @@ function MerchantCredential() {
       [index]: !prev[index]
     }));
   }
+
+  const handlePayment = () => {
+    setIsModalOpen(true);
+  }
+
   return (
     <div>
       <div className="bg-white p-4">
@@ -55,7 +62,7 @@ function MerchantCredential() {
           <div className="flex border-b py-4 text-xs">
             <p className='w-32 mr-32'>{merchantCredentials?.clientId}</p>
             <div className='flex items-center gap-5'>
-              {viewSecret === true ? merchantCredentials?.clientSecret : '************'}
+              {merchantCredentials?.clientSecret && viewSecret === true ? merchantCredentials?.clientSecret : '************'}
               <button onClick={() => setViewSecret(!viewSecret)} className='text-priColor'><Eye size={'15px'} /></button>
             </div>
           </div>
@@ -78,11 +85,16 @@ function MerchantCredential() {
                 {viewKey[index] === true ? data?.integrationKey : '************'}
                 <button onClick={() => handleIntegrationKey(index)} className='text-priColor'><Eye size={'15px'} /></button>
               </div>
-              <button className='text-priColor '>Make Payment</button>
+              <button onClick={handlePayment} className='text-priColor '>Make Payment</button>
             </div>
           ))
         }
       </div>
+
+      {isModalOpen && 
+        (<PaymentForm setIsModalOpen={setIsModalOpen}
+        />
+      )}
     </div>
   )
 }

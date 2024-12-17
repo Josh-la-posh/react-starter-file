@@ -2,17 +2,9 @@ import React from 'react';
 import DataTable from '../../../components/Table';
 import { dateFormatter, timeFormatter } from '../../../utils/dateFormatter';
 import { Edit } from 'lucide-react';
-import SettlementService from '../../../services/api/settlementApi';
-import useAxiosPrivate from '../../../services/hooks/useAxiosPrivate';
-import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-const SettlementTable = ({filteredData, merchantCode}) => {
-    const axiosPrivate = useAxiosPrivate();
-    const dispatch = useDispatch();
-    const settlementservice = new SettlementService(axiosPrivate);
-    const pageNumber = 1;
-    const pageSize = 40;
+const SettlementTable = ({filteredData}) => {
     
     const columns = [
         {
@@ -63,20 +55,12 @@ const SettlementTable = ({filteredData, merchantCode}) => {
             header: '',
             accessor: 'id',
             render: (id) => (
-                <Link to='/settlement/batch/transaction'>
-                    <button onClick={() => handleClick(id)}>
-                        <Edit size={14} color='green'/>
-                    </button>
+                <Link to={`/settlement/batch/transaction/${id}`}>
+                    <Edit size={14} color='green'/>
                 </Link>
             )
         },
     ];
-
-    const handleClick = async (id) => {
-        console.log('The id is: ', id);
-        await settlementservice.getSettlementBatchTransaction(merchantCode, pageNumber, pageSize, id, dispatch);
-    }
-
     return (
         <div className="">
 

@@ -1,11 +1,21 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import useTitle from '../services/hooks/useTitle';
-import { ArrowLeftRight, Combine, Handshake, Headset, LayoutDashboard, LogOut, MessageSquareX, RefreshCwOff, ScrollText, Settings, User, Warehouse } from 'lucide-react';
-import Logo from "../assets/logo.jpg"
+import { ArrowLeftRight, Handshake, Headset, LayoutDashboard, LogOut, Settings, Warehouse } from 'lucide-react';
+import Logo from "../assets/logo.jpg";
+import { Tooltip } from 'react-tooltip';
 
 const Sidebar = ({handleSidebar, isSidebarTextVisible}) => {
     const { appTitle } = useTitle();
+    const [tooltipVisible, setTooltipVisible] = useState(null);
+
+    const handleMouseEnter = (id) => {
+        setTooltipVisible(id); // Show tooltip on hover
+    };
+
+    const handleMouseLeave = () => {
+        setTooltipVisible(null);
+    };
 
     const sidebarItems = [
         {
@@ -44,7 +54,7 @@ const Sidebar = ({handleSidebar, isSidebarTextVisible}) => {
             openSidebar: false
         },
         {
-            id: 5,
+            id: 6,
             icon: <Headset size={isSidebarTextVisible ? '18' : '22'} />,
             title: 'Help Center',
             url: '/help-center',
@@ -60,9 +70,24 @@ const Sidebar = ({handleSidebar, isSidebarTextVisible}) => {
             <nav className={`flex-1 my-2 ${isSidebarTextVisible ? 'pl-6' : ''} overflow-y-auto scrollbar-none`}>
                 {
                     sidebarItems.map((item) => (
-                        <Link to={item.url} onClick={() => handleSidebar(item.openSidebar)} className={`block py-4 ${appTitle === item.title ? 'text-priColor' : ''}`}>
+                        <Link key={item.id} to={item.url} onClick={() => handleSidebar(item.openSidebar)} className={`block py-4 ${appTitle === item.title ? 'text-priColor' : ''}`}>
                             <div className={`flex items-center ${isSidebarTextVisible ? '' : 'justify-center'} gap-2`}>
-                                {item.icon}
+                                <button
+                                    data-tooltip-id={`tooltip-${item.id}`}
+                                    type='button'
+                                    className='relative'
+                                >
+                                    {item.icon}
+                                </button>
+                                {!isSidebarTextVisible && <Tooltip
+                                    id={`tooltip-${item.id}`}
+                                    place='right'
+                                    effect='solid'
+                                    aria-haspopup='true'
+                                >
+                                    {item.title}
+                                </Tooltip>}
+                                
                                 <div className={isSidebarTextVisible ? 'block' : 'hidden'}>{item.title}</div>
                             </div>
                         </Link>

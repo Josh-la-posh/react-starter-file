@@ -1,15 +1,17 @@
 import { Plus, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import useAxiosPrivate from '../../../../services/hooks/useAxiosPrivate';
+import useNoHeaderAxiosPrivate from '../../../../services/hooks/useAuthPrivare2';
 import MerchantService from '../../../../services/api/merchantApi';
 import { useDispatch, useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
 import useAuth from '../../../../services/hooks/useAuth';
 
 function MerchantDocumentFilter() {
     const { auth } = useAuth();
     const axiosPrivate = useAxiosPrivate();
+    const noHeaderxiosPrivate = useNoHeaderAxiosPrivate();
     const merchantService = new MerchantService(axiosPrivate);
+    const noHeaderMerchantService = new MerchantService(noHeaderxiosPrivate);
     const { merchantDocumentType } = useSelector((state) => state.merchant);
     const dispatch = useDispatch();
     const [documents, setDocuments] = useState(merchantDocumentType);
@@ -47,7 +49,7 @@ function MerchantDocumentFilter() {
         const merchantCode = auth?.merchant?.merchantCode;
         const formData = new FormData();
         formData.append("file", file);
-        await merchantService.createMerchantDocument(merchantCode, documentId, formData, dispatch);
+        await noHeaderMerchantService.createMerchantDocument(merchantCode, documentId, formData, dispatch);
     }
     
   return (
@@ -62,7 +64,7 @@ function MerchantDocumentFilter() {
                                 {
                                     documents.map(document => {
                                         return (
-                                            <option value={document.id} className='text-xs'>
+                                            <option key={document.id} value={document.id} className='text-xs'>
                                                 {document.documentName}
                                             </option>
                                         )

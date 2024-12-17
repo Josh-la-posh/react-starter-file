@@ -1,9 +1,6 @@
 import React from 'react';
 import DataTable from '../../../components/Table';
 import { dateFormatter } from '../../../utils/dateFormatter';
-import SettlementService from '../../../services/api/settlementApi';
-import useAxiosPrivate from '../../../services/hooks/useAxiosPrivate';
-import { useDispatch } from 'react-redux';
 import SettlementCard from './SettlementCard';
     
 const columns = [
@@ -34,7 +31,7 @@ const columns = [
     },
     {
         header: 'Stamp Duty (₦)',
-        accessor: 'N/A',
+        accessor: 'stampDuty',
     },
     {
         header: 'Status',
@@ -49,12 +46,7 @@ const columns = [
     }
 ];
 
-const SettlementBatchTransactionTable = ({filteredData, merchantCode}) => {
-    const axiosPrivate = useAxiosPrivate();
-    const dispatch = useDispatch();
-    const settlementservice = new SettlementService(axiosPrivate);
-    const pageNumber = 1;
-    const pageSize = 40;
+const SettlementBatchTransactionTable = ({filteredData}) => {
 
     const processedData = filteredData.map(row => ({
         ...row,
@@ -64,12 +56,8 @@ const SettlementBatchTransactionTable = ({filteredData, merchantCode}) => {
     const totalAmount = filteredData.reduce((sum, amount) => (sum + amount.amountCollected), 0)
     const totalFees = filteredData.reduce((sum, fee) => sum + fee.merchantCharge, 0);
     // const amountPayable = totalAmount - totalFees;
-    const stampDuty = 50;
+    const stampDuty = filteredData.reduce((sum, fee) => sum + fee.stampDuty, 0);
     const amountPayable = totalAmount - (totalFees + stampDuty);
-
-    const handleClick = async (id) => {
-        await settlementservice.getSettlementBatchTransaction(merchantCode, pageNumber, pageSize, id, dispatch);
-    }
 
     return (
         <div className="">

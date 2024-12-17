@@ -14,7 +14,6 @@ class SettlementService {
           `api/Settlement/batches/${merchantCode}?pageSize=${pageSize}&pageNumber=${pageNumber}`,
         );
         const data = response.data.data;
-        console.log('fuck this: ', data);
         dispatch(settlementSuccess(data));
       } catch (err) {
         if (!err.response) {
@@ -29,7 +28,6 @@ class SettlementService {
     async getSettlementBatchTransaction(merchantCode, pageNumber, pageSize, id, dispatch) {
         dispatch(settlementTransactionStart());
       try {
-        console.log('The id is: ', id);
         const response = await this.axiosPrivate.post(
           `api/Settlement/batch/${id}/transactions?merchantCode=${merchantCode}&pageNumber=${pageNumber}&pageSize=${pageSize}`,
           JSON.stringify({merchantCode})

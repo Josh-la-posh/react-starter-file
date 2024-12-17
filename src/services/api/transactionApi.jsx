@@ -14,6 +14,7 @@ class TransactionService {
         );
         toast('Transations downloaded successfully');
       } catch (err) {
+        console.log('The response is: ', err)
         if (!err.response) {
             toast('No response from server');
         } else {

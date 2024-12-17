@@ -1,6 +1,8 @@
 import { toast } from "react-toastify";
 import { aggregatorFailure, aggregatorMerchantFailure, aggregatorMerchantStart, aggregatorMerchantSuccess, aggregatorStart, aggregatorSuccess } from "../../redux/slices/aggregatorSlice";
 import { merchantAccountFailure, merchantAccountStart, merchantAccountSuccess, merchantAddressFailure, merchantAddressStart, merchantBusinessTypesSucess, merchantContactFailure, merchantContactStart, merchantContactSuccess, merchantCredentialsFailure, merchantCredentialsStart, merchantCredentialsSuccess, merchantDocumentFailure, merchantDocumentStart, merchantDocumentSuccess, merchantDocumentTypeFailure, merchantDocumentTypeStart, merchantDocumentTypeSuccess, merchantDomainFailure, merchantDomainStart, merchantDomainSuccess, merchantFailure, merchantProfileFailure, merchantProfileStart, merchantProfileSuccess, merchantRegistrationTypesSucess, merchantStart, merchantSuccess } from "../../redux/slices/merchantSlice";
+import jsPDF from "jspdf";
+import { saveAs } from "file-saver";
 
 class MerchantService {
     constructor(axiosPrivate) {
@@ -32,11 +34,12 @@ class MerchantService {
         dispatch(merchantDocumentStart());
       try {
         const response = await this.axiosPrivate.post(
-          `api/MerchantDocuments/${merchantCode}/document-type/${documentId}`,
-          JSON.stringify(fileData)
+          `api/MechantDocuments/${merchantCode}/document-type/${documentId}`,
+          fileData
         );
-        console.log('Merchant document created ', response.data);
-        return response.data;
+        // console.log('Merchant document created ', response.data);
+        toast('Merchant document created successfully');
+        await this.fetchMerchantDocument(merchantCode, dispatch);
       } catch (err) {
         if (!err.response) {
             dispatch(merchantDocumentFailure('No response from server'));
@@ -91,9 +94,42 @@ class MerchantService {
         const response = await this.axiosPrivate.get(
           `api/MechantDocuments/download/${Id}`,
         );
-        console.log('merchant document fetched successfully ', response.data);
-        return response.data;
+        if (!response.data) {
+          throw new Error('No data received from the server.');
+        }
+
+        const decryptData = (data) => {
+          try {
+              return new TextDecoder().decode(data);
+          } catch (error) {
+              console.error('Decryption error:', error);
+              return null;
+          }
+        };
+        const encryptedData = new Uint8Array(response.data);
+        const decryptedData = decryptData(encryptedData);
+
+        if (!decryptedData) {
+          throw new Error('Decryption failed.');
+        }
+
+        const pdf = new jsPDF();
+        pdf.text('Merchant Document', 10, 10);
+        pdf.text(decryptedData, 10, 20);
+
+        const pdfBlob = pdf.output('blob');
+        saveAs(pdfBlob, 'merchant-document.pdf');
+        
+        console.log('PDF downloaded successfully!');
+
+
+
+
+
+        // console.log('merchant document fetched successfully ', response.data);
+        // return response.data;
       } catch (err) {
+        console.log(err)
         if (!err.response) {
             // dispatch(merchantDocumentFailure('No response from server'));
         } else {

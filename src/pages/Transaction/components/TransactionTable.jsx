@@ -56,11 +56,10 @@ const TransactionTable = ({filteredData, handleOpenModal, isExportPopupOpen, set
         },
         // {
         //     header: 'Action',
-        //     accessor: 'transactionStatus',
-        //     render: (id, row) => (
-        //         row.transactionStatus !== 'Successful' && 
+        //     accessor: '',
+        //     render: (row) => (
         //         <button
-        //             onClick={() => handleDispute(row)}
+        //             onClick={() => getDataToParent(1)}
         //             className='bg-red-700 text-white text-xs px-2 py-1 rounded-[4px]'
         //         >
         //             Dispute

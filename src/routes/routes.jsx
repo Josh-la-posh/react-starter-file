@@ -69,7 +69,7 @@ const RoutesSystem = () => {
           </Route>
           <Route path="/settlement" >
             <Route path='all' element={<AllSettlement />} />
-            <Route path='batch/transaction' element={<SettlementBatchTransaction />} />
+            <Route path='batch/transaction/:transactionId' element={<SettlementBatchTransaction />} />
             <Route path='bank' element={<SettlementBankAccount />} />
             <Route path='configuration' element={<SettlementConfiguration />} />
           </Route>

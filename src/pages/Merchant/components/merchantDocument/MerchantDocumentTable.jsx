@@ -63,7 +63,8 @@ const MerchantDocumentTable = ({filteredData, merchantCode}) => {
                     onClick={() => handleDelete(id)}
                     className='text-red-700 text-xs px-2 py-1 rounded-[4px]'
                 >
-                    <Trash size={'14px'} />
+                    {/* <Trash size={'14px'} /> */}
+                    Request Deletion
                 </button>
             ),
         },
