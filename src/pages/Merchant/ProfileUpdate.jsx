@@ -352,7 +352,7 @@ function MerchantProfileUpdate() {
                         )}
                     />
                     {/* <div className="mb-6 w-full">
-                        <label className="mb-1 lg:mb-2 flex items-center" htmlFor="country">
+                        <label className="mb-1 text-xs font-medium text-gray-700" htmlFor="country">
                             Country
                         </label>
                         <select
@@ -374,7 +374,7 @@ function MerchantProfileUpdate() {
                         </div>}
                     </div> */}
                     <div className="mb-6 w-full">
-                        <label className="mb-1 lg:mb-2 flex items-center" htmlFor="state">
+                        <label className="text-xs font-medium text-gray-700" htmlFor="state">
                             State
                         </label>
                         <select
@@ -382,7 +382,7 @@ function MerchantProfileUpdate() {
                             name="state"
                             value={addressData.state}
                             onChange={(e) => handleStateChange(e)}
-                            className="w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
+                            className="mt-1 w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
                             required
                         >
                             {stateList.map((state) => (
@@ -393,7 +393,7 @@ function MerchantProfileUpdate() {
                         </select>
                     </div>
                     {/* <div className="mb-6 w-full">
-                        <label className="mb-1 lg:mb-2 flex items-center" htmlFor="city">
+                        <label className="mb-1 text-xs font-medium text-gray-700" htmlFor="city">
                             City
                         </label>
                         <select
@@ -487,7 +487,7 @@ function MerchantProfileUpdate() {
                         )}
                     />
                     <div className="mb-6 w-full">
-                        <label className="mb-1 lg:mb-2 flex items-center" htmlFor="businessType">
+                        <label className="text-xs font-medium text-gray-700" htmlFor="businessType">
                             Business Type
                         </label>
                         <select
@@ -495,7 +495,7 @@ function MerchantProfileUpdate() {
                             name="businessType"
                             value={formData.businessType}
                             onChange={handleChange}
-                            className="w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
+                            className="mt-1 w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
                             required
                         >
                             {businessTypes.map((reg, index) => (
@@ -506,7 +506,7 @@ function MerchantProfileUpdate() {
                         </select>
                     </div>
                     <div className="mb-6 w-full">
-                        <label className="mb-1 lg:mb-2 flex items-center" htmlFor="registerationType">
+                        <label className="text-xs font-medium text-gray-700" htmlFor="registerationType">
                             Registration Type
                         </label>
                         <select
@@ -514,7 +514,7 @@ function MerchantProfileUpdate() {
                             name="registerationType"
                             value={formData.registerationType}
                             onChange={handleChange}
-                            className="w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
+                            className="mt-1 w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
                             required
                         >
                             {registrationTypes.map((reg, index) => (
@@ -525,7 +525,7 @@ function MerchantProfileUpdate() {
                         </select>
                     </div>
                     <div className="mb-6 w-full">
-                        <label className="mb-1 lg:mb-2 flex items-center" htmlFor="industry">
+                        <label className="text-xs font-medium text-gray-700" htmlFor="industry">
                             Industry
                         </label>
                         <select
@@ -533,7 +533,7 @@ function MerchantProfileUpdate() {
                             name="industry"
                             value={formData.industry}
                             onChange={(e) => handleIndustryChange(e)}
-                            className="w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
+                            className="mt-1 w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
                             required
                         >
                             {industryList.map((industry) => (
@@ -546,7 +546,7 @@ function MerchantProfileUpdate() {
                     {
                         showIndustryCategories &&
                         <div className="mb-6 w-full">
-                            <label className="mb-1 lg:mb-2 flex items-center" htmlFor="industryCategoryId">
+                            <label className="mb-1 text-xs font-medium text-gray-700" htmlFor="industryCategoryId">
                                 Industry Category
                             </label>
                             <select

@@ -24,7 +24,7 @@ function DashboardCards({ lumpsum }) {
       : 0;
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-1 gap-6 lg:gap-0 mb-8">
+    <div className="grid grid-cols-3 md:grid-cols-1 gap-4 lg:gap-0 mb-8">
       <Card title="Total Revenue" value={`₦${totalRevenue}`} color="bg-[#EEE8FA]" icon={<FontAwesomeIcon icon={faDollarSign} style={{ color: '#7447C6' }} />} />
       <Card title="Total Transactions" value={totalCounts} color="bg-[#FFF8E1]" color2= "bg-[#0000FF]" icon={<FontAwesomeIcon icon={faCartShopping} style={{ color: '#FFC107' }} />} />
       <Card title="Successful Payments" value={successfulTransaction} color="bg-[#E7F6EC]" color2="bg-priColor" icon={<FontAwesomeIcon icon={faCheck} style={{ color: '#40B869' }} />} />
