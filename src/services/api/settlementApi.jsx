@@ -1,19 +1,17 @@
-import { settlementConfigurationDetailFailure, settlementConfigurationDetailStart, settlementConfigurationFailure, settlementConfigurationStart, settlementFailure, settlementStart, settlementSuccess } from "../../redux/slices/settlementSlice";
+import { settlementConfigurationDetailFailure, settlementConfigurationDetailStart, settlementConfigurationFailure, settlementConfigurationStart, settlementFailure, settlementStart, settlementSuccess, settlementTransactionFailure, settlementTransactionStart, settlementTransactionSuccess } from "../../redux/slices/settlementSlice";
 
 class SettlementService {
-    constructor(axiosPrivate, auth) {
+    constructor(axiosPrivate) {
       this.axiosPrivate = axiosPrivate;
-      this.auth = auth;
     }
 
     // settlement
   
     async fetchSettlement(merchantCode, pageNumber, pageSize, dispatch) {
-      console.log('Secg to it: ', merchantCode);
         dispatch(settlementStart());
       try {
         const response = await this.axiosPrivate.get(
-          `api/Settlement/${merchantCode}?pageSize=${pageSize}&pageNumber=${pageNumber}`,
+          `api/Settlement/batches/${merchantCode}?pageSize=${pageSize}&pageNumber=${pageNumber}`,
         );
         const data = response.data.data;
         dispatch(settlementSuccess(data));
@@ -22,6 +20,26 @@ class SettlementService {
             dispatch(settlementFailure('No response from server'));
         } else {
             dispatch(settlementFailure('Failed to load settlement data. Try again.'));
+        }
+      } finally {
+      }
+    }
+  
+    async getSettlementBatchTransaction(merchantCode, pageNumber, pageSize, id, dispatch) {
+        dispatch(settlementTransactionStart());
+      try {
+        const response = await this.axiosPrivate.post(
+          `api/Settlement/batch/${id}/transactions?merchantCode=${merchantCode}&pageNumber=${pageNumber}&pageSize=${pageSize}`,
+          JSON.stringify({merchantCode})
+        );
+        console.log('The newest: ', response.data.data)
+        const data = response.data.data;
+        dispatch(settlementTransactionSuccess(data));
+      } catch (err) {
+        if (!err.response) {
+            dispatch(settlementTransactionFailure('No response from server'));
+        } else {
+            dispatch(settlementTransactionFailure('Failed to load settlement data. Try again.'));
         }
       } finally {
       }

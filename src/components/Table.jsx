@@ -27,7 +27,7 @@ const DataTable = ({ columns, data, rowsPerPageOptions, onIndexChange, actionBut
 
     return (
         <div className="">
-            <div className="overflow-x-auto" id={elementId}>
+            <div className="overflow-x-auto scrollbar-none" id={elementId}>
                 <table className="min-w-full rounded-lg divide-y-8">
                     <thead className="bg-[#F0F2F5]">
                         <tr>
@@ -77,7 +77,7 @@ const DataTable = ({ columns, data, rowsPerPageOptions, onIndexChange, actionBut
             </div>
 
             {drpp !== '' && (
-                <div className="flex flex-col sm:flex-row sm:justify-between md:items-center mt-4 gap-4">
+                <div className="flex flex-col sm:flex-row sm:justify-between md:items-center mt-4 ml-3 gap-4">
                     <div className="text-[12px] lg:text-[13px] text-gray-500">
                         <span className="mr-2">Items per page:</span>
                         <select

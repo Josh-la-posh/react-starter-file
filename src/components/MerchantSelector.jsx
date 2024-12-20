@@ -18,7 +18,7 @@ function MerchantSelector({ merchants, onMerchantChange }) {
 
   useEffect(() => {
     setAuth(prev => {
-      return { ...prev, merchantCode: selectedMerchant.merchantCode }
+      return { ...prev, merchant: selectedMerchant }
   });
   }, [selectedMerchant]);
 

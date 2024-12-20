@@ -1,6 +1,5 @@
 import React from 'react';
 import DataTable from '../../../components/Table';
-import { dateFormatter } from '../../../utils/dateFormatter';
 
 const SettlementBankAccountTable = ({filteredData}) => {
     

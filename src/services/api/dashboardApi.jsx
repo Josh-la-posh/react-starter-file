@@ -13,7 +13,6 @@ class DashboardService {
           `api/Dashboard/tnx/lumpsum/${merchantCode}?env=${env}&interval=${interval}`,
         );
         const data = response.data.responseData;
-        console.log('The new lumpsum: ', data);
         dispatch(lumpsumSuccess(data));
       } catch (err) {
         if (!err.response) {

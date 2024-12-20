@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import useSettingsTitle from '../../services/hooks/useSettingsTitle';
 
 function NotificationSettings() {
+    const { setSettingsTitle } = useSettingsTitle();
     const [emailNotifications, setEmailNotifications] = useState({
         transactions: true,
         security: false,
@@ -18,6 +20,10 @@ function NotificationSettings() {
         security: true,
         updates: false,
     });
+
+    useEffect(() => {
+        setSettingsTitle('Notification');
+    }, []);
 
     const handleEmailChange = (e) => {
         setEmailNotifications({
@@ -48,12 +54,10 @@ function NotificationSettings() {
 
     return (
         <div className="p-6 bg-white rounded-lg shadow-lg max-w-3xl mx-auto">
-            <h1 className="text-2xl font-semibold mb-4 text-gray-800">Notification Settings</h1>
-
             {/* Email Notifications */}
-            <section className="mb-6">
-                <h2 className="text-xl font-medium mb-4">Email Notifications</h2>
-                <div className="flex flex-col space-y-4">
+            <section className="mb-8">
+                <h2 className="text-xl font-medium mb-4">Email Notification</h2>
+                <div className="flex flex-col space-y-4 text-sm">
                     <label className="flex items-center">
                         <input
                             type="checkbox"
@@ -88,9 +92,9 @@ function NotificationSettings() {
             </section>
 
             {/* Push Notifications */}
-            <section className="mb-6">
-                <h2 className="text-xl font-medium mb-4">Push Notifications</h2>
-                <div className="flex flex-col space-y-4">
+            <section className="mb-8">
+                <h2 className="text-xl font-medium mb-4">Push Notification</h2>
+                <div className="flex flex-col space-y-4 text-sm">
                     <label className="flex items-center">
                         <input
                             type="checkbox"
@@ -125,9 +129,9 @@ function NotificationSettings() {
             </section>
 
             {/* SMS Notifications */}
-            <section className="mb-6">
-                <h2 className="text-xl font-medium mb-4">SMS Notifications</h2>
-                <div className="flex flex-col space-y-4">
+            <section className="mb-8">
+            <h2 className="text-xl font-medium mb-4">SMS Notification</h2>
+                <div className="flex flex-col space-y-4 text-sm">
                     <label className="flex items-center">
                         <input
                             type="checkbox"
@@ -161,12 +165,12 @@ function NotificationSettings() {
                 </div>
             </section>
 
-            <div className="mt-4">
+            <div className="mb-8">
                 <label htmlFor="frequency" className="block text-sm font-medium text-gray-700">Notification Frequency</label>
                 <select
                     id="frequency"
                     name="frequency"
-                    className="mt-1 block w-full py-2 px-3 border border-gray-300 rounded-md"
+                    className="mt-3 block py-2 px-3 border border-gray-300 rounded-md"
                 >
                     <option value="immediate">Immediate</option>
                     <option value="daily">Daily Summary</option>
@@ -178,7 +182,7 @@ function NotificationSettings() {
             {/* Save Button */}
             <button
                 onClick={handleSubmit}
-                className="w-full py-2 px-4 bg-blue-500 hover:bg-blue-600 text-white rounded-md"
+                className="py-2 px-4 bg-priColor text-white text-sm rounded-md"
             >
                 Save Changes
             </button>

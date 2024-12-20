@@ -7,13 +7,7 @@ import useAxiosPrivate from '../../../services/hooks/useAxiosPrivate';
 import { toast } from 'react-toastify';
 
 const TransactionTable = ({filteredData, handleOpenModal, isExportPopupOpen, setIsExportPopupOpen}) => {
-    const axiosPrivate = useAxiosPrivate();
     const [selectedIndex, setSelectedIndex] = useState(null);
-    const [isDispute, setIsDispute] = useState(false);
-    const [description, setDescription] = useState('');
-    const [paymentReference, setPaymentReference] = useState('');
-    const [loading, setLoading] = useState(false);
-    const [errMsg, setErrMsg] = useState('');
     
     const columns = [
         {
@@ -39,16 +33,16 @@ const TransactionTable = ({filteredData, handleOpenModal, isExportPopupOpen, set
             accessor: 'paymentReference',
         },
         {
-            header: 'Name',
-            accessor: 'customerName',
+            header: 'Virtual Acct No',
+            accessor: 'accountNumber',
             render: (value) => (
-                <span className='font-medimu text-gray-900'>
+                <span className='font-medium text-gray-900'>
                     {value}
                 </span>
             ),
         },
         {
-            header: 'Amount',
+            header: 'Amount (₦)',
             accessor: 'amount',
         },
         {
@@ -62,11 +56,10 @@ const TransactionTable = ({filteredData, handleOpenModal, isExportPopupOpen, set
         },
         // {
         //     header: 'Action',
-        //     accessor: 'transactionStatus',
-        //     render: (id, row) => (
-        //         row.transactionStatus !== 'Successful' && 
+        //     accessor: '',
+        //     render: (row) => (
         //         <button
-        //             onClick={() => handleDispute(row)}
+        //             onClick={() => getDataToParent(1)}
         //             className='bg-red-700 text-white text-xs px-2 py-1 rounded-[4px]'
         //         >
         //             Dispute
@@ -74,8 +67,6 @@ const TransactionTable = ({filteredData, handleOpenModal, isExportPopupOpen, set
         //     ),
         // },
     ];
-
-    // const submitDispute = async (e) => {
     //     e.preventDefault();
     //     setLoading(true);
 
@@ -116,45 +107,8 @@ const TransactionTable = ({filteredData, handleOpenModal, isExportPopupOpen, set
         setSelectedIndex(selectedIndex === index ? null : index);
     };
 
-    // const filteredSearchData = transactions.filter((row) => {
-    //     const rowValues = Object.values(row).map(val => (val || '').toString().toLowerCase());
-    //     const matchesSearch = search
-    //         ? rowValues.some(val => val.includes(search.toLowerCase()))
-    //         : true;
-    //     const matchesStatus = filterStatus
-    //         ? row.status === filterStatus
-    //         : true;
-    //     return matchesSearch && matchesStatus;
-    // });
-
     return (
         <div className="">
-            {/* {
-                isDispute &&
-                <CustomModal
-                    handleOpenModal={() => setIsDispute(false)}
-                >
-                    <h2 className='mb-8'>Description</h2>
-                    {errMsg && <p>{errMsg}</p>}
-                    <textarea
-                        className='border w-full h-[200px] max-x-[500px] text-sm p-3'
-                        placeholder='Write something ...'
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                    />
-                    <div className="flex justify-end mt-8">
-                        <button
-                            onClick={submitDispute}
-                            className='py-2 px-4 bg-priColor text-white rounded-[8px]'
-                            disabled={loading}
-                        >
-                                {loading ? 'Sending...' : 'Submit'}
-                            </button>
-                    </div>
-
-                </CustomModal>
-            } */}
-
             <DataTable
                 columns={columns}
                 data={filteredData}
@@ -170,15 +124,6 @@ const TransactionTable = ({filteredData, handleOpenModal, isExportPopupOpen, set
                             <button onClick={() => getDataToParent(selectedIndex)} className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">
                                 View Details
                             </button>
-                            {/* <button className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">
-                                Edit
-                            </button>
-                            <button className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">
-                                Change Status
-                            </button>
-                            <button className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">
-                                Delete
-                            </button> */}
                         </div>
                     }
                     </>

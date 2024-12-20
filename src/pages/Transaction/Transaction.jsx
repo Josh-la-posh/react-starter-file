@@ -15,7 +15,8 @@ function TransactionPage() {
   const dispatch = useDispatch();
   const { transactions } = useSelector((state) => state.transaction);
   const [filteredData, setFilteredData] = useState(transactions);
-  const merchantCode = auth?.merchantCode;
+  const [filteredDataResult, setFilteredDataResult] = useState(filteredData);
+  const merchantCode = auth?.merchant.merchantCode;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedTransactionData, setSelectedTransactionData] = useState({});
   const [isExportPopupOpen, setIsExportPopupOpen] = useState(false);
@@ -54,7 +55,7 @@ function TransactionPage() {
 
   return (
     <div>
-      <TransactionFilter filteredData={filteredData} setFilteredData={setFilteredData} transactions={transactions}/>
+      <TransactionFilter filteredData={filteredData} setFilteredData={setFilteredData} transactions={transactions} filteredDataResult={filteredDataResult} setFilteredDataResult={setFilteredDataResult}/>
 
       {isModalOpen && 
         (<TransactionForm
@@ -63,7 +64,7 @@ function TransactionPage() {
         />
       )}
 
-      <TransactionTable isExportPopupOpen={isExportPopupOpen} setIsExportPopupOpen={setIsExportPopupOpen} filteredData={filteredData} handleOpenModal={handleOpenModal} />
+      <TransactionTable isExportPopupOpen={isExportPopupOpen} setIsExportPopupOpen={setIsExportPopupOpen} filteredData={filteredDataResult} handleOpenModal={handleOpenModal} />
     </div>
   )
 }

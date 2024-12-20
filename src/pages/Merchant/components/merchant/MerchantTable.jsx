@@ -1,16 +1,31 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ExportPopup from '../../../../utils/exportPopup';
 import DataTable from '../../../../components/Table';
 import { dateFormatter, timeFormatter } from '../../../../utils/dateFormatter';
-import CustomModal from '../../../../components/Modal';
-import useAxiosPrivate from '../../../../services/hooks/useAxiosPrivate';
-import { toast } from 'react-toastify';
-import { render } from '@testing-library/react';
 import { Link } from 'react-router-dom';
+import { Pen } from 'lucide-react';
+import CustomModal from '../../../../components/Modal';
+import MerchantService from '../../../../services/api/merchantApi';
+import UserService from '../../../../services/api/userApi';
+import { toast } from 'react-toastify';
+import useAxiosPrivate from '../../../../services/hooks/useAxiosPrivate';
+import { useDispatch, useSelector } from 'react-redux';
+import useAuth from '../../../../services/hooks/useAuth';
 
-const MerchantTable = ({filteredData, handleOpenModal, isExportPopupOpen, setIsExportPopupOpen}) => {
+const MerchantTable = ({filteredData, handleOpenModal}) => {
+    const { auth } = useAuth();
     const axiosPrivate = useAxiosPrivate();
+    const merchantService = new MerchantService(axiosPrivate);
+    const userService = new UserService(axiosPrivate);
+    const dispatch = useDispatch();
+    const { aggregatorUser } = useSelector((state) => state.users);
+    const [users, setUsers] = useState(aggregatorUser);
     const [selectedIndex, setSelectedIndex] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [formData, setFormData] = useState({
+        userId : '',
+        merchantId : ''
+    });
     
     const columns = [
         {
@@ -38,18 +53,18 @@ const MerchantTable = ({filteredData, handleOpenModal, isExportPopupOpen, setIsE
                 </Link>
             )
         },
-        {
-            header: 'Domain',
-            accessor: 'merchantCode',
-            render: (id) => (
-                <Link
-                    to={`/merchants/domain/${id}`}
-                    className='text-priColor'
-                >
-                    Domain
-                </Link>
-            )
-        },
+        // {
+        //     header: 'Domain',
+        //     accessor: 'merchantCode',
+        //     render: (id) => (
+        //         <Link
+        //             to={`/merchants/domain/${id}`}
+        //             className='text-priColor'
+        //         >
+        //             Domain
+        //         </Link>
+        //     )
+        // },
         {
             header: 'Document',
             accessor: 'merchantCode',
@@ -64,10 +79,10 @@ const MerchantTable = ({filteredData, handleOpenModal, isExportPopupOpen, setIsE
         },
         {
             header: 'Credentials',
-            accessor: '',
+            accessor: 'merchantCode',
             render: (id) => (
                 <Link
-                    to='/merchants/credential'
+                    to={`/merchants/credential/${id}`}
                     className='text-priColor'
                 >
                     Credentials
@@ -86,100 +101,110 @@ const MerchantTable = ({filteredData, handleOpenModal, isExportPopupOpen, setIsE
             header: 'Status',
             accessor: 'status',
         },
-        // {
-        //     header: 'Action',
-        //     accessor: 'transactionStatus',
-        //     render: (id, row) => (
-        //         row.transactionStatus !== 'Successful' && 
-        //         <button
-        //             onClick={() => handleDispute(row)}
-        //             className='bg-red-700 text-white text-xs px-2 py-1 rounded-[4px]'
-        //         >
-        //             Dispute
-        //         </button>
-        //     ),
-        // },
+        {
+            header: 'Action',
+            accessor: 'id',
+            render: (id) => (
+                <button
+                    onClick={() => handleModalOpen(id)}
+                    className='p-2 rounded-sm border border-gray-200'
+                >
+                    <Pen size='14px' />
+                </button>
+            ),
+        },
     ];
 
-    // const submitDispute = async (e) => {
-    //     e.preventDefault();
-    //     setLoading(true);
+    useEffect(() => {
+        setUsers(aggregatorUser);
+    }, [aggregatorUser])
 
+    useEffect(() => {
+        fetchUsers();
+    }, [])
 
-    //     try {
-    //         const response = await axiosPrivate.post('',
-    //             JSON.stringify({paymentReference, description})
-    //         );
-    //         console.log(response);
-    //         const data = response.status;
-    //         if (data === 201) {
-    //             toast('Sent Successfully');
-    //             setPaymentReference('');
-    //             setIsDispute(false);
-    //         }
-    //     } catch (err) {
-    //         if (!err.status) {
-    //          setErrMsg('No Server Response');   
-    //         } else {
-    //             setErrMsg('Unable to send request at this time.')
-    //         }
-    //     } finally {
-    //         setLoading(false);
-    //     }
+    const handleUserChange = (e) => {
+        const {value} = e.target;
 
-    // }
+        setFormData((prev) => ({
+            ...prev,
+            userId: value
+        }))
+    }
 
-    // const handleDispute = (id) => {
-    //     setPaymentReference(id.paymentReference);
-    //     setIsDispute(true);
-    // };
+    const handleModalOpen = (id) => {
+        setIsModalOpen(true);
+        setFormData((prev) => ({
+            ...prev,
+            merchantId: id
+        }));
+    }
+
+    const handleModalClose = () => {
+        setIsModalOpen(false);
+        setFormData({
+            userId: '',
+            merchantId: ''
+        });
+    }
 
     const getDataToParent = (id) => {
         handleOpenModal(filteredData[id]);
+    }
+
+    const handleSubmit = (e) => {
+        const v1 = formData.userId;
+
+        if (v1 === '') {
+            toast('User Id cannot be empty');
+            return;
+        }
+        loadData();
     }
     
     const handleSelectedRow = (index) => {
         setSelectedIndex(selectedIndex === index ? null : index);
     };
-
-    // const filteredSearchData = transactions.filter((row) => {
-    //     const rowValues = Object.values(row).map(val => (val || '').toString().toLowerCase());
-    //     const matchesSearch = search
-    //         ? rowValues.some(val => val.includes(search.toLowerCase()))
-    //         : true;
-    //     const matchesStatus = filterStatus
-    //         ? row.status === filterStatus
-    //         : true;
-    //     return matchesSearch && matchesStatus;
-    // });
+    
+    const loadData = async () => {
+        await merchantService.addUserMerchant(formData);
+    };
+    
+    const fetchUsers = async () => {
+        const aggregatorCode = auth?.data?.aggregator?.aggregatorCode;
+        await userService.fetchUserByAggregatorCode(aggregatorCode, 1, 20, dispatch);
+    };
 
     return (
         <div className="">
-            {/* {
-                isDispute &&
+            {
+                isModalOpen &&
                 <CustomModal
-                    handleOpenModal={() => setIsDispute(false)}
+                    handleOpenModal={handleModalClose}
                 >
-                    <h2 className='mb-8'>Description</h2>
-                    {errMsg && <p>{errMsg}</p>}
-                    <textarea
-                        className='border w-full h-[200px] max-x-[500px] text-sm p-3'
-                        placeholder='Write something ...'
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                    />
-                    <div className="flex justify-end mt-8">
+                    <h2 className='mb-8'>New User</h2>
+
+                    <div className="flex mt-8 gap-3">
+                        <select id='users' value={users.id} onChange={handleUserChange} className='flex-grow px-4 py-2 outline-gray-400' defaultValue='Select User'>
+                            {
+                                users &&
+                                users.map((user) =>
+                                 (<option key={user.id} value={user.id} className='text-xs max-w-fit'>
+                                    {user.firstName} {user.lastName}
+                                </option>)
+                                )
+                            }
+                        </select>
                         <button
-                            onClick={submitDispute}
-                            className='py-2 px-4 bg-priColor text-white rounded-[8px]'
-                            disabled={loading}
-                        >
-                                {loading ? 'Sending...' : 'Submit'}
-                            </button>
+                            className='text-white border border-gray bg-priColor text-xs font-[600] py-2 px-5 rounded-md flex justify-between items-center'
+                            onClick={handleSubmit}
+                            >
+                                Add
+                        </button>
                     </div>
 
                 </CustomModal>
-            } */}
+            }
 
             <DataTable
                 columns={columns}
@@ -187,7 +212,7 @@ const MerchantTable = ({filteredData, handleOpenModal, isExportPopupOpen, setIsE
                 rowsPerPageOptions={[5, 10, 20, 50]}
                 onIndexChange={handleSelectedRow}
                 selectedIndex={selectedIndex}
-                displayActionButton={true}
+                displayActionButton={false}
                 elementId='MerchantTable'
                 actionButton={
                     <>
@@ -209,12 +234,6 @@ const MerchantTable = ({filteredData, handleOpenModal, isExportPopupOpen, setIsE
                     }
                     </>
                 }
-            />
-            <ExportPopup
-                isOpen={isExportPopupOpen}
-                onClose={() => setIsExportPopupOpen(false)}
-                data={filteredData}
-                elementId='MerchantTable'
             />
         </div>
     );

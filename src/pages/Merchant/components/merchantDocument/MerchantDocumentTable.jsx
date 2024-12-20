@@ -4,6 +4,7 @@ import { dateFormatter } from '../../../../utils/dateFormatter';
 import useAxiosPrivate from '../../../../services/hooks/useAxiosPrivate';
 import MerchantService from '../../../../services/api/merchantApi';
 import { useDispatch } from 'react-redux';
+import { Cloud, Trash } from 'lucide-react';
 
 const MerchantDocumentTable = ({filteredData, merchantCode}) => {
     const axiosPrivate = useAxiosPrivate();
@@ -22,6 +23,15 @@ const MerchantDocumentTable = ({filteredData, merchantCode}) => {
             ),
         },
         {
+            header: 'Document Name',
+            accessor: 'document',
+            render: (value) => (
+                <span >
+                    {value.documentName}
+                </span>
+            )
+        },
+        {
             header: 'Status',
             accessor: 'isActive',
             render: (value) => (
@@ -33,18 +43,36 @@ const MerchantDocumentTable = ({filteredData, merchantCode}) => {
             )
         },
         {
-            header: 'Action',
-            accessor: 'documentId',
-            render: (row) => (
+            header: 'Download',
+            accessor: 'id',
+            render: (id) => (
                 <button
-                    onClick={() => handleDelete(row)}
-                    className='bg-red-700 text-white text-xs px-2 py-1 rounded-[4px]'
+                    onClick={() => handleDownload(id)}
+                    className='text-priColor flex items-center gap-2 text-xs px-2 py-1 rounded-[4px]'
                 >
-                    Delete
+                    <Cloud size={'18px'} />
+                    Download
+                </button>
+            ),
+        },
+        {
+            header: '',
+            accessor: 'documentId',
+            render: (id) => (
+                <button
+                    onClick={() => handleDelete(id)}
+                    className='text-red-700 text-xs px-2 py-1 rounded-[4px]'
+                >
+                    {/* <Trash size={'14px'} /> */}
+                    Request Deletion
                 </button>
             ),
         },
     ];
+
+    const handleDownload = async (id) => {
+        await merchantService.downloadMerchantDocument(id);
+    }
 
     const handleDelete = async (id) => {
         await merchantService.deleteMerchantDocument(id, merchantCode, dispatch);
