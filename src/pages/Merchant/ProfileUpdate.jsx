@@ -320,7 +320,7 @@ function MerchantProfileUpdate() {
                 <p className='text-base font-[600]'>Update Merchant Profile</p>
             </div>
             <form onSubmit={handleSubmit}>
-                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5 text-sm font-medium text-gray-700">
+                <div className="mb-6 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-5 text-xs font-medium text-gray-700">
                     <AuthInputField
                         label="Business Description"
                         type='text'
@@ -351,7 +351,7 @@ function MerchantProfileUpdate() {
                             </>
                         )}
                     />
-                    {/* <div className="mb-6 w-full">
+                    {/* <div className="w-full">
                         <label className="mb-1 text-xs font-medium text-gray-700" htmlFor="country">
                             Country
                         </label>
@@ -360,7 +360,7 @@ function MerchantProfileUpdate() {
                             name="country"
                             value={formData.country}
                             onChange={handleCountryChange}
-                            className="w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
+                            className="w-full px-3 py-2 text-xs border border-gray rounded-lg focus:outline-none bg-transparent"
                             required
                         >
                             {countryList.map((country) => (
@@ -373,7 +373,7 @@ function MerchantProfileUpdate() {
                             <Link to='' onClick={getCountry} className='text-priColor text-xs text-right cursor'>Retry</Link>
                         </div>}
                     </div> */}
-                    <div className="mb-6 w-full">
+                    <div className="w-full">
                         <label className="text-xs font-medium text-gray-700" htmlFor="state">
                             State
                         </label>
@@ -382,7 +382,7 @@ function MerchantProfileUpdate() {
                             name="state"
                             value={addressData.state}
                             onChange={(e) => handleStateChange(e)}
-                            className="mt-1 w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
+                            className="mt-1 w-full px-3 py-2 text-xs border border-gray rounded-lg focus:outline-none bg-transparent"
                             required
                         >
                             {stateList.map((state) => (
@@ -392,7 +392,7 @@ function MerchantProfileUpdate() {
                             ))}
                         </select>
                     </div>
-                    {/* <div className="mb-6 w-full">
+                    {/* <div className="w-full">
                         <label className="mb-1 text-xs font-medium text-gray-700" htmlFor="city">
                             City
                         </label>
@@ -401,7 +401,7 @@ function MerchantProfileUpdate() {
                             name="city"
                             value={formData.city}
                             onChange={(e) => handleCityChange(e)}
-                            className="w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
+                            className="w-full px-3 py-2 text-xs border border-gray rounded-lg focus:outline-none bg-transparent"
                             required
                         >
                             {cityList.map((city) => (
@@ -486,7 +486,7 @@ function MerchantProfileUpdate() {
                             </>
                         )}
                     />
-                    <div className="mb-6 w-full">
+                    <div className="w-full">
                         <label className="text-xs font-medium text-gray-700" htmlFor="businessType">
                             Business Type
                         </label>
@@ -495,7 +495,7 @@ function MerchantProfileUpdate() {
                             name="businessType"
                             value={formData.businessType}
                             onChange={handleChange}
-                            className="mt-1 w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
+                            className="mt-1 w-full px-3 py-2 text-xs border border-gray rounded-lg focus:outline-none bg-transparent"
                             required
                         >
                             {businessTypes.map((reg, index) => (
@@ -505,7 +505,7 @@ function MerchantProfileUpdate() {
                             ))}
                         </select>
                     </div>
-                    <div className="mb-6 w-full">
+                    <div className="w-full">
                         <label className="text-xs font-medium text-gray-700" htmlFor="registerationType">
                             Registration Type
                         </label>
@@ -514,7 +514,7 @@ function MerchantProfileUpdate() {
                             name="registerationType"
                             value={formData.registerationType}
                             onChange={handleChange}
-                            className="mt-1 w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
+                            className="mt-1 w-full px-3 py-2 text-xs border border-gray rounded-lg focus:outline-none bg-transparent"
                             required
                         >
                             {registrationTypes.map((reg, index) => (
@@ -524,7 +524,7 @@ function MerchantProfileUpdate() {
                             ))}
                         </select>
                     </div>
-                    <div className="mb-6 w-full">
+                    <div className="w-full">
                         <label className="text-xs font-medium text-gray-700" htmlFor="industry">
                             Industry
                         </label>
@@ -533,7 +533,7 @@ function MerchantProfileUpdate() {
                             name="industry"
                             value={formData.industry}
                             onChange={(e) => handleIndustryChange(e)}
-                            className="mt-1 w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
+                            className="mt-1 w-full px-3 py-2 text-xs border border-gray rounded-lg focus:outline-none bg-transparent"
                             required
                         >
                             {industryList.map((industry) => (
@@ -545,7 +545,7 @@ function MerchantProfileUpdate() {
                     </div>
                     {
                         showIndustryCategories &&
-                        <div className="mb-6 w-full">
+                        <div className="w-full">
                             <label className="mb-1 text-xs font-medium text-gray-700" htmlFor="industryCategoryId">
                                 Industry Category
                             </label>
@@ -554,7 +554,7 @@ function MerchantProfileUpdate() {
                                 name="industryCategoryId"
                                 value={formData.industryCategoryId}
                                 onChange={handleChange}
-                                className="w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
+                                className="w-full px-3 py-2 text-xs border border-gray rounded-lg focus:outline-none bg-transparent"
                                 required
                             >
                                 {industryCategoryList.map((industry) => (
@@ -567,7 +567,7 @@ function MerchantProfileUpdate() {
                     }
                 </div>
                 <div className="flex justify-end">
-                    <button type='submit ' className='text-white bg-priColor px-4 py-2 text-sm rounded-sm'>
+                    <button type='submit ' className='text-white bg-priColor px-4 py-2 text-xs rounded-sm'>
                         Update
                     </button>
                 </div>

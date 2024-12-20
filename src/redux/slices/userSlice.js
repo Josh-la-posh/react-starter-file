@@ -4,6 +4,9 @@ const initialState = {
   usersLoading: false,
   usersError: null,
   users: [],
+  newUserLoading: false,
+  newUserError: null,
+  newUser: {},
   aggregatorUserLoading: false,
   aggregatorUserError: null,
   aggregatorUser: []
@@ -25,6 +28,18 @@ const usersSlice = createSlice({
       state.usersLoading = false;
       state.usersError = action.payload;
     },
+    newUserStart: (state) => {
+      state.newUserLoading = true;
+      state.newUserError = null;
+    },
+    newUserSuccess: (state, action) => {
+      state.newUserLoading = false;
+      state.newUser = action.payload;
+    },
+    newUserFailure: (state, action) => {
+      state.newUserLoading = false;
+      state.newUserError = action.payload;
+    },
     aggregatorUserStart: (state) => {
       state.aggregatorUserLoading = true;
       state.aggregatorUserError = null;
@@ -40,6 +55,6 @@ const usersSlice = createSlice({
   },
 });
 
-export const { usersStart, usersSuccess, usersFailure, aggregatorUserStart, aggregatorUserSuccess, aggregatorUserFailure } = usersSlice.actions;
+export const { usersStart, usersSuccess, usersFailure, newUserStart, newUserSuccess, newUserFailure, aggregatorUserStart, aggregatorUserSuccess, aggregatorUserFailure } = usersSlice.actions;
 
 export default usersSlice.reducer;

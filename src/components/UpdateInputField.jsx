@@ -18,7 +18,7 @@ function UpdateInputField({ label, type, valueName, id, onChange, icon, disabled
                     value={valueName}
                     onChange={onChange}
                     disabled={disabled}
-                    className="bg-transparent text-xs md:text-sm text-gray-900 focus:outline-none w-full"
+                    className="bg-transparent text-xs text-gray-900 focus:outline-none w-full"
                 />
             </div>
         </div>

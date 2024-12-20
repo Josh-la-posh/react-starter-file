@@ -32,7 +32,7 @@ function MerchantDocument() {
   }, [merchantCode, dispatch]);
 
   return (
-    <div>
+    <div className=''>
       <MerchantDocumentFilter />
       <MerchantDocumentTable filteredData={merchantDocument} merchantCode={merchantCode} />
     </div>

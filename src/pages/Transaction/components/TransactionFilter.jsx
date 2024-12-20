@@ -1,24 +1,35 @@
 import React, { useState, useEffect } from 'react'
-import { ArrowDownWideNarrow, ArrowLeft, CalendarDays, Cloud, Download, Search } from 'lucide-react';
+import { ArrowDownWideNarrow, ArrowLeft, CalendarDays, Cloud, Search } from 'lucide-react';
+import { ReactComponent as MastercardIcon } from '../../../assets/Mastercard.svg';
+import { ReactComponent as StanbicIcon } from '../../../assets/Stanbic.png';
+import { ReactComponent as VerveIcon } from '../../../assets/verve.svg';
+import { ReactComponent as WemaIcon } from '../../../assets/wema.svg';
+import { ReactComponent as VisaIcon } from '../../../assets/Visa.svg';
+import { ReactComponent as AfrigoIcon } from '../../../assets/Afrigo.png';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import { useNavigate } from 'react-router-dom';
 import TransactionService from '../../../services/api/transactionApi';
 import useAxiosPrivate from '../../../services/hooks/useAxiosPrivate';
 import useAuth from '../../../services/hooks/useAuth';
+import { toast } from 'react-toastify';
+import { useDispatch } from 'react-redux';
 
 function TransactionFilter({filteredData, setFilteredData, transactions, filteredDataResult, setFilteredDataResult}) {
     const navigate = useNavigate();
     const { auth } = useAuth();
+    const dispatch = useDispatch();
     const axiosPrivate = useAxiosPrivate();
     const [search, setSearch] = useState('');
     const [filterStatus, setFilterStatus] = useState('All');
     const [searchMode, setSearchMode] = useState('All');
-    const [searchFilterType, setSearchFilterType] = useState('Name');
+    const [searchFilterType, setSearchFilterType] = useState('TransactionId');
     const [startDate, setStartDate] = useState(null);
     const [endDate, setEndDate] = useState(null);
     const transactionService = new TransactionService(axiosPrivate);
     const [canSearch, setCanSearch] = useState(false);
+    const env = 'Test';
+    const pageNumber = 1;
     const [formData, setFormData] = useState({
         transactionReference : '',
         accountNumber : '',
@@ -53,7 +64,12 @@ function TransactionFilter({filteredData, setFilteredData, transactions, filtere
                 return isAfterStartDate && isBeforeEndDate;
             });
             setFilteredData(filteredTransactions);
+            filterByDate();
             // setFilteredDataResult(filteredTransactions);
+        } else {
+            setStartDate(null);
+            setEndDate(null);
+            filterByPaymentReference();
         }
     };
 
@@ -105,9 +121,28 @@ function TransactionFilter({filteredData, setFilteredData, transactions, filtere
         setSearch(e.target.value);
     };
 
+    const filterByDate = async () => {
+        const merchantCode = auth?.merchant?.merchantCode;
+        if (startDate === null) {
+            toast('Select a start data to continue');
+            return;
+        };
+        if (endDate === null) {
+            toast('Select a end data to proceed');
+            return;
+        };
+        await transactionService.fetchtransactionsByDate(merchantCode, startDate, endDate, pageNumber, 40, env, dispatch);
+    };
+
+    const filterByPaymentReference = async () => {
+        const paymentReference = search;
+        const merchantCode = auth?.merchant?.merchantCode;
+        await transactionService.fetchtransactionsByPaymentReference(merchantCode, paymentReference, env, dispatch);
+    };
+
     const downloadTransaction = async () => {
         const merchantCode = auth?.merchant?.merchantCode;
-        await transactionService.downloadTransactionReceipt(merchantCode, 1, 20, 'Test');
+        await transactionService.downloadTransactionReceipt(merchantCode, pageNumber, 40,  env);
     };
     
   return (
@@ -139,7 +174,7 @@ function TransactionFilter({filteredData, setFilteredData, transactions, filtere
                         <select id="searchFilterType" value={searchFilterType} onChange={handleSearchMode} className="p-2 border focus:outline-none rounded-sm bg-white text-gray-400 selection:bg-transparent text-xs">
                             <option value="Name">Name</option>
                             <option value="Email">Email</option>
-                            <option value="TransactionId">Transaction ID</option>
+                            <option value="paymentReference">Transaction ID</option>
                         </select>
                         <div className="relative">
                             <input
@@ -239,8 +274,25 @@ function TransactionFilter({filteredData, setFilteredData, transactions, filtere
             }
         </div>
         <div className="h-32 bg-[#F0F2F5] my-4 p-4">
-            <div className="bg-white h-full w-full flex justify-center items-center">
-                
+            <div className="bg-white h-full flex justify-center items-center gap-5">
+                <div className="h-[60px] flex-1">
+                    <MastercardIcon width='100%' height='100%' />
+                </div>
+                <div className="h-[60px] flex-1">
+                    <VerveIcon width='100%' height='100%' />
+                </div>
+                <div className="h-[60px] flex-1">
+                    <VisaIcon width='100%' height='100%' />
+                </div>
+                <div className="h-[60px] flex-1">
+                    <MastercardIcon width='100%' height='100%' />
+                </div>
+                <div className="h-[60px] flex-1">
+                    <VisaIcon width='100%' height='100%' />
+                </div>
+                <div className="h-[60px] flex-1">
+                    <WemaIcon width='100%' height='100%' />
+                </div>
             </div>
         </div>
         <div className="w-full flex justify-between">

@@ -1,5 +1,5 @@
 import { toast } from "react-toastify";
-import { aggregatorUserFailure, aggregatorUserStart, aggregatorUserSuccess, usersFailure, usersStart, usersSuccess } from "../../redux/slices/userSlice";
+import { aggregatorUserFailure, aggregatorUserStart, aggregatorUserSuccess, newUserFailure, newUserStart, newUserSuccess, usersFailure, usersStart, usersSuccess } from "../../redux/slices/userSlice";
 import { useEffect } from "react";
 
 class userService {
@@ -121,25 +121,20 @@ class userService {
     }
   
     async updateUserData(userId, formData, dispatch) {
-        dispatch(usersStart());
+        dispatch(newUserStart());
       try {
         const response = await this.axiosPrivate.put(
           `api/Users/${userId}`,
           JSON.stringify(formData)
         );
         const data = response.data.responseData;
-        dispatch(usersSuccess(data));
-
-        console.log('user details: ', data);
-        this.setAuth(prev => {
-          return {...prev, firstName: data.firstName, lastName: data.lastName, email: data.email, phoneNumber: data.phoneNumber}
-        });
-        toast('success', 'Profile updated successfully');
+        dispatch(newUserSuccess(data));
+        toast('Profile updated successfully');
       } catch (err) {
         if (!err.response) {
-            dispatch(usersFailure('No response from server'));
+            dispatch(newUserFailure('No response from server'));
         } else {
-            dispatch(usersFailure('Failed to updata user data. Try again.'));
+            dispatch(newUserFailure('Failed to update user data. Try again.'));
         }
       } finally {
       }

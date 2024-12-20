@@ -23,7 +23,7 @@ function UserManagement() {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    setSettingsTitle('Team');
+    setSettingsTitle('Teams');
   }, []);
 
   useEffect(() => {

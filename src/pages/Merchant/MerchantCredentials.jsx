@@ -7,6 +7,8 @@ import { Eye } from 'lucide-react';
 import useAuth from '../../services/hooks/useAuth';
 import useSettingsTitle from '../../services/hooks/useSettingsTitle';
 import PaymentForm from './components/merchantCredential/PaymentForm';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
 function MerchantCredential() {
   const { auth } = useAuth();
@@ -22,6 +24,8 @@ function MerchantCredential() {
   const [viewSecret, setViewSecret] = useState(false);
   const [viewKey, setViewKey] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [accessToken, setAccessToken] = useState('');
+  const [selectedIntegrationKey, setSelectedIntegrationKey] = useState('');
 
   useEffect(() => {
       setAppTitle('Merchant');
@@ -47,8 +51,24 @@ function MerchantCredential() {
     }));
   }
 
-  const handlePayment = () => {
-    setIsModalOpen(true);
+  const handlePayment = async (index) => {
+    try {
+      const response = await axios.post(
+        'https://api.pelpay.ng/api/account/login',
+        {
+          clientId: merchantCredentials?.clientId,
+          clientSecret: merchantCredentials?.clientSecret
+        }
+      );
+      setSelectedIntegrationKey(userData[index].integrationKey);
+      const data = response.data.access_token;
+      setAccessToken(data);
+      setIsModalOpen(true);
+    } catch (e) {
+      toast('An error occurred. Try again later');
+    }
+
+
   }
 
   return (
@@ -79,20 +99,23 @@ function MerchantCredential() {
 
         { userData &&
           userData.map((data, index) => (
-            <div key={data.index} className="flex border-b py-4 text-xs">
+            <div key={index} className="flex border-b py-4 text-xs">
               <p className='w-32 mr-32'>{data?.env === 'Test' ? 'Sandbox' : 'Production'}</p>
               <div className='flex items-center gap-5 mr-auto'>
                 {viewKey[index] === true ? data?.integrationKey : '************'}
                 <button onClick={() => handleIntegrationKey(index)} className='text-priColor'><Eye size={'15px'} /></button>
               </div>
-              <button onClick={handlePayment} className='text-priColor '>Make Payment</button>
+              <button onClick={() => handlePayment(index)} className='text-priColor '>Make Payment</button>
             </div>
           ))
         }
       </div>
 
       {isModalOpen && 
-        (<PaymentForm setIsModalOpen={setIsModalOpen}
+        (<PaymentForm 
+          selectedIntegrationKey={selectedIntegrationKey}
+          accessToken={accessToken} 
+          setIsModalOpen={setIsModalOpen}
         />
       )}
     </div>

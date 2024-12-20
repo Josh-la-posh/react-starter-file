@@ -15,17 +15,27 @@ function ProfilePage() {
   const axiosPrivate = useAxiosPrivate();
   const userService = new UserService(axiosPrivate, auth, setAuth);
   const dispatch = useDispatch();
-  const {usersLoading} = useSelector((state) => state.users);
+  const {newUserLoading, newUser} = useSelector((state) => state.users);
   const [editing, setEditing] = useState(false);
   const userDetails = auth?.data?.user;
   const [errMsg, setErrMsg] = useState('');
-
+  
   const [formData, setFormData] = useState({
-    firstName: userDetails.firstName ?? '',
+      firstName: userDetails.firstName ?? '',
     lastName: userDetails.lastName ?? '',
     email: userDetails.email ?? '',
     phone: userDetails.phoneNumber ?? ''
 });
+
+useEffect(() => {
+    if (newUser) {
+        setAuth(prev => ({ ...prev, data: {
+            ...prev.data,
+            user: newUser
+        } }));
+    }
+    
+}, [newUser]);
 
 useEffect(() => {
     setFormData({
@@ -34,9 +44,7 @@ useEffect(() => {
         email: userDetails.email ?? '',
         phone: userDetails.phoneNumber ?? ''
     })
-
-    console.log('new user name: ', userDetails.firstName);
-}, [userDetails, auth])
+}, [setAuth])
 
 const updateUserData = async () => {
     const userId = userDetails.id;
@@ -60,7 +68,7 @@ const handleSubmit = (e) => {
     
     if (v1 !== '' && v2 !== '' && v3 !== '' ** v4 !== '') {
         updateUserData();
-        usersLoading === true ? setEditing(true) : setEditing(false);
+        newUserLoading === true ? setEditing(true) : setEditing(false);
     } else {
         setErrMsg('All fields must be field');
         setTimeout(() => {
@@ -155,7 +163,7 @@ const handleSubmit = (e) => {
                     <button 
                         type='submit' 
                         className='bg-priColor px-8 py-3 rounded-sm text-white text-xs font-[500]'>
-                        {usersLoading === true ? 'Updating ...' : 'Save Changes'}
+                        {newUserLoading === true ? 'Updating ...' : 'Save Changes'}
                     </button>
                 
                 </div>

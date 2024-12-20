@@ -44,7 +44,7 @@ const MerchantDocumentTable = ({filteredData, merchantCode}) => {
         },
         {
             header: 'Download',
-            accessor: 'documentId',
+            accessor: 'id',
             render: (id) => (
                 <button
                     onClick={() => handleDownload(id)}

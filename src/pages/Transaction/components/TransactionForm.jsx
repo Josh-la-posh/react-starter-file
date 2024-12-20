@@ -33,7 +33,6 @@ function TransactionForm({ handleCloseModal, data }) {
     try {
       const response = await axios.get(`https://api.pelpay.ng/api/WebHook/payment/${id}`);
       const data = response.data;
-      // transactionJsonData.push(data);
       setTransactionJsonData(response.data);
       console.log('new responsr: ', transactionJsonData);
     } catch (e) {

@@ -346,7 +346,6 @@ function AddMerchantPage() {
             setSuccess(true);
             toast.success("Registration successful! Please check your email to confirm your account.");
 
-            // Clear the form fields after successful submission
             setFormData({
                 country: 'NG',
                 businessName: '',
@@ -373,14 +372,10 @@ function AddMerchantPage() {
     };
 
     return (
-        <div className=''>    
-            {/* <button onClick={() => navigate(-1)} className='text-priColor mb-5 flex items-center gap-2 text-xs'><ArrowLeft size={'14px'}/> Go Back</button> */}
+        <div className=''>
             <div className="bg-white p-5">
-                {/* <div className="mb-12">
-                    <p className='text-base font-[600]'>Add Merchant</p> */}
-                {/* </div> */}
                 <form onnSubmit={handleSubmit}>
-                    <div className='grid lg:grid-cols-3 gap-4'>
+                    <div className='grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-4'>
                         <AuthInputField
                             label="Business Name"
                             type='text'
@@ -447,7 +442,7 @@ function AddMerchantPage() {
                                 </>
                             )}
                         />
-                        <div className="mb-6 w-full">
+                        <div className="w-full">
                             <label className="text-black text-xs mb-1 lg:mb-2 flex items-center" htmlFor="country">
                                 Country
                             </label>
@@ -456,7 +451,7 @@ function AddMerchantPage() {
                                 name="country"
                                 value={formData.countryCode}
                                 onChange={handleCountryChange}
-                                className="w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
+                                className="w-full px-3 py-2 text-xs border border-gray rounded-lg focus:outline-none bg-transparent"
                                 required
                             >
                                 {countryList.map((country) => (
@@ -470,7 +465,7 @@ function AddMerchantPage() {
                             </div>}
                         </div>
                         
-                        <div className="mb-6 w-full">
+                        <div className="w-full">
                             <label className="mb-1 lg:mb-2 text-xs flex items-center" htmlFor="state">
                                 State
                             </label>
@@ -479,7 +474,7 @@ function AddMerchantPage() {
                                 name="stateCode"
                                 value={formData.stateCode}
                                 onChange={(e) => handleStateChange(e)}
-                                className="w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
+                                className="w-full px-3 py-2 text-xs border border-gray rounded-lg focus:outline-none bg-transparent"
                                 required
                             >
                                 {stateList.map((state) => (
@@ -666,7 +661,7 @@ function AddMerchantPage() {
                                 </>
                             )}
                         />
-                        <div className="mb-6 w-full">
+                        <div className="w-full">
                             <label className="text-black text-xs mb-1 lg:mb-2 flex items-center" htmlFor="industry">
                                 Industry
                             </label>
@@ -675,7 +670,7 @@ function AddMerchantPage() {
                                 name="industry"
                                 value={formData.industry}
                                 onChange={(e) => handleCategoryChange(e)}
-                                className="w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
+                                className="w-full px-3 py-2 text-xs border border-gray rounded-lg focus:outline-none bg-transparent"
                                 required
                             >
                                 {industryList.map((industry) => (
@@ -687,7 +682,7 @@ function AddMerchantPage() {
                         </div>
                         {
                             industryId !== null &&
-                            <div className="mb-6 w-full">
+                            <div className="w-full">
                                 <label className="text-black text-xs mb-1 lg:mb-2 flex items-center" htmlFor="industryCategoryId">
                                     Industry Category
                                 </label>
@@ -696,7 +691,7 @@ function AddMerchantPage() {
                                     name="industryCategoryId"
                                     value={formData.industryCategoryId}
                                     onChange={handleChange}
-                                    className="w-full px-3 py-2 text-sm border border-gray rounded-lg focus:outline-none bg-transparent"
+                                    className="w-full px-3 py-2 text-xs border border-gray rounded-lg focus:outline-none bg-transparent"
                                     required
                                 >
                                     {industryCategoryList.map((industry) => (
@@ -710,7 +705,7 @@ function AddMerchantPage() {
                     </div>
                     <button
                         type="submit"
-                        className="bg-priColor text-sm text-white py-2 px-5 rounded-md"
+                        className="bg-priColor text-xs text-white py-2 px-5 rounded-md mb-10"
                         // disabled={loading || !validBusinessName || !validContactEmail || !validContactFirstName || !validContactLastName || !validContactPhoneNumber ? true : false}
                     >
                         {loading ? 'Registering...' : 'Register'}

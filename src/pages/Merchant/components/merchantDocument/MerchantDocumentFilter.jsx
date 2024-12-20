@@ -53,9 +53,8 @@ function MerchantDocumentFilter() {
     }
     
   return (
-    <div className="flex justify-end items-center mb-5">
+    <div className="bg-white flex justify-end items-center pb-5 pt-3 px-3">
         <div className="">
-            {/* {file && <p>Selected file: {file.name}</p>} */}
             <div className="flex items-center gap-4">
                 { canUpload &&
                     <div className ="flex items-center justify-center gap-2">

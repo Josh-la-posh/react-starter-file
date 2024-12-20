@@ -89,51 +89,43 @@ class MerchantService {
     }
   
     async downloadMerchantDocument(Id) {
-        // dispatch(merchantDocumentStart());
+
+      const getFileExtention = (data) => {
+        const type = {
+          'image/png': '.png',
+          'application/pdf': '.pdf'
+        }
+        return type[data];
+      }
+
       try {
         const response = await this.axiosPrivate.get(
           `api/MechantDocuments/download/${Id}`,
+          {
+            responseType: 'blob'
+          }
         );
+
+        const contentTYpe = response.headers['content-type'];
+        const fileExt = getFileExtention(contentTYpe);
+
+
         if (!response.data) {
           throw new Error('No data received from the server.');
         }
 
-        const decryptData = (data) => {
-          try {
-              return new TextDecoder().decode(data);
-          } catch (error) {
-              console.error('Decryption error:', error);
-              return null;
-          }
-        };
-        const encryptedData = new Uint8Array(response.data);
-        const decryptedData = decryptData(encryptedData);
+        const fileName = `Pelpay_document${Date.now()}${fileExt}`;
 
-        if (!decryptedData) {
-          throw new Error('Decryption failed.');
-        }
+        saveAs(response.data, fileName);
 
-        const pdf = new jsPDF();
-        pdf.text('Merchant Document', 10, 10);
-        pdf.text(decryptedData, 10, 20);
-
-        const pdfBlob = pdf.output('blob');
-        saveAs(pdfBlob, 'merchant-document.pdf');
+        toast('Merchant document downloaded successfully');
         
-        console.log('PDF downloaded successfully!');
-
-
-
-
-
-        // console.log('merchant document fetched successfully ', response.data);
-        // return response.data;
       } catch (err) {
         console.log(err)
         if (!err.response) {
-            // dispatch(merchantDocumentFailure('No response from server'));
+            toast('No response from server');
         } else {
-            // dispatch(merchantDocumentFailure('Failed to fetch merchant data. Try again.'));
+            toast('Failed to fetch merchant data. Try again.');
         }
       } finally {
       }

@@ -2,30 +2,38 @@ import React, { useEffect, useState } from 'react'
 import CustomModal from '../../../../components/Modal'
 import UpdateInputField from '../../../../components/UpdateInputField';
 import useAuth from '../../../../services/hooks/useAuth';
+import axios from 'axios';
+import { toast } from 'react-toastify';
 
-function PaymentForm({setIsModalOpen}) {
+function PaymentForm({selectedIntegrationKey, accessToken, setIsModalOpen}) {
     const { auth } = useAuth();
+    const uniqueId = crypto.randomUUID();
     const [formData, setFormData] = useState({
-        amount: '',
-        currency: '',
-        merchantReference: '',
-        narration: '',
-        callBackUrl: '',
-        notificationUrl: '',
-        customerId: '',
-        customerFirstName: '',
-        customerLastName: '',
-        customerEmail: '',
-        customerPhoneNumber: '',
-        customerAddress: '',
-        customerCity: '',
-        customerStateCode: '',
-        customerPostalCode: '',
-        customerCountry: '',
-        integrationKey: '',
+        amount: '100',
+        currency: 'NGN',
+        merchantRef: uniqueId,
+        narration: 'test',
+        callBackUrl: 'https://your_callback_url.com',
+        splitCode: '',
         shouldTokenizeCard: false,
-        mccCategory: '',
-        merchantDescription: '',
+        customer: {
+            customerId: 'csg',
+            customerLastName: 'Chams',
+            customerFirstName: 'Switch',
+            customerEmail: 'chams@chamsswitch.com',
+            customerPhoneNumber: '',
+            customerAddress: '',
+            customerCity: '',
+            customerStateCode: '',
+            customerPostalCode: '',
+            customerCountryCode: 'NG'
+        },
+        integrationKey: selectedIntegrationKey,
+        notificationUrl: 'https://your_notification_url.com/',
+        mcc: '0',
+        merchantDescriptor: 'string',
+        channels: ["Card", "BankTransfer", "USSD"]
+
     });
 
     useEffect(() => {
@@ -43,6 +51,27 @@ function PaymentForm({setIsModalOpen}) {
             ...prev,
             [name]: value
         }))
+    }
+
+    const handleSubmit = async () => {
+        const headers = {
+            'Authorization': `Bearer ${accessToken}`,
+            'Content-Type': 'application/json'
+          }
+    try {
+        const response = await axios.post(
+          'https://api.pelpay.ng/payment/advice',
+          formData,
+          { headers },
+        );
+        const data = response.data.responseData;
+        window.open(data.paymentUrl, '_blank');
+        // window.location.href = data.paymentUrl;
+      } catch (e) {
+        console.log('The error is: ', e)
+        const errMsg = e.response.data.message;
+        toast(errMsg);
+      }
     }
 
     return (
@@ -65,13 +94,13 @@ function PaymentForm({setIsModalOpen}) {
                     id='currency'
                     valueName={formData.currency}
                     onChange={handleChange}
-                    disabled={false}
+                    disabled={true}
                 />
                 <UpdateInputField 
                     label='Merchant Reference'
                     type='text'
                     id='merchantReference'
-                    valueName={formData.merchantReference}
+                    valueName={formData.merchantRef}
                     onChange={handleChange}
                     disabled={false}
                 />
@@ -103,7 +132,7 @@ function PaymentForm({setIsModalOpen}) {
                     label='Customer ID'
                     type='text'
                     id='customerId'
-                    valueName={formData.customerId}
+                    valueName={formData.customer.customerId}
                     onChange={handleChange}
                     disabled={true}
                 />
@@ -111,7 +140,7 @@ function PaymentForm({setIsModalOpen}) {
                     label='Customer First Name'
                     type='text'
                     id='customerFirstName'
-                    valueName={formData.customerFirstName}
+                    valueName={formData.customer.customerFirstName}
                     onChange={handleChange}
                     disabled={true}
                 />
@@ -119,7 +148,7 @@ function PaymentForm({setIsModalOpen}) {
                     label='Customer Last Name'
                     type='text'
                     id='customerLastName'
-                    valueName={formData.customerLastName}
+                    valueName={formData.customer.customerLastName}
                     onChange={handleChange}
                     disabled={true}
                 />
@@ -127,7 +156,7 @@ function PaymentForm({setIsModalOpen}) {
                     label='Customer Email'
                     type='email'
                     id='customerEmail'
-                    valueName={formData.customerEmail}
+                    valueName={formData.customer.customerEmail}
                     onChange={handleChange}
                     disabled={true}
                 />
@@ -135,7 +164,7 @@ function PaymentForm({setIsModalOpen}) {
                     label='Customer Phone Number'
                     type='tetelt'
                     id='customerPhoneNumber'
-                    valueName={formData.customerPhoneNumber}
+                    valueName={formData.customer.customerPhoneNumber}
                     onChange={handleChange}
                     disabled={true}
                 />
@@ -143,7 +172,7 @@ function PaymentForm({setIsModalOpen}) {
                     label='Customer Address'
                     type='text'
                     id='customerAddress'
-                    valueName={formData.customerAddress}
+                    valueName={formData.customer.customerAddress}
                     onChange={handleChange}
                     disabled={true}
                 />
@@ -151,7 +180,7 @@ function PaymentForm({setIsModalOpen}) {
                     label='City'
                     type='text'
                     id='customerCity'
-                    valueName={formData.customerCity}
+                    valueName={formData.customer.customerCity}
                     onChange={handleChange}
                     disabled={true}
                 />
@@ -159,7 +188,7 @@ function PaymentForm({setIsModalOpen}) {
                     label='State Code'
                     type='text'
                     id='customerStateCode'
-                    valueName={formData.customerStateCode}
+                    valueName={formData.customer.customerStateCode}
                     onChange={handleChange}
                     disabled={true}
                 />
@@ -167,7 +196,7 @@ function PaymentForm({setIsModalOpen}) {
                     label='Postal Code'
                     type='text'
                     id='customerPostalCode'
-                    valueName={formData.customerPostalCode}
+                    valueName={formData.customer.customerPostalCode}
                     onChange={handleChange}
                     disabled={true}
                 />
@@ -175,7 +204,7 @@ function PaymentForm({setIsModalOpen}) {
                     label='Country'
                     type='text'
                     id='customerCountry'
-                    valueName={formData.customerCountry}
+                    valueName={formData.customer.customerCountryCode}
                     onChange={handleChange}
                     disabled={true}
                 />
@@ -193,13 +222,13 @@ function PaymentForm({setIsModalOpen}) {
                     id='shouldTokenizeCard'
                     valueName={formData.shouldTokenizeCard}
                     onChange={handleChange}
-                    disabled={true}
+                    disabled={false}
                 />
                 <UpdateInputField 
                     label='MCC Category'
                     type='text'
                     id='mccCategory'
-                    valueName={formData.mccCategory}
+                    valueName={formData.mcc}
                     onChange={handleChange}
                     disabled={true}
                 />
@@ -207,13 +236,13 @@ function PaymentForm({setIsModalOpen}) {
                     label='Merchant Description'
                     type='text'
                     id='merchantDescription'
-                    valueName={formData.merchantDescription}
+                    valueName={formData.merchantDescriptor}
                     onChange={handleChange}
                     disabled={true}
                 />
             </div>
 
-            <button className='py-2 px-4 bg-priColor text-white text-xs rounded-sm'>
+            <button onClick={handleSubmit} className='py-2 px-4 bg-priColor text-white text-xs rounded-sm'>
                 Submit
             </button>
         </CustomModal>
