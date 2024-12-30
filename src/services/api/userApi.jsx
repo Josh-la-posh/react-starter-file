@@ -34,6 +34,7 @@ class userService {
           `api/Users/bymerchant/${merchantCode}?pageSize=${pageSize}&pageNumber=${pageNumber}`
         );
         const data = response.data.responseData.data;
+        console.log(data);
         dispatch(usersSuccess(data));
       } catch (err) {
         if (!err.response) {
@@ -161,9 +162,9 @@ class userService {
           `api/Users/deactivate`,
           JSON.stringify({userId, merchantCode})
         );
-        console.log('User data has been deactivated ', response.data);
         toast('User data has been deactivated');
-        // this.fetchUsersByMerchantCode(merchantCode, '40', '1', dispatch);
+
+        await this.fetchUsersByMerchantCode(merchantCode, 1, 40, dispatch);
       } catch (err) {
         if (!err.response) {
             dispatch(usersFailure('No response from server'));

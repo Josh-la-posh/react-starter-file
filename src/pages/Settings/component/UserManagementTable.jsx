@@ -4,6 +4,7 @@ import useAuth from '../../../services/hooks/useAuth';
 import useAxiosPrivate from '../../../services/hooks/useAxiosPrivate';
 import UserService from '../../../services/api/userApi';
 import { useDispatch } from 'react-redux';
+import { CheckCircle, X } from 'lucide-react';
 
 const UserManagementTable = ({filteredData}) => {
     const [selectedIndex, setSelectedIndex] = useState(null);
@@ -35,9 +36,29 @@ const UserManagementTable = ({filteredData}) => {
             accessor: 'isActive',
             render: (value) => (
                 <span className={`${value === true ? 'text-green-600' : 'text-red-600'}`}>
-                    {value === true ? 'Active' : 'Inactive'}
+                    {value === true ? <CheckCircle size='14px' /> : <X size='14px' />}
                 </span>
             )
+        },
+        {
+            header: 'ASSIGN ROLE',
+            accessor: 'isAdmin',
+            render: (isAdmin, row) => (
+                <div className="flex items-center">
+                    {
+                    isAdmin === true
+                        ?
+                            <p className='text-xs'>Super Admin</p>
+                        :
+                            <button
+                                onClick={() => handleRole(row)}
+                                className='text-priColor text-xs px-2 py-1 rounded-[4px] border border-transparent hover:border-priColor'
+                            >
+                                User Role
+                            </button>
+                    }
+                </div>
+            ),
         },
         {
             header: 'Action',
@@ -45,13 +66,17 @@ const UserManagementTable = ({filteredData}) => {
             render: (isActive, row) => (
                  <button
                     onClick={() => handleAction(row)}
-                    className='bg-red-700 text-white text-xs px-2 py-1 rounded-[4px]'
+                    className={`${isActive === true ? 'bg-red-700' : 'bg-green-700'} text-white text-xs px-2 py-1 rounded-[4px]`}
                 >
-                    {isActive=== true ? 'Deactivate' : 'Activate'}
+                    {isActive === true ? <X size='14px' /> : <CheckCircle size='14px' />}
                 </button>
             ),
         },
     ];
+
+    const handleRole = () => {
+        
+    }
 
     const activateAccount = async (id) => {
         await userService.activateUser(
