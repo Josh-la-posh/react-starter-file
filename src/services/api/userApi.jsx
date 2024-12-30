@@ -33,7 +33,6 @@ class userService {
         const response = await this.axiosPrivate.get(
           `api/Users/bymerchant/${merchantCode}?pageSize=${pageSize}&pageNumber=${pageNumber}`
         );
-        console.log('This is the user data ', response.data.responseData.data);
         const data = response.data.responseData.data;
         dispatch(usersSuccess(data));
       } catch (err) {
@@ -52,7 +51,6 @@ class userService {
         const response = await this.axiosPrivate.get(
           `api/Users/merchant/${aggregatorCode}?pageSize=${pageSize}&pageNumber=${pageNumber}`
         );
-        console.log('This is the user data ', response.data);
         const data = response.data.responseData;
         dispatch(aggregatorUserSuccess(data));
       } catch (err) {
@@ -90,7 +88,6 @@ class userService {
           `api/Users/byaggregator/${aggregatorCode}?pageSize=${pageSize}&pageNumber=${pageNumber}`
         );
         const data = response.data.responseData.data;
-        console.log('This is the aggregator user data ', data);
         dispatch(aggregatorUserSuccess(data));
       } catch (err) {
         if (!err.response) {
@@ -108,7 +105,6 @@ class userService {
         const response = await this.axiosPrivate.get(
           `api/Users/profile?merchantCode=${merchantCode}`
         );
-        console.log('This is the user data ', response.data);
         return response.data;
       } catch (err) {
         if (!err.response) {
@@ -147,9 +143,7 @@ class userService {
           `api/Users/activate`,
           JSON.stringify({userId, merchantCode})
         );
-        console.log('User data has been activated ', response.data);
         toast('User data has been activated');
-        // await this.fetchUsersByMerchantCode(merchantCode, '40', '1', dispatch);
       } catch (err) {
         if (!err.response) {
             dispatch(usersFailure('No response from server'));

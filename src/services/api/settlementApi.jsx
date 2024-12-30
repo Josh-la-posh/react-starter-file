@@ -32,7 +32,6 @@ class SettlementService {
           `api/Settlement/batch/${id}/transactions?merchantCode=${merchantCode}&pageNumber=${pageNumber}&pageSize=${pageSize}`,
           JSON.stringify({merchantCode})
         );
-        console.log('The newest: ', response.data.data)
         const data = response.data.data;
         dispatch(settlementTransactionSuccess(data));
       } catch (err) {

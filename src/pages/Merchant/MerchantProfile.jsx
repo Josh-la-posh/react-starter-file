@@ -9,6 +9,8 @@ import useAuth from '../../services/hooks/useAuth';
 import useSettingsTitle from '../../services/hooks/useSettingsTitle';
 import { Plus, X } from 'lucide-react';
 import { toast } from 'react-toastify';
+import Spinner from '../../components/Spinner';
+import ErrorLayout from '../../components/ErrorLayout';
 
 function MerchantProfile() {
     const { auth } = useAuth();
@@ -19,10 +21,12 @@ function MerchantProfile() {
     const merchantService = new MerchantService(axiosPrivate);
     const userService = new UserService(axiosPrivate);
     const dispatch = useDispatch();
-    const { aggregatorUser } = useSelector((state) => state.users);
-    const [users, setUsers] = useState(aggregatorUser);    
+    const { aggregatorUser, aggregatorUserLoading } = useSelector((state) => state.users);
+    const [users, setUsers] = useState(aggregatorUser);
     const [canAddUser, setCanAddUser] = useState(false);
-    const { merchantProfile } = useSelector((state) => state.merchant);
+    const { merchantProfile, merchantProfileLoading, merchantProfileError } = useSelector((state) => state.merchant);
+    const [isLoading, setIsLoading] = useState(merchantProfileLoading);
+    const [errMsg, setErrMsg] = useState(merchantProfileError);
     const [isExpanded, setIsExpanded] = useState(false);
     const [formData, setFormData] = useState({
         userId : '',
@@ -37,7 +41,20 @@ function MerchantProfile() {
     }, [auth])
         
     useEffect(() => {
+        setIsLoading(merchantProfileLoading);
+    }, [merchantProfileLoading]);
+        
+    useEffect(() => {
+        setErrMsg(merchantProfileError);
+    }, [merchantProfileError]);
+        
+    useEffect(() => {
         setUsers(aggregatorUser);
+        setFormData((prev) => ({
+            ...prev,
+            userId: aggregatorUser[0]?.id
+        }))
+
     }, [aggregatorUser])
 
     useEffect(() => {
@@ -59,23 +76,27 @@ function MerchantProfile() {
     }, []);
 
     useEffect(() => {
-        const loadData = async () => {
-        if (merchantCode) {
-            await merchantService.fetchMerchantProfile(merchantCode, dispatch);
-        }
-        };
         loadData();
     }, [merchantCode, dispatch]);
     
     const handleSubmit = (e) => {
         const v1 = formData.userId;
-
         if (v1 === '') {
             toast('User Id cannot be empty');
             return;
         }
         addMerchant();
     }
+
+    const handleRefresh = () => {
+        loadData();
+    }
+    
+    const loadData = async () => {
+        if (merchantCode) {
+            await merchantService.fetchMerchantProfile(merchantCode, dispatch);
+        }
+    };
     
     const addMerchant = async () => {
         await merchantService.addUserMerchant(formData);
@@ -85,6 +106,18 @@ function MerchantProfile() {
         const aggregatorCode = auth?.data?.aggregator?.aggregatorCode;
         await userService.fetchUserByAggregatorCode(aggregatorCode, 1, 20, dispatch);
     };
+
+    if (isLoading) return (
+        <div className='h-[40vh] w-full'>
+            <Spinner />
+        </div>
+    );
+
+    if (errMsg !== null) return (
+        <div className='h-[40vh] w-full'>
+            <ErrorLayout errMsg={errMsg} handleRefresh={handleRefresh} />
+        </div>
+    );
 
     return (
         <div className="bg-white p-5">
@@ -145,10 +178,6 @@ function MerchantProfile() {
                 }
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 text-sm font-[700] text-gray-600">
-                {/* <div className="flex">
-                    <p className='flex-1'>Merchant Name:</p>
-                    <span className='font-[400] ml-4 flex-1'>{merchantProfile.merchantName}</span>
-                </div> */}
                 <div className="flex">
                     <p className='flex-1'>Merchant Code:</p>
                     <span className='font-[400] ml-4 flex-1'>{merchantProfile.merchantCode}</span>

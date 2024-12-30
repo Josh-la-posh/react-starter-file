@@ -49,7 +49,6 @@ class PermissionService {
         const response = await this.axiosPrivate.get(
           `api/RolePermission/${roleId}/permissions/${aggregatorCode}?pageSize=${pageSize}&pageNumber=${pageNumber}`
         );
-        console.log('This is the aggregator role permission data ', response.data);
         return response.data;
       } catch (err) {
         if (!err.response) {

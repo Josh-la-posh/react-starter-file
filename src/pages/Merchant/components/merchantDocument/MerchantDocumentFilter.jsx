@@ -12,7 +12,8 @@ function MerchantDocumentFilter() {
     const noHeaderxiosPrivate = useNoHeaderAxiosPrivate();
     const merchantService = new MerchantService(axiosPrivate);
     const noHeaderMerchantService = new MerchantService(noHeaderxiosPrivate);
-    const { merchantDocumentType } = useSelector((state) => state.merchant);
+    const { merchantDocumentType, merchantDocumentLoading } = useSelector((state) => state.merchant);
+    const [isUploading, setIsUploading] = useState(merchantDocumentLoading);
     const dispatch = useDispatch();
     const [documents, setDocuments] = useState(merchantDocumentType);
     const [canUpload, setCanUpload] = useState(false);
@@ -28,6 +29,10 @@ function MerchantDocumentFilter() {
         const { name, value } = e.target;
         setDocumentId(value);
     }
+
+    useEffect(() => {
+        setIsUploading(merchantDocumentLoading);
+    }, [merchantDocumentLoading])
 
     useEffect(() => {
         setDocuments(merchantDocumentType);
@@ -80,8 +85,9 @@ function MerchantDocumentFilter() {
                         <button
                             className={`text-white border border-gray bg-priColor text-xs font-[600] py-2 px-2 rounded-sm flex justify-between items-center gap-2`}
                             onClick={uploadDocument}
+                            disabled={isUploading}
                             >
-                                Upload
+                                {isUploading ? 'Uploading...' : 'Upload'}
                         </button>
                     </div>
                 }

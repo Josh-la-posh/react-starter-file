@@ -17,7 +17,6 @@ class MerchantService {
         const response = await this.axiosPrivate.get(
           'api/MechantDocuments/document-types',
         );
-        console.log('merchant document fetched successfully ', response.data);
         const data = response.data.responseData;
         dispatch(merchantDocumentTypeSuccess(data));
       } catch (err) {
@@ -38,7 +37,7 @@ class MerchantService {
           fileData
         );
         // console.log('Merchant document created ', response.data);
-        toast('Merchant document created successfully');
+        dispatch(merchantDocumentSuccess('Merchant document created successfully'));
         await this.fetchMerchantDocument(merchantCode, dispatch);
       } catch (err) {
         if (!err.response) {
@@ -76,7 +75,6 @@ class MerchantService {
           `api/MechantDocuments/${merchantCode}`,
         );
         const data = response.data.responseData;
-        console.log('New data: ', data)
         dispatch(merchantDocumentSuccess(data));
       } catch (err) {
         if (!err.response) {
@@ -152,14 +150,13 @@ class MerchantService {
 
     // merchant
   
-    async fetchMercahntCredentials(merchantCode, dispatch) {
+    async fetchMerchantCredentials(merchantCode, dispatch) {
         dispatch(merchantCredentialsStart());
       try {
         const response = await this.axiosPrivate.get(
           `api/Merchant/credentials/${merchantCode}`
         );
         const data = response.data.responseData;
-        console.log("credential data: ", data);
         dispatch(merchantCredentialsSuccess(data));
       } catch (err) {
         if (!err.response) {
@@ -432,7 +429,6 @@ class MerchantService {
           `api/MerchantContact/${merchantCode}`
         );
         const data = response.data.responseData;
-        console.log('merchant Contact fetched successfully ', data);
         dispatch(merchantContactSuccess(data));
       } catch (err) {
         if (!err.response) {
@@ -569,7 +565,6 @@ class MerchantService {
   
     async updateMerchantProfile(merchantCode, formData, addressData, dispatch, navigate) {
         dispatch(merchantProfileStart());
-        console.log(merchantCode, formData)
       try {
         const response = await this.axiosPrivate.put(
           `api/MerchantProfile/${merchantCode}`,

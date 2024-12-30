@@ -7,14 +7,18 @@ import UserManagementTable from './component/UserManagementTable';
 import { Plus } from 'lucide-react';
 import AddUserForm from './component/AddUserForm';
 import useSettingsTitle from '../../services/hooks/useSettingsTitle';
+import Spinner from '../../components/Spinner';
+import ErrorLayout from '../../components/ErrorLayout';
 
 function UserManagement() {
   const { setSettingsTitle } = useSettingsTitle();
   const axiosPrivate = useAxiosPrivate();
   const { auth } = useAuth();
   const dispatch = useDispatch();
-  const { users } = useSelector((state) => state.users);
+  const { users, usersLoading, usersError } = useSelector((state) => state.users);
   const [filteredData, setFilteredData] = useState(users);
+  const [isLoading, setIsLoading] = useState(usersLoading);
+  const [errMsg, setErrMsg] = useState(usersError);
   const merchantCode = auth?.merchant?.merchantCode;
   const userService = new UserService(axiosPrivate, auth);
   const pageNumber = 1;
@@ -29,16 +33,28 @@ function UserManagement() {
   useEffect(() => {
     setFilteredData(users);
   }, [users]);
+            
+  useEffect(() => {
+    setIsLoading(usersLoading);
+  }, [usersLoading]);
+      
+  useEffect(() => {
+      setErrMsg(usersError);
+  }, [usersError]);
 
   useEffect(() => {
-    const loadData = async () => {
-        console.log(merchantCode)
-      if (merchantCode) {
-        await userService.fetchUsersByMerchantCode(merchantCode, pageNumber, pageSize, dispatch);
-      }
-    };
     loadData();
   }, [merchantCode, dispatch]);
+
+  const handleRefresh = () => {
+      loadData();
+  }
+  
+  const loadData = async () => {
+    if (merchantCode) {
+      await userService.fetchUsersByMerchantCode(merchantCode, pageNumber, pageSize, dispatch);
+    }
+  };
 
   const handleModalOpen = () => {
     setIsModalOpen(true);
@@ -47,6 +63,18 @@ function UserManagement() {
   const handleModalClose = () => {
     setIsModalOpen(false);
   }
+
+  if (isLoading) return (
+      <div className='h-[80vh] w-full'>
+          <Spinner />
+      </div>
+  );
+
+  if (errMsg !== null) return (
+      <div className='h-[40vh] w-full'>
+          <ErrorLayout errMsg={errMsg} handleRefresh={handleRefresh} />
+      </div>
+  );
 
   return (
     <div>

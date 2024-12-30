@@ -129,7 +129,6 @@ function AddMerchantPage() {
             const response = await axiosPrivate.get('api/country');
             if (response.data.message === 'Successful') {
                 setCountryList(response.data.responseData);
-                console.log('country list is: ', response.data);
 
                 // const selectedStateList = response.data.responseData
                 //     .find(country => country.id === 'NG').states;
@@ -374,7 +373,7 @@ function AddMerchantPage() {
     return (
         <div className=''>
             <div className="bg-white p-5">
-                <form onnSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit}>
                     <div className='grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-4'>
                         <AuthInputField
                             label="Business Name"

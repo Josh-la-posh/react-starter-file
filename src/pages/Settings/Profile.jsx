@@ -10,77 +10,83 @@ import { useDispatch, useSelector } from 'react-redux';
 
 function ProfilePage() {
     const { auth, setAuth } = useAuth();
-  const { setAppTitle } = useTitle();
-  const { setSettingsTitle } = useSettingsTitle();
-  const axiosPrivate = useAxiosPrivate();
-  const userService = new UserService(axiosPrivate, auth, setAuth);
-  const dispatch = useDispatch();
-  const {newUserLoading, newUser} = useSelector((state) => state.users);
-  const [editing, setEditing] = useState(false);
-  const userDetails = auth?.data?.user;
-  const [errMsg, setErrMsg] = useState('');
+    const { setAppTitle } = useTitle();
+    const { setSettingsTitle } = useSettingsTitle();
+    const axiosPrivate = useAxiosPrivate();
+    const userService = new UserService(axiosPrivate, auth, setAuth);
+    const dispatch = useDispatch();
+    const {newUserLoading, newUser} = useSelector((state) => state.users);
+    const [editing, setEditing] = useState(false);
+    const userDetails = auth?.data?.user;
+    const [isLoading, setIsLoading] = useState(newUserLoading);
+    const [errMsg, setErrMsg] = useState('');
   
-  const [formData, setFormData] = useState({
-      firstName: userDetails.firstName ?? '',
-    lastName: userDetails.lastName ?? '',
-    email: userDetails.email ?? '',
-    phone: userDetails.phoneNumber ?? ''
-});
-
-useEffect(() => {
-    if (newUser) {
-        setAuth(prev => ({ ...prev, data: {
-            ...prev.data,
-            user: newUser
-        } }));
-    }
-    
-}, [newUser]);
-
-useEffect(() => {
-    setFormData({
+    const [formData, setFormData] = useState({
         firstName: userDetails.firstName ?? '',
         lastName: userDetails.lastName ?? '',
         email: userDetails.email ?? '',
         phone: userDetails.phoneNumber ?? ''
-    })
-}, [setAuth])
+    });
+              
+    useEffect(() => {
+    setIsLoading(newUserLoading);
+    }, [newUserLoading]);
 
-const updateUserData = async () => {
-    const userId = userDetails.id;
-    await userService.updateUserData(userId, formData, dispatch);
-};
+    useEffect(() => {
+        console.log(newUser)
+        if (newUser) {
+            setAuth(prev => ({ ...prev, data: {
+                ...prev.data,
+                user: newUser
+            } }));
+        }
+    }, [newUser]);
 
-const handleChange = (e) => {
-    const {name, value} = e.target;
-    setFormData((prev) => ({
-        ...prev,
-        [name]: value
-    }));
-}
+    useEffect(() => {
+        setFormData({
+            firstName: userDetails.firstName ?? '',
+            lastName: userDetails.lastName ?? '',
+            email: userDetails.email ?? '',
+            phone: userDetails.phoneNumber ?? ''
+        })
+    }, [setAuth])
 
-const handleSubmit = (e) => {
-    e.preventDefault();
-    const v1 = formData.firstName;
-    const v2 = formData.lastName;
-    const v3 = formData.email;
-    const v4 = formData.phoneNumber;
-    
-    if (v1 !== '' && v2 !== '' && v3 !== '' ** v4 !== '') {
-        updateUserData();
-        newUserLoading === true ? setEditing(true) : setEditing(false);
-    } else {
-        setErrMsg('All fields must be field');
-        setTimeout(() => {
-            setErrMsg('');
-        }, 2000);
+    const updateUserData = async () => {
+        const userId = userDetails.id;
+        await userService.updateUserData(userId, formData, dispatch);
+    };
+
+    const handleChange = (e) => {
+        const {name, value} = e.target;
+        setFormData((prev) => ({
+            ...prev,
+            [name]: value
+        }));
     }
-}
 
-  useEffect(() => {
-      setAppTitle('Settings');
-      setSettingsTitle('Accounts');
-  }, []);
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const v1 = formData.firstName;
+        const v2 = formData.lastName;
+        const v3 = formData.email;
+        const v4 = formData.phoneNumber;
+        
+        if (v1 !== '' && v2 !== '' && v3 !== '' ** v4 !== '') {
+            updateUserData();
+            newUserLoading === true ? setEditing(true) : setEditing(false);
+        } else {
+            setErrMsg('All fields must be field');
+            setTimeout(() => {
+                setErrMsg('');
+            }, 2000);
+        }
+    }
+
+    useEffect(() => {
+        setAppTitle('Settings');
+        setSettingsTitle('Accounts');
+    }, []);
+
   return (
     <div className="px-5 py-4 bg-white h-full">
         {/* <h3 className='text-gray-700 text-md font-[600]'>Profile</h3>
@@ -163,7 +169,7 @@ const handleSubmit = (e) => {
                     <button 
                         type='submit' 
                         className='bg-priColor px-8 py-3 rounded-sm text-white text-xs font-[500]'>
-                        {newUserLoading === true ? 'Updating ...' : 'Save Changes'}
+                        {isLoading ? 'Updating ...' : 'Save Changes'}
                     </button>
                 
                 </div>

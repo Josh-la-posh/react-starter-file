@@ -9,6 +9,8 @@ import useSettingsTitle from '../../services/hooks/useSettingsTitle';
 import PaymentForm from './components/merchantCredential/PaymentForm';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import Spinner from '../../components/Spinner';
+import ErrorLayout from '../../components/ErrorLayout';
 
 function MerchantCredential() {
   const { auth } = useAuth();
@@ -18,7 +20,7 @@ function MerchantCredential() {
   const axiosPrivate = useAxiosPrivate();
   const merchantService = new MerchantService(axiosPrivate);
   const dispatch = useDispatch();
-  const { merchantCredentials } = useSelector((state) => state.merchant);
+  const { merchantCredentials, merchantCredentialsLoading, merchantCredentialsError } = useSelector((state) => state.merchant);
   const credential = merchantCredentials?.integrations;
   const [userData, setUserData] = useState(credential);
   const [viewSecret, setViewSecret] = useState(false);
@@ -26,6 +28,9 @@ function MerchantCredential() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [accessToken, setAccessToken] = useState('');
   const [selectedIntegrationKey, setSelectedIntegrationKey] = useState('');
+  
+  const [isLoading, setIsLoading] = useState(merchantCredentialsLoading);
+  const [errMsg, setErrMsg] = useState(merchantCredentialsError);
 
   useEffect(() => {
       setAppTitle('Merchant');
@@ -35,13 +40,25 @@ function MerchantCredential() {
   useEffect(() => {
     setUserData(credential);
   }, [merchantCredentials])
+            
+  useEffect(() => {
+    setIsLoading(merchantCredentialsLoading);
+  }, [merchantCredentialsLoading]);
+      
+  useEffect(() => {
+      setErrMsg(merchantCredentialsError);
+  }, [merchantCredentialsError]);
 
   useEffect(() => {
     loadData();
   }, [merchantCode, dispatch]);
+
+  const handleRefresh = () => {
+      loadData();
+  }
   
   const loadData = async () => {
-      await merchantService.fetchMercahntCredentials(merchantCode, dispatch);
+      await merchantService.fetchMerchantCredentials(merchantCode, dispatch);
   };
 
   const handleIntegrationKey = (index) => {
@@ -70,6 +87,18 @@ function MerchantCredential() {
 
 
   }
+
+  if (isLoading) return (
+      <div className='h-[40vh] w-full'>
+          <Spinner />
+      </div>
+  );
+
+  if (errMsg !== null) return (
+      <div className='h-[40vh] w-full'>
+          <ErrorLayout errMsg={errMsg} handleRefresh={handleRefresh} />
+      </div>
+  );
 
   return (
     <div>

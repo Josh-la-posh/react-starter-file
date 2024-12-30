@@ -5,6 +5,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import AggregatorService from '../../services/api/aggregatorApi';
 import AggregatorProfile from './component/AggregatorProfile';
 import useSettingsTitle from '../../services/hooks/useSettingsTitle';
+import Spinner from '../../components/Spinner';
+import ErrorLayout from '../../components/ErrorLayout';
 
 function Aggregator() {
   const { setAppTitle } = useTitle();
@@ -12,8 +14,10 @@ function Aggregator() {
   const axiosPrivate = useAxiosPrivate();
   const aggregatorService = new AggregatorService(axiosPrivate);
   const dispatch = useDispatch();
-  const { aggregator } = useSelector((state) => state.aggregator);
+  const { aggregator, aggregatorLoading, aggregatorError } = useSelector((state) => state.aggregator);
   const [aggregatorData, setAggregatorData] = useState(aggregator);
+  const [isLoading, setIsLoading] = useState(aggregatorLoading);
+  const [errMsg, setErrMsg] = useState(aggregatorError);
 
   useEffect(() => {
     setAggregatorData(aggregator);
@@ -21,15 +25,40 @@ function Aggregator() {
 
   useEffect(() => {
       setAppTitle('Merchant');
-      setSettingsTitle('Aggregator');
+      setSettingsTitle('Aggregatorxx');
   }, []);
+          
+  useEffect(() => {
+      setIsLoading(aggregatorLoading);
+  }, [aggregatorLoading]);
+          
+  useEffect(() => {
+      setErrMsg(aggregatorError);
+  }, [aggregatorError]);
 
   useEffect(() => {
-    const loadData = async () => {
-        await aggregatorService.fetchAggregator(dispatch);
-    };
     loadData();
   }, [dispatch]);
+
+  const handleRefresh = () => {
+    loadData();
+  }
+  
+  const loadData = async () => {
+    await aggregatorService.fetchAggregator(dispatch);
+  };
+
+  if (isLoading) return (
+      <div className='h-[40vh] w-full'>
+          <Spinner />
+      </div>
+  );
+
+  if (errMsg !== null) return (
+      <div className='h-[40vh] w-full'>
+          <ErrorLayout errMsg={errMsg} handleRefresh={handleRefresh} />
+      </div>
+  );
   
   return (
     <div>
