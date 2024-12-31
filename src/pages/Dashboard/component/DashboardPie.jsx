@@ -69,6 +69,9 @@ function DashboardPie({graph, type}) {
         ],
     };
 
+    if (totalTransactionsCount === 0) return (
+        <div className="text-md font-[600] w-full h-[20vh] flex items-center justify-center">No Data</div>
+    )
 
     return (
         <ReactApexChart options={pieOptions} series={pieSeries} type="donut" />

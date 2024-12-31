@@ -12,6 +12,7 @@ const UserManagementTable = ({filteredData}) => {
     const axiosPrivate = useAxiosPrivate();
     const dispatch = useDispatch();
     const merchantCode = auth?.merchant?.merchantCode;
+    const aggregatorCode = auth?.data?.aggregator?.aggregatorCode;
     const userService = new UserService(axiosPrivate, auth);
     
     const columns = [
@@ -82,6 +83,7 @@ const UserManagementTable = ({filteredData}) => {
         await userService.activateUser(
             id,
             merchantCode,
+            aggregatorCode,
             dispatch
           );
     }
@@ -90,6 +92,7 @@ const UserManagementTable = ({filteredData}) => {
         await userService.deactivateUser(
             id,
             merchantCode,
+            aggregatorCode,
             dispatch
         );
     }

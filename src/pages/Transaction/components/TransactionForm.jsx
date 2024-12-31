@@ -6,6 +6,7 @@ import axios from 'axios';
 import useAxiosPrivate from '../../../services/hooks/useAxiosPrivate';
 import TransactionService from '../../../services/api/transactionApi';
 import { useDispatch } from 'react-redux';
+import { toast } from 'react-toastify';
 
 function TransactionForm({ handleCloseModal, data }) {
   const axiosPrivate = useAxiosPrivate();
@@ -39,6 +40,17 @@ function TransactionForm({ handleCloseModal, data }) {
     }
   }
 
+  const resendNotification = async () => {
+    const id = transactionData?.paymentReference;
+    try {
+      const response = await axios.post(`https://api.pelpay.africa/api/WebHook/push/${id}`);
+      const data = response.data.responseData;
+      toast(data);
+    } catch (e) {
+      console.log('the resulting error is: ', e);
+    }
+  }
+
   return (
     <CustomModal handleOpenModal={handleCloseModal} width='w-[90%] md:w-[70%]'>
       <div className="mb-8">
@@ -61,8 +73,11 @@ function TransactionForm({ handleCloseModal, data }) {
         <div className="">
           <div className="flex justify-between">
             <div className="flex gap-5">
-              <button className='text-white text-xs bg-priColor py-3 px-6 rounded-md'>Resend Notification</button>
-              <button onClick={downloadTransaction} className='text-priColor text-xs rounded-md flex items-center justify-center gap-2 hover:bg-priColor hover:bg-opacity-[0.56] p-3 hover:text-[#121212]'><Cloud size={'15px'}/> Download Receipt</button>
+              <button onClick={resendNotification} className='text-white text-xs bg-priColor py-3 px-6 rounded-md'>Resend Notification</button>
+              {
+                data.transactionStatus === 'Successful' || data.transactionStatus === 'Failed'
+                 && <button onClick={downloadTransaction} className='text-priColor text-xs rounded-md flex items-center justify-center gap-2 hover:bg-priColor hover:bg-opacity-[0.56] p-3 hover:text-[#121212]'><Cloud size={'15px'}/> Download Receipt</button>
+              }
             </div>
               
           </div>

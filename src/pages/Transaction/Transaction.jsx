@@ -65,11 +65,9 @@ function TransactionPage() {
     setSelectedTransactionData(null);
   };
 
-  if (isLoading) return (
-      <div className='h-[80vh] w-full'>
-          <Spinner />
-      </div>
-  );
+  // if (isLoading) return (
+      
+  // );
 
   if (errMsg !== null) return (
       <div className='h-[40vh] w-full'>
@@ -79,7 +77,7 @@ function TransactionPage() {
 
   return (
     <div>
-      <TransactionFilter filteredData={filteredData} setFilteredData={setFilteredData} transactions={transactions} filteredDataResult={filteredDataResult} setFilteredDataResult={setFilteredDataResult}/>
+      <TransactionFilter filteredData={filteredData} setFilteredData={setFilteredData} transactions={transactions} filteredDataResult={filteredDataResult} handleRefresh={handleRefresh} setFilteredDataResult={setFilteredDataResult}/>
 
       {isModalOpen && 
         (<TransactionForm
@@ -88,7 +86,13 @@ function TransactionPage() {
         />
       )}
 
-      <TransactionTable isExportPopupOpen={isExportPopupOpen} setIsExportPopupOpen={setIsExportPopupOpen} filteredData={filteredDataResult} handleOpenModal={handleOpenModal} />
+      {
+        isLoading
+        ? <div className='h-[40vh] w-full'>
+            <Spinner />
+        </div>
+        : <TransactionTable isExportPopupOpen={isExportPopupOpen} setIsExportPopupOpen={setIsExportPopupOpen} filteredData={filteredDataResult} handleOpenModal={handleOpenModal} />
+      }
     </div>
   )
 }

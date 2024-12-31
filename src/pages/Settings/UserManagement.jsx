@@ -15,11 +15,11 @@ function UserManagement() {
   const axiosPrivate = useAxiosPrivate();
   const { auth } = useAuth();
   const dispatch = useDispatch();
-  const { users, usersLoading, usersError } = useSelector((state) => state.users);
-  const [filteredData, setFilteredData] = useState(users);
-  const [isLoading, setIsLoading] = useState(usersLoading);
-  const [errMsg, setErrMsg] = useState(usersError);
-  const merchantCode = auth?.merchant?.merchantCode;
+  const { aggregatorUser, aggregatorUserLoading, aggregatorUserError } = useSelector((state) => state.users);
+  const [filteredData, setFilteredData] = useState(aggregatorUser);
+  const [isLoading, setIsLoading] = useState(aggregatorUserLoading);
+  const [errMsg, setErrMsg] = useState(aggregatorUserError);
+  const aggregatorCode = auth?.data?.aggregator?.aggregatorCode;
   const userService = new UserService(axiosPrivate, auth);
   const pageNumber = 1;
   const pageSize = 20;
@@ -31,28 +31,29 @@ function UserManagement() {
   }, []);
 
   useEffect(() => {
-    setFilteredData(users);
-  }, [users]);
+    setFilteredData(aggregatorUser);
+  }, [aggregatorUser]);
             
   useEffect(() => {
-    setIsLoading(usersLoading);
-  }, [usersLoading]);
+    setIsLoading(aggregatorUserLoading);
+  }, [aggregatorUserLoading]);
       
   useEffect(() => {
-      setErrMsg(usersError);
-  }, [usersError]);
+      setErrMsg(aggregatorUserError);
+  }, [aggregatorUserError]);
 
   useEffect(() => {
     loadData();
-  }, [merchantCode, dispatch]);
+  }, [aggregatorCode, dispatch]);
 
   const handleRefresh = () => {
       loadData();
   }
   
   const loadData = async () => {
-    if (merchantCode) {
-      await userService.fetchUsersByMerchantCode(merchantCode, pageNumber, pageSize, dispatch);
+    console.log(auth)
+    if (aggregatorCode) {
+      await userService.fetchUserByAggregatorCode(aggregatorCode, pageNumber, pageSize, dispatch);
     }
   };
 

@@ -34,7 +34,6 @@ class userService {
           `api/Users/bymerchant/${merchantCode}?pageSize=${pageSize}&pageNumber=${pageNumber}`
         );
         const data = response.data.responseData.data;
-        console.log(data);
         dispatch(usersSuccess(data));
       } catch (err) {
         if (!err.response) {
@@ -101,17 +100,18 @@ class userService {
     }
   
     async fetchUserProfile(merchantCode, dispatch) {
-        dispatch(usersStart());
+        dispatch(newUserStart());
       try {
         const response = await this.axiosPrivate.get(
           `api/Users/profile?merchantCode=${merchantCode}`
         );
-        return response.data;
+        const data = response.data.responseData;
+        dispatch(newUserSuccess(data));
       } catch (err) {
         if (!err.response) {
-            dispatch(usersFailure('No response from server'));
+            dispatch(newUserFailure('No response from server'));
         } else {
-            dispatch(usersFailure('Failed to load users. Try again.'));
+            dispatch(newUserFailure('Failed to load users. Try again.'));
         }
       } finally {
       }
@@ -137,7 +137,7 @@ class userService {
       }
     }
   
-    async activateUser(userId, merchantCode, dispatch) {
+    async activateUser(userId, merchantCode, aggregatorCode, dispatch) {
         dispatch(usersStart());
       try {
         const response = await this.axiosPrivate.put(
@@ -145,6 +145,7 @@ class userService {
           JSON.stringify({userId, merchantCode})
         );
         toast('User data has been activated');
+        await this.fetchUserByAggregatorCode(aggregatorCode, 1, 40, dispatch);
       } catch (err) {
         if (!err.response) {
             dispatch(usersFailure('No response from server'));
@@ -155,7 +156,7 @@ class userService {
       }
     }
   
-    async deactivateUser(userId, merchantCode, dispatch) {
+    async deactivateUser(userId, merchantCode, aggregatorCode, dispatch) {
         dispatch(usersStart());
       try {
         const response = await this.axiosPrivate.put(
@@ -164,7 +165,7 @@ class userService {
         );
         toast('User data has been deactivated');
 
-        await this.fetchUsersByMerchantCode(merchantCode, 1, 40, dispatch);
+        await this.fetchUserByAggregatorCode(aggregatorCode, 1, 40, dispatch);
       } catch (err) {
         if (!err.response) {
             dispatch(usersFailure('No response from server'));

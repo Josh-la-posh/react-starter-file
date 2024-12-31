@@ -15,7 +15,7 @@ import useAuth from '../../../services/hooks/useAuth';
 import { toast } from 'react-toastify';
 import { useDispatch } from 'react-redux';
 
-function TransactionFilter({filteredData, setFilteredData, transactions, filteredDataResult, setFilteredDataResult}) {
+function TransactionFilter({filteredData, setFilteredData, transactions, handleRefresh, setFilteredDataResult}) {
     const navigate = useNavigate();
     const { auth } = useAuth();
     const dispatch = useDispatch();
@@ -28,24 +28,21 @@ function TransactionFilter({filteredData, setFilteredData, transactions, filtere
     const [endDate, setEndDate] = useState(null);
     const transactionService = new TransactionService(axiosPrivate);
     const [canSearch, setCanSearch] = useState(false);
-    const env = 'Test';
+    const env = 'None';
     const pageNumber = 1;
     const [formData, setFormData] = useState({
         transactionReference : '',
         accountNumber : '',
         sessionId : '',
-        sData : '',
+        sDate : '',
         eDate : '',
         status : '',
         customerEmail : '',
     });
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prev) => ({
-            ...prev,
-            [name]: value
-        }));
+    const handleRefreshAllTransctions = () => {
+        setSearchMode('All');
+        handleRefresh();
     }
 
     useEffect(() => {
@@ -117,7 +114,7 @@ function TransactionFilter({filteredData, setFilteredData, transactions, filtere
         setSearchFilterType(e.target.value);
     }
 
-    const handleSearch = (e) => {
+    const handleFilterSearch = (e) => {
         setSearch(e.target.value);
     };
 
@@ -144,13 +141,32 @@ function TransactionFilter({filteredData, setFilteredData, transactions, filtere
         const merchantCode = auth?.merchant?.merchantCode;
         await transactionService.downloadTransactionReceipt(merchantCode, pageNumber, 40,  env);
     };
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prev) => ({
+            ...prev,
+            [name]: value
+        }));
+    }
+
+    const searchByData = async () => {
+        const merchantCode = auth?.merchant?.merchantCode;
+        
+        setFormData((prev) => ({
+            ...prev,
+            sDate: startDate ?? '',
+            eDate: endDate ?? ''
+        }));
+        await transactionService.searchTransaction(merchantCode, 1, 40, env, formData, dispatch);
+    };
     
   return (
     <div className='mb-4'>
         <div className="flex items-center justify-between">
             <button onClick={() => navigate(-1)} className='text-priColor flex items-center gap-2 text-xs'><ArrowLeft size={'14px'}/> Go Back</button>
             <div className="flex">
-                <button onClick={() => setSearchMode('All')}
+                <button onClick={handleRefreshAllTransctions}
                     className={`${searchMode === 'All' ? 'text-white bg-priColor font-[600]' : 'text-gray-400 border border-gray bg-white'} text-xs w-20 py-2 px-2 rounded-sm`}>
                         All
                 </button>
@@ -180,7 +196,7 @@ function TransactionFilter({filteredData, setFilteredData, transactions, filtere
                             <input
                                 type="text"
                                 value={search}
-                                onChange={handleSearch}
+                                onChange={handleFilterSearch}
                                 className="p-2 pl-8 border border-gray-300 rounded-sm focus:outline-none text-xs"
                                 placeholder="Search transactions..."
                             />
@@ -221,45 +237,74 @@ function TransactionFilter({filteredData, setFilteredData, transactions, filtere
         
         <div className="flex justify-end mt-4">
             { canSearch &&
-                <div className ="flex items-center justify-center gap-2">
-                    <input
-                        type="text"
-                        name='transactionReference'
-                        value={formData.transactionReference}
-                        onChange={handleChange}
-                        className="p-2 pl-4 border border-gray-300 rounded-lg focus:outline-none text-xs"
-                        placeholder="Transaction Reference"
-                    />
-                    <input
-                        type="text"
-                        name='accountNumber'
-                        value={formData.accountNumber}
-                        onChange={handleChange}
-                        className="p-2 pl-4 border border-gray-300 rounded-lg focus:outline-none text-xs"
-                        placeholder="Account Number"
-                    />
-                    <input
-                        type="text"
-                        name='sessionId'
-                        value={formData.sessionId}
-                        onChange={handleChange}
-                        className="p-2 pl-4 border border-gray-300 rounded-lg focus:outline-none text-xs"
-                        placeholder="Session ID"
-                    />
-                    <input
-                        type="text"
-                        name='sessionId'
-                        value={formData.sessionId}
-                        onChange={handleChange}
-                        className="p-2 pl-4 border border-gray-300 rounded-lg focus:outline-none text-xs"
-                        placeholder="Session ID"
-                    />
-                    <button
-                        className={`text-white border border-gray bg-priColor text-xs font-[600] py-2 px-2 rounded-sm flex justify-between items-center gap-2`}
-                        onClick={handleSearch}
-                        >
-                            Search
-                    </button>
+                <div className ="flex flex-col items-center justify-center gap-5">
+                    <div className="flex flex-wrap items-center justify-center gap-2 overflow-x-auto">
+                        <input
+                            type="text"
+                            name='transactionReference'
+                            value={formData.transactionReference}
+                            onChange={handleChange}
+                            className="p-2 pl-4 border border-gray-300 rounded-lg focus:outline-none text-xs"
+                            placeholder="Transaction Reference"
+                        />
+                        <input
+                            type="text"
+                            name='accountNumber'
+                            value={formData.accountNumber}
+                            onChange={handleChange}
+                            className="p-2 pl-4 border border-gray-300 rounded-lg focus:outline-none text-xs"
+                            placeholder="Account Number"
+                        />
+                        <input
+                            type="text"
+                            name='sessionId'
+                            value={formData.sessionId}
+                            onChange={handleChange}
+                            className="p-2 pl-4 border border-gray-300 rounded-lg focus:outline-none text-xs"
+                            placeholder="Session ID"
+                        />
+                        <DatePicker 
+                            selected={startDate}
+                            onChange={(date) => setStartDate(date)}
+                            placeholderText='Start Date'
+                            className='text-gray-400 border border-gray bg-white text-xs w-40 py-2 px-2 rounded-lg flex justify-between items-center'
+                        />
+                        <DatePicker
+                            selected={endDate}
+                            onChange={(date) => setEndDate(date)}
+                            placeholderText='End Date'
+                            className='text-gray-400 border border-gray bg-white text-xs w-40 py-2 px-2 rounded-lg flex justify-between items-center'
+                        />
+                        <select
+                            id="status" 
+                            name='status' 
+                            value={formData.status} 
+                            onChange={handleChange} 
+                            className="p-2 text-xs text-gray-400 border focus:outline-none rounded-lg bg-white selection:bg-transparent">
+                            <option value="Successful">Successful</option>
+                            <option value="Pending">Pending</option>
+                            <option value="Processing">Processing</option>
+                            <option value="Otp">Otp</option>
+                            <option value="AuthSetup">Auth Setup</option>
+                            <option value="Secure3D">Secure3D</option>
+                            <option value="Failed">Failed</option>
+                        </select>
+                    </div>
+                    <div className="flex gap-5">
+                        <button
+                            className='text-white border border-gray bg-priColor text-xs font-[600] py-2 px-2 rounded-sm flex justify-between items-center gap-2'
+                            onClick={searchByData}
+                            >
+                                Search
+                        </button>
+                        <button
+                            className={`text-priColor border border-priColor text-xs font-[600] py-2 px-2 rounded-sm flex justify-between items-center gap-2`}
+                            onClick={() => setCanSearch(false)}
+                            >
+                                Cancel
+                        </button>
+
+                    </div>
                 </div>
             }
             {

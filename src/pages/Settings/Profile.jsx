@@ -29,11 +29,10 @@ function ProfilePage() {
     });
               
     useEffect(() => {
-    setIsLoading(newUserLoading);
+        setIsLoading(newUserLoading);
     }, [newUserLoading]);
 
     useEffect(() => {
-        console.log(newUser)
         if (newUser) {
             setAuth(prev => ({ ...prev, data: {
                 ...prev.data,
@@ -43,17 +42,28 @@ function ProfilePage() {
     }, [newUser]);
 
     useEffect(() => {
-        setFormData({
-            firstName: userDetails.firstName ?? '',
-            lastName: userDetails.lastName ?? '',
-            email: userDetails.email ?? '',
-            phone: userDetails.phoneNumber ?? ''
-        })
+        fetchUser();
+    }, []);
+
+    useEffect(() => {
+        if (auth?.data?.user !== null) {
+            setFormData({
+                firstName: userDetails.firstName ?? '',
+                lastName: userDetails.lastName ?? '',
+                email: userDetails.email ?? '',
+                phone: userDetails.phoneNumber ?? ''
+            });
+        }
     }, [setAuth])
 
     const updateUserData = async () => {
         const userId = userDetails.id;
         await userService.updateUserData(userId, formData, dispatch);
+    };
+
+    const fetchUser = async () => {
+        const merchantCode = auth?.merchants?.merchantCode;
+        await userService.fetchUserProfile(merchantCode, dispatch);
     };
 
     const handleChange = (e) => {
@@ -73,7 +83,7 @@ function ProfilePage() {
         
         if (v1 !== '' && v2 !== '' && v3 !== '' ** v4 !== '') {
             updateUserData();
-            newUserLoading === true ? setEditing(true) : setEditing(false);
+            isLoading ? setEditing(true) : setEditing(false);
         } else {
             setErrMsg('All fields must be field');
             setTimeout(() => {

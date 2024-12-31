@@ -53,10 +53,10 @@ class TransactionService {
         dispatch(transactionStart());
       try {
         const response = await this.axiosPrivate.get(
-          `api/Transaction/bypaymentreference/${paymentReference}?merchantCode=${merchantCode}&env=${env}`
+          `api/Transaction/bypayemtreference/${paymentReference}?merchantCode=${merchantCode}&env=${env}`
         );
-        console.log('This is the transaction data ', response.data);
-        return response.data;
+        const data = response.data.responseData;
+        dispatch(transactionSuccess(data));
       } catch (err) {
         if (!err.response) {
             dispatch(transactionFailure('No response from server'));
@@ -73,8 +73,8 @@ class TransactionService {
         const response = await this.axiosPrivate.get(
           `api/Transaction/bydate/${startDate}/${endDate}?merchantCode=${merchantCode}&pageNumber=${pageNumber}&pageSize=${pageSize}&env=${env}`
         );
-        console.log('This is the transaction data ', response.data);
-        return response.data;
+        const data = response.data.data;
+        dispatch(transactionSuccess(data));
       } catch (err) {
         if (!err.response) {
             dispatch(transactionFailure('No response from server'));
@@ -85,15 +85,15 @@ class TransactionService {
       }
     }
   
-    async searchTransaction(merchantCode, pageNumber, pageSize, env, data, dispatch) {
+    async searchTransaction(merchantCode, pageNumber, pageSize, env, formData, dispatch) {
         dispatch(transactionStart());
       try {
         const response = await this.axiosPrivate.post(
           `api/Transaction/search?merchantCode=${merchantCode}&pageNumber=${pageNumber}&pageSize=${pageSize}&env=${env}`,
-          JSON.stringify({data})
+          JSON.stringify(formData)
         );
-        console.log('transaction created ', response.data);
-        return response.data;
+        const data = response.data.data;
+        dispatch(transactionSuccess(data));
       } catch (err) {
         if (!err.response) {
             dispatch(transactionFailure('No response from server'));
@@ -110,8 +110,8 @@ class TransactionService {
         const response = await this.axiosPrivate.get(
           `api/Transaction/bycustomeremail/${customerEmail}?merchantCode=${merchantCode}`
         );
-        console.log('This is the transaction data ', response.data);
-        return response.data;
+        const data = response.data.data;
+        dispatch(transactionSuccess(data));
       } catch (err) {
         if (!err.response) {
             dispatch(transactionFailure('No response from server'));

@@ -35,7 +35,7 @@ function DashboardCards({ lumpsum }) {
           </div>
           <div className=''>
             <h3 className='font-[700] text-gray-600 text-sm mb-1'>You're doing good!</h3>
-            <p className='text-[11px] text-gray-400 '>Your performance is 12% better compare to last year</p>
+            {/* <p className='text-[11px] text-gray-400 '>Your performance is 12% better compare to last year</p> */}
           </div>
         </div>
       </div>

@@ -7,6 +7,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import DashboardCards from './component/DashboardCards';
 import DashboardChart from './component/DashboardChart';
 import DashboardPie from './component/DashboardPie';
+import Spinner from '../../components/Spinner';
+import ErrorLayout from '../../components/ErrorLayout';
 
 function Dashboard() {
     const { setAppTitle } = useTitle();
@@ -20,26 +22,60 @@ function Dashboard() {
     const merchant = auth?.merchant;
     const merchantCode = merchant?.merchantCode;
     const dashboardService = new DashboardService(axiosPrivate, auth);
-    const { lumpsum, graph } = useSelector((state) => state.dashboard);
-    const env = 'Test';
+    const { lumpsum, lumpsumLoading, lumpsumError, graph, graphLoading, graphError } = useSelector((state) => state.dashboard);
+    const [isLumpsumLoading, setIsLumpsumLoading] = useState(lumpsumLoading);
+    const [isGraphLoading, setIsGraphLoading] = useState(graphLoading);
+    const [errMsg, setErrMsg] = useState('');
+    const env = 'None';
 
     useEffect(() => {
         setAppTitle('Dashboard');
     }, []);
 
     useEffect(() => {
-        const loadData = async () => {
-          if (merchantCode) {
-            await dashboardService.fetchLumpsum(merchantCode, env, interval, dispatch);
-            await dashboardService.fetchGraph(merchantCode, interval, dispatch);
-          }
-        };
+      setIsLumpsumLoading(lumpsumLoading)
+    }, [lumpsumLoading]);
+
+    useEffect(() => {
+      setIsGraphLoading(graphLoading)
+    }, [graphLoading]);
+
+    useEffect(() => {
+      if (lumpsumError !== null) {
+        setErrMsg(lumpsumError);
+      } else {
+        setErrMsg(graphError);
+      }
+    })
+
+    useEffect(() => {
         loadData();
     }, [merchant, interval, dispatch]);
+
+    const handleRefresh = () => {
+      loadData();
+    }
+
+    const loadData = async () => {
+      if (merchantCode) {
+        await dashboardService.fetchLumpsum(merchantCode, env, interval, dispatch);
+        await dashboardService.fetchGraph(merchantCode, interval, dispatch);
+      }
+    };
 
     const handleIntervalChange = (val) => {
       setInterval(val);
     };
+
+    if (isLumpsumLoading || isGraphLoading) return (
+      <div className="h-[80vh] w-full">
+        <Spinner />
+      </div>
+    );
+
+    if (errMsg !== null) return (
+      <ErrorLayout errMsg={errMsg} handleRefresh={handleRefresh} />
+    );
       
   return (
     <div className="space-y-6">
@@ -87,10 +123,10 @@ function Dashboard() {
         </div>
         <div className="bg-white col-span-2 border-b border-b-gray">
           <p className="text-[16px] font-[800] mb-5 py-5 px-6 border-b border-b-gray">Transaction {transactionMode}</p>
-            <div className="flex justify-center mb-5">
-              <button onClick={() => setTransactionMode('Count')} className={`${transactionMode === 'Count' ? 'bg-gray-200 shadow-md text-priColor font-[600]' : 'font-[500] text-gray-300'} text-sm px-5 py-2 rounded-md`}>Count</button>
-              <button onClick={() => setTransactionMode('Volume')} className={`${transactionMode === 'Volume' ? 'bg-gray-200 shadow-md text-priColor font-[600]' : 'font-[500] text-gray-300'} text-sm px-5 py-2 rounded-md`}>Volume</button>
-            </div>
+          <div className="flex justify-center mb-5">
+            <button onClick={() => setTransactionMode('Count')} className={`${transactionMode === 'Count' ? 'bg-gray-200 shadow-md text-priColor font-[600]' : 'font-[500] text-gray-300'} text-sm px-5 py-2 rounded-md`}>Count</button>
+            <button onClick={() => setTransactionMode('Volume')} className={`${transactionMode === 'Volume' ? 'bg-gray-200 shadow-md text-priColor font-[600]' : 'font-[500] text-gray-300'} text-sm px-5 py-2 rounded-md`}>Volume</button>
+          </div>
           <div className="border-b border-b-gray pb-8">
             <DashboardPie graph={lumpsum} type={transactionMode} />
           </div>
