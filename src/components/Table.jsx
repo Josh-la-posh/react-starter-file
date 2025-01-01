@@ -83,7 +83,7 @@ const DataTable = ({ columns, data, rowsPerPageOptions, onIndexChange, actionBut
                         <select
                             value={rowsPerPage}
                             onChange={handleRowsPerPageChange}
-                            className="bg-white border border-gray-300 rounded-lg px-2 py-2 text-gray-700"
+                            className="bg-white border border-gray-300 rounded-lg p-2 text-gray-700"
                         >
                             {rowsPerPageOptions.map((option) => (
                                 <option key={option} value={option}>

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import useSettingsTitle from '../../services/hooks/useSettingsTitle';
-import { Bell, BookUser, GroupIcon, LockKeyhole, User, Verified, Warehouse } from 'lucide-react';
+import { Bell, BookUser, GroupIcon, LockKeyhole, LockOpen, User, Verified, Warehouse } from 'lucide-react';
 
 const SettingsSidebar = () => {
     const { settingsTitle } = useSettingsTitle();
@@ -48,6 +48,13 @@ const SettingsSidebar = () => {
             name: 'Teams',
             url: '/settings/user',
             title: 'Teams'
+        },
+        {
+            id: 6,
+            icon: <LockOpen size={'15px'} />,
+            name: 'Roles',
+            url: '/settings/role',
+            title: 'Roles'
         },
     ]
 

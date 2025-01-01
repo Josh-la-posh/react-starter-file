@@ -32,6 +32,8 @@ import ContactPage from '../pages/Settings/Contact';
 import UserManagement from '../pages/Settings/UserManagement';
 import SettingsLayout from '../pages/Settings/component/SettingsLayout';
 import MerchantLayout from '../pages/Merchant/components/MerchantLayout';
+import RolesAndPermission from '../pages/Settings/Roles';
+import ManagePermission from '../pages/Settings/ManagePermission';
 
 const RoutesSystem = () => {
   return (
@@ -84,6 +86,8 @@ const RoutesSystem = () => {
               <Route path="notification" element={<NotificationSettings />} />
               <Route path="privacy" element={<PrivacySettings />} />
               <Route path="user" element={<UserManagement />} />
+              <Route path="role" element={<RolesAndPermission />} />
+              <Route path="role/:id/managePermission" element={<ManagePermission />} />
             </Route>
           </Route>
 

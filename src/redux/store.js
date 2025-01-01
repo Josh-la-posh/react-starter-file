@@ -9,6 +9,8 @@ import merchantReducer from './slices/merchantSlice';
 import settlementReducer from './slices/settlementSlice';
 import transactionReducer from './slices/transactionSlice';
 import usersReducer from './slices/userSlice';
+import rolesReducer from './slices/roleSlice';
+import permissionsReducer from './slices/permissionSlice';
 
 export const store = configureStore({
   reducer: {
@@ -22,5 +24,7 @@ export const store = configureStore({
     settlement: settlementReducer,
     transaction: transactionReducer,
     users: usersReducer,
+    roles: rolesReducer,
+    permissions: permissionsReducer
   },
 });

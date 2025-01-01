@@ -4,7 +4,7 @@ import useAuth from '../../../services/hooks/useAuth';
 import useAxiosPrivate from '../../../services/hooks/useAxiosPrivate';
 import UserService from '../../../services/api/userApi';
 import { useDispatch } from 'react-redux';
-import { CheckCircle, X } from 'lucide-react';
+import { CheckCircle, ToggleLeft, ToggleRight, X } from 'lucide-react';
 
 const UserManagementTable = ({filteredData}) => {
     const [selectedIndex, setSelectedIndex] = useState(null);
@@ -67,9 +67,9 @@ const UserManagementTable = ({filteredData}) => {
             render: (isActive, row) => (
                  <button
                     onClick={() => handleAction(row)}
-                    className={`${isActive === true ? 'bg-red-700' : 'bg-green-700'} text-white text-xs px-2 py-1 rounded-[4px]`}
+                    className={`${isActive === true ? 'text-green-700' : 'text-red-700'} text-xs`}
                 >
-                    {isActive === true ? <X size='14px' /> : <CheckCircle size='14px' />}
+                    {isActive === true ? <ToggleRight size='32px' /> : <ToggleLeft size='32px' />}
                 </button>
             ),
         },

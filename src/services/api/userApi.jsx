@@ -164,7 +164,6 @@ class userService {
           JSON.stringify({userId, merchantCode})
         );
         toast('User data has been deactivated');
-
         await this.fetchUserByAggregatorCode(aggregatorCode, 1, 40, dispatch);
       } catch (err) {
         if (!err.response) {
