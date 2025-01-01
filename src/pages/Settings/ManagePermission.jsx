@@ -20,7 +20,6 @@ function ManagePermission() {
     const [isPermissionsLoading, setIsPermissionsLoading] = useState(permissionsLoading);
     const [errMsg, setErrMsg] = useState(permissionsError);
     const aggregatorCode = auth?.data?.aggregator?.aggregatorCode;
-    const merchantCode = auth?.merchant?.merchantCode;
     const permisssionService = new PermissionService(axiosPrivate, auth);
 
     useEffect(() => {
@@ -82,7 +81,6 @@ function ManagePermission() {
             errMsg={errMsg}
             handleRefresh={handleRefresh}
             permissionLists={permissionLists}
-            isPermissionLoading={isPermissionsLoading}
             handleOptionRefresh={handleOptionRefresh}
         />
     );

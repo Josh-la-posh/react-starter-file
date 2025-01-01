@@ -5,6 +5,7 @@ import useAxiosPrivate from '../../../services/hooks/useAxiosPrivate';
 import UserService from '../../../services/api/userApi';
 import { useDispatch } from 'react-redux';
 import { CheckCircle, ToggleLeft, ToggleRight, X } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 const UserManagementTable = ({filteredData}) => {
     const [selectedIndex, setSelectedIndex] = useState(null);
@@ -43,20 +44,20 @@ const UserManagementTable = ({filteredData}) => {
         },
         {
             header: 'ASSIGN ROLE',
-            accessor: 'isAdmin',
-            render: (isAdmin, row) => (
+            accessor: 'id',
+            render: (id, row) => (
                 <div className="flex items-center">
                     {
-                    isAdmin === true
+                    row.isAdmin === true
                         ?
                             <p className='text-xs'>Super Admin</p>
                         :
-                            <button
-                                onClick={() => handleRole(row)}
+                            <Link
+                                to={`${id}/roleAssign`}
                                 className='text-priColor text-xs px-2 py-1 rounded-[4px] border border-transparent hover:border-priColor'
                             >
                                 User Role
-                            </button>
+                            </Link>
                     }
                 </div>
             ),
@@ -74,10 +75,6 @@ const UserManagementTable = ({filteredData}) => {
             ),
         },
     ];
-
-    const handleRole = () => {
-        
-    }
 
     const activateAccount = async (id) => {
         await userService.activateUser(
@@ -107,17 +104,6 @@ const UserManagementTable = ({filteredData}) => {
     const handleSelectedRow = (index) => {
         setSelectedIndex(selectedIndex === index ? null : index);
     };
-
-    // const filteredSearchData = transactions.filter((row) => {
-    //     const rowValues = Object.values(row).map(val => (val || '').toString().toLowerCase());
-    //     const matchesSearch = search
-    //         ? rowValues.some(val => val.includes(search.toLowerCase()))
-    //         : true;
-    //     const matchesStatus = filterStatus
-    //         ? row.status === filterStatus
-    //         : true;
-    //     return matchesSearch && matchesStatus;
-    // });
 
     return (
         <div className="">

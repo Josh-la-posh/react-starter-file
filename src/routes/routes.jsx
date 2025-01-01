@@ -34,6 +34,7 @@ import SettingsLayout from '../pages/Settings/component/SettingsLayout';
 import MerchantLayout from '../pages/Merchant/components/MerchantLayout';
 import RolesAndPermission from '../pages/Settings/Roles';
 import ManagePermission from '../pages/Settings/ManagePermission';
+import RoleAssignment from '../pages/Settings/RoleAssignment';
 
 const RoutesSystem = () => {
   return (
@@ -88,6 +89,7 @@ const RoutesSystem = () => {
               <Route path="user" element={<UserManagement />} />
               <Route path="role" element={<RolesAndPermission />} />
               <Route path="role/:id/managePermission" element={<ManagePermission />} />
+              <Route path="user/:id/roleAssign" element={<RoleAssignment />} />
             </Route>
           </Route>
 

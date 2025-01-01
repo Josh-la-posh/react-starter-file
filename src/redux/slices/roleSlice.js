@@ -4,6 +4,9 @@ const initialState = {
   rolesLoading: false,
   rolesError: null,
   roles: [],
+  userRolesLoading: false,
+  userRolesError: null,
+  userRoles: [],
   updateRolesLoading: false,
   updateRolesError: null,
   updateRoles: [],
@@ -25,6 +28,18 @@ const rolesSlice = createSlice({
       state.rolesLoading = false;
       state.rolesError = action.payload;
     },
+    userRolesStart: (state) => {
+      state.userRolesLoading = true;
+      state.userRolesError = null;
+    },
+    userRolesSuccess: (state, action) => {
+      state.userRolesLoading = false;
+      state.userRoles = action.payload;
+    },
+    userRolesFailure: (state, action) => {
+      state.userRolesLoading = false;
+      state.userRolesError = action.payload;
+    },
     updateRolesStart: (state) => {
       state.updateRolesLoading = true;
       state.updateRolesError = null;
@@ -40,6 +55,6 @@ const rolesSlice = createSlice({
   },
 });
 
-export const { rolesStart, rolesSuccess, rolesFailure, updateRolesStart, updateRolesSuccess, updateRolesFailure } = rolesSlice.actions;
+export const { rolesStart, rolesSuccess, rolesFailure, userRolesStart, userRolesSuccess, userRolesFailure, updateRolesStart, updateRolesSuccess, updateRolesFailure } = rolesSlice.actions;
 
 export default rolesSlice.reducer;

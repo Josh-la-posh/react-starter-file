@@ -15,7 +15,6 @@ const ManagePermissionTable = ({
     errMsg,
     handleRefresh,
     permissionLists,
-    isPermissionLoading,
     handleOptionRefresh
 }) => {
     const { id } = useParams();
@@ -84,8 +83,7 @@ const ManagePermissionTable = ({
         try {
             await permissionService.activateAggregatorRolePermission(
                 roleId,
-                aggregatorCode,
-                dispatch
+                aggregatorCode
             );                
             cancelEditing();
             handleRefresh();
@@ -98,8 +96,7 @@ const ManagePermissionTable = ({
         try {
             await permissionService.deactivateAggregatorRolePermission(
                 roleId,
-                aggregatorCode,
-                dispatch
+                aggregatorCode
             );            
             cancelEditing();
             handleRefresh();
@@ -226,28 +223,41 @@ const ManagePermissionTable = ({
     return (
         <div className="">
             <div className='bg-white w-full space-y-6 px-12 pt-12 pb-24'>
-                <div className="w-full border border-gray-300 focus:outline-gray-300 p-2 rounded-md">
-                    <select
-                        className='w-full text-sm border border-none focus:outline-none p-1 rounded-md'
-                        value={formData.permissionId}
-                        onChange={(e) => updateFormData('permissionId', Number(e.target.value))}
-                    >
-                        <option value="0" disabled>
-                            Select Permission
-                        </option>
-                        {
-                            permissionLists.map((list) => (
-                                <option 
-                                    key={list.id}
-                                    value={list.id}
-                                    className='text-xs'
-                                    
-                                >
-                                    {list.permissionName}
-                                </option>
-                            ))
-                        }
-                    </select>
+                <div className="w-full">
+                    <div className="w-full border border-gray-300 focus:outline-gray-300 p-2 rounded-md">
+                        <select
+                            className='w-full text-sm border border-none focus:outline-none p-1 rounded-md'
+                            value={formData.permissionId}
+                            onChange={(e) => updateFormData('permissionId', Number(e.target.value))}
+                        >
+                            <option value="0" disabled>
+                                Select Permission
+                            </option>
+                            {
+                                permissionLists.map((list) => (
+                                    <option 
+                                        key={list.id}
+                                        value={list.id}
+                                        className='text-xs'
+                                        
+                                    >
+                                        {list.permissionName}
+                                    </option>
+                                ))
+                            }
+                        </select>
+                    </div>
+                    {
+                        permissionLists.length === 0 &&
+                        <div className="flex justify-end">
+                            <button
+                                onClick={handleOptionRefresh}
+                                className='text-xs text-priColor'
+                            >
+                                Reload
+                            </button>
+                        </div>
+                    }
                 </div>
                 <div className="md:flex items-center gap-8 flex-wrap">
                     {['canRead', 'canAdd', 'canEdit', 'canDelete'].map((perm) => (

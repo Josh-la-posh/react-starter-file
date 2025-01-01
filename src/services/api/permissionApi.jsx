@@ -54,7 +54,6 @@ class PermissionService {
           `api/RolePermission/${roleId}/aggregator/${aggregatorCode}?pageSize=${pageSize}&pageNumber=${pageNumber}`
         );
         const data = response.data.data;
-        console.log(data)
         dispatch(aggregatorPermissionsSuccess(data));
       } catch (err) {
         if (!err.response) {
@@ -73,7 +72,6 @@ class PermissionService {
           JSON.stringify(formData)
         );
         toast('Permission created successfully');
-        // await this.fetchAggregatorRolePermission(id, aggregatorCode, pageSize, pageNumber, dispatch);
       } catch (err) {
         if (!err.response) {
           toast('No response from server');
@@ -105,13 +103,12 @@ class PermissionService {
       }
     }
   
-    async activateAggregatorRolePermission(roleId, aggregatorCode, dispatch) {
+    async activateAggregatorRolePermission(roleId, aggregatorCode) {
       try {
         const response = await this.axiosPrivate.put(
           `api/RolePermission/activate/${roleId}/aggregator/${aggregatorCode}`
         );
         toast('Permission activated successfully');
-        // await this.fetchAggregatorRolePermission(id, aggregatorCode, pageSize, pageNumber, dispatch);
       } catch (err) {
         if (!err.response) {
           toast('No response from server');
@@ -122,13 +119,12 @@ class PermissionService {
       }
     }
   
-    async deactivateAggregatorRolePermission(roleId, aggregatorCode, dispatch) {
+    async deactivateAggregatorRolePermission(roleId, aggregatorCode) {
       try {
         const response = await this.axiosPrivate.put(
           `api/RolePermission/deactivate/${roleId}/aggregator/${aggregatorCode}`
         );
         toast('Permission deactivated successfully');
-        // await this.fetchAggregatorRolePermission(id, aggregatorCode, pageSize, pageNumber, dispatch);
       } catch (err) {
         if (!err.response) {
             toast('No response from server');
