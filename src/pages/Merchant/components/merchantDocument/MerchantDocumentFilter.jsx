@@ -62,33 +62,36 @@ function MerchantDocumentFilter() {
         <div className="">
             <div className="flex items-center gap-4">
                 { canUpload &&
-                    <div className ="flex items-center justify-center gap-2">
-                        <div className="flex flex-col md:flex-row items-start md:items-center gap-2">
-                            <select name="" id="documents" value={documents.id} onChange={handleChange} className='px-2 py-2 outline-none text-xs'>
-                                {
-                                    documents.map(document => {
-                                        return (
-                                            <option key={document.id} value={document.id} className='text-xs'>
-                                                {document.documentName}
-                                            </option>
-                                        )
-                                    })
-                                }
-                            </select>
-                            <input 
-                                type="file"
-                                accept='image/*, .pdf'
-                                onChange={handleFileCharge}
-                                className='text-xs'
-                            />
+                    <div className="">
+                        <div className ="flex items-center justify-center gap-2">
+                            <div className="flex flex-col md:flex-row items-start md:items-center gap-2">
+                                <select name="" id="documents" value={documents.id} onChange={handleChange} className='px-2 py-2 outline-none text-xs'>
+                                    {
+                                        documents.map(document => {
+                                            return (
+                                                <option key={document.id} value={document.id} className='text-xs'>
+                                                    {document.documentName}
+                                                </option>
+                                            )
+                                        })
+                                    }
+                                </select>
+                                <input 
+                                    type="file"
+                                    accept='image/*, .pdf'
+                                    onChange={handleFileCharge}
+                                    className='text-xs'
+                                />
+                            </div>
+                            <button
+                                className={`text-white border border-gray bg-priColor text-xs font-[600] py-2 px-2 rounded-sm flex justify-between items-center gap-2`}
+                                onClick={uploadDocument}
+                                disabled={isUploading}
+                                >
+                                    {isUploading ? 'Uploading...' : 'Upload'}
+                            </button>
                         </div>
-                        <button
-                            className={`text-white border border-gray bg-priColor text-xs font-[600] py-2 px-2 rounded-sm flex justify-between items-center gap-2`}
-                            onClick={uploadDocument}
-                            disabled={isUploading}
-                            >
-                                {isUploading ? 'Uploading...' : 'Upload'}
-                        </button>
+                        <p className='text-gray-400 text-xs text-center'>**Supported files jpeg, png, pdf</p>
                     </div>
                 }
                 {

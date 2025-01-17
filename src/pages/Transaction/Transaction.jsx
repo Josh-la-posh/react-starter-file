@@ -57,17 +57,12 @@ function TransactionPage() {
   const handleOpenModal = (val) => {
     setSelectedTransactionData(val);
     setIsModalOpen(true);
-    console.log(val);
   };
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setSelectedTransactionData(null);
   };
-
-  // if (isLoading) return (
-      
-  // );
 
   if (errMsg !== null) return (
       <div className='h-[40vh] w-full'>

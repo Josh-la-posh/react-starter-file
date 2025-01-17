@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { ArrowDownWideNarrow, ArrowLeft, CalendarDays, Cloud, Search } from 'lucide-react';
 import { ReactComponent as MastercardIcon } from '../../../assets/Mastercard.svg';
-import { ReactComponent as StanbicIcon } from '../../../assets/Stanbic.png';
+import { ReactComponent as StanbicIcon } from '../../../assets/Stanbic.svg';
 import { ReactComponent as VerveIcon } from '../../../assets/verve.svg';
 import { ReactComponent as WemaIcon } from '../../../assets/wema.svg';
 import { ReactComponent as VisaIcon } from '../../../assets/Visa.svg';
-import { ReactComponent as AfrigoIcon } from '../../../assets/Afrigo.png';
+import { ReactComponent as AfrigoIcon } from '../../../assets/Afrigo.svg';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import { useNavigate } from 'react-router-dom';
@@ -327,10 +327,10 @@ function TransactionFilter({filteredData, setFilteredData, transactions, handleR
                     <VerveIcon width='100%' height='100%' />
                 </div>
                 <div className="h-[60px] flex-1">
-                    <VisaIcon width='100%' height='100%' />
+                    <StanbicIcon width='100%' height='100%' />
                 </div>
                 <div className="h-[60px] flex-1">
-                    <MastercardIcon width='100%' height='100%' />
+                    <AfrigoIcon width='100%' height='100%' />
                 </div>
                 <div className="h-[60px] flex-1">
                     <VisaIcon width='100%' height='100%' />

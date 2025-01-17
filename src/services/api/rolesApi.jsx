@@ -126,7 +126,7 @@ class RoleService {
           `api/Roles/${id}/deactivate/${aggregatorCode}`
         );
         console.log('role deactivated ', response.data);
-        toast('Role activated successfully');
+        toast('Role deactivated successfully');
         await this.fetchRoles(aggregatorCode, merchantCode, dispatch);
       } catch (err) {
         if (!err.response) {

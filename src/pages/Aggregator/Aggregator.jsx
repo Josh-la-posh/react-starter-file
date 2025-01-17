@@ -25,7 +25,7 @@ function Aggregator() {
 
   useEffect(() => {
       setAppTitle('Merchant');
-      setSettingsTitle('Aggregatorxx');
+      setSettingsTitle('Aggregator');
   }, []);
           
   useEffect(() => {

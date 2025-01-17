@@ -75,8 +75,14 @@ function TransactionForm({ handleCloseModal, data }) {
             <div className="flex gap-5">
               <button onClick={resendNotification} className='text-white text-xs bg-priColor py-3 px-6 rounded-md'>Resend Notification</button>
               {
-                data.transactionStatus === 'Successful' || data.transactionStatus === 'Failed'
-                 && <button onClick={downloadTransaction} className='text-priColor text-xs rounded-md flex items-center justify-center gap-2 hover:bg-priColor hover:bg-opacity-[0.56] p-3 hover:text-[#121212]'><Cloud size={'15px'}/> Download Receipt</button>
+                (data.transactionStatus === 'Successful' || data.transactionStatus === 'Failed') && (
+                  <button 
+                    onClick={downloadTransaction} 
+                    className="text-priColor text-xs rounded-md flex items-center justify-center gap-2 hover:bg-priColor hover:bg-opacity-[0.56] p-3 hover:text-[#121212]"
+                  >
+                    <Cloud size="15px" /> Download Receipt
+                  </button>
+                )
               }
             </div>
               

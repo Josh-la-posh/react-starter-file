@@ -5,6 +5,7 @@ import { dateFormatter, timeFormatter } from '../../../utils/dateFormatter';
 import CustomModal from '../../../components/Modal';
 import useAxiosPrivate from '../../../services/hooks/useAxiosPrivate';
 import { toast } from 'react-toastify';
+import { EyeIcon } from 'lucide-react';
 
 const TransactionTable = ({filteredData, handleOpenModal, isExportPopupOpen, setIsExportPopupOpen}) => {
     const [selectedIndex, setSelectedIndex] = useState(null);
@@ -54,53 +55,19 @@ const TransactionTable = ({filteredData, handleOpenModal, isExportPopupOpen, set
                 </span>
             )
         },
-        // {
-        //     header: 'Action',
-        //     accessor: '',
-        //     render: (row) => (
-        //         <button
-        //             onClick={() => getDataToParent(1)}
-        //             className='bg-red-700 text-white text-xs px-2 py-1 rounded-[4px]'
-        //         >
-        //             Dispute
-        //         </button>
-        //     ),
-        // },
+        {
+            header: 'Action',
+            accessor: 'transactionStatus',
+            render: (transactionStatus, row) => (
+                <span onClick={() => getDataToParent(row)}>
+                    <EyeIcon color='green' />
+                </span>
+            )
+        }
     ];
-    //     e.preventDefault();
-    //     setLoading(true);
-
-
-    //     try {
-    //         const response = await axiosPrivate.post('',
-    //             JSON.stringify({paymentReference, description})
-    //         );
-    //         console.log(response);
-    //         const data = response.status;
-    //         if (data === 201) {
-    //             toast('Sent Successfully');
-    //             setPaymentReference('');
-    //             setIsDispute(false);
-    //         }
-    //     } catch (err) {
-    //         if (!err.status) {
-    //          setErrMsg('No Server Response');   
-    //         } else {
-    //             setErrMsg('Unable to send request at this time.')
-    //         }
-    //     } finally {
-    //         setLoading(false);
-    //     }
-
-    // }
-
-    // const handleDispute = (id) => {
-    //     setPaymentReference(id.paymentReference);
-    //     setIsDispute(true);
-    // };
-
-    const getDataToParent = (id) => {
-        handleOpenModal(filteredData[id]);
+    
+    const getDataToParent = (row) => {
+        handleOpenModal(row);
     }
     
     const handleSelectedRow = (index) => {
@@ -115,19 +82,8 @@ const TransactionTable = ({filteredData, handleOpenModal, isExportPopupOpen, set
                 rowsPerPageOptions={[5, 10, 20, 50]}
                 onIndexChange={handleSelectedRow}
                 selectedIndex={selectedIndex}
-                displayActionButton={true}
+                displayActionButton={false}
                 elementId='transactionTable'
-                actionButton={
-                    <>
-                    {
-                        <div className="absolute right-0 mt-2 w-32 bg-white border border-gray-200 shadow-lg z-10 rounded-[8px] text-xs">
-                            <button onClick={() => getDataToParent(selectedIndex)} className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">
-                                View Details
-                            </button>
-                        </div>
-                    }
-                    </>
-                }
             />
             <ExportPopup
                 isOpen={isExportPopupOpen}
