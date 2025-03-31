@@ -18,7 +18,7 @@ function CustomersPage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMode, setModalMode] = useState(null);
   const [selectedCustomerData, setSelectedCustomerData] = useState({});
-  const merchantCode = auth?.merchantCode;
+  const merchantCode = auth?.merchant.merchantCode;
   const customerService = new CustomerService(axiosPrivate, auth);
   const pageNumber = 1;
   const pageSize = 40;

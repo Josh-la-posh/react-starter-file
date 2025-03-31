@@ -5,8 +5,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 function AuthInputField({ label, type, validName, valueName, id, onChange, setOnFocus, nameFocus, errNote, icon }) {
     return (
-        <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-700" htmlFor={id}>
+        <div className="">
+            <label className="text-xs font-medium text-gray-700" htmlFor={id}>
                 {label}
                 <span className={validName ? 'valid' : 'hide'}>
                     <FontAwesomeIcon icon={faCheck} />
@@ -24,7 +24,7 @@ function AuthInputField({ label, type, validName, valueName, id, onChange, setOn
                     // ref={emailRef}
                     value={valueName}
                     onChange={onChange}
-                    className="bg-transparent block text-sm text-gray-900 focus:outline-none w-full"
+                    className="bg-transparent block text-xs text-gray-900 focus:outline-none w-full"
                     required
                     autoComplete='off'
                     aria-invalid={() => validName ? 'false' : 'true'}

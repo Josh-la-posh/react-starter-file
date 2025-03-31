@@ -18,7 +18,7 @@ function MerchantSelector({ merchants, onMerchantChange }) {
 
   useEffect(() => {
     setAuth(prev => {
-      return { ...prev, merchantCode: selectedMerchant.merchantCode }
+      return { ...prev, merchant: selectedMerchant }
   });
   }, [selectedMerchant]);
 
@@ -28,7 +28,7 @@ function MerchantSelector({ merchants, onMerchantChange }) {
         id="merchant"
         value={selectedMerchant.id || ''}
         onChange={handleMerchantChange}
-        className="p-2 border focus:outline-none rounded-md"
+        className="p-2 border border-gray-300 focus:outline-gray-300 rounded-md"
       >
         {merchants.map((merchant) => (
           <option value={merchant.id} key={merchant.id}>

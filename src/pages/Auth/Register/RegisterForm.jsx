@@ -71,7 +71,6 @@ const RegisterForm = () => {
         try {
             const response = await axios.get('api/country');
             if (response.data.message === 'Successful') {
-                console.log('The new response is ', response.data);
                 setCountryList(response.data.responseData);
                 setShowCountryListReload(false);
             } else {
@@ -88,7 +87,6 @@ const RegisterForm = () => {
         try {
             const response = await axios.get('api/industry');
             if (response.data.message === 'Successful') {
-                console.log('The new response is ', response.data);
                 setIndustryList(response.data.responseData);
                 setShowIndustryListReload(false);
             } else {
@@ -104,7 +102,6 @@ const RegisterForm = () => {
         try {
             const response = await axios.get(`api/industry/categories/${id}`);
             if (response.data.message === 'Successful') {
-                console.log('The new industry categories are ', response.data);
                 setIndustryCategoryList(response.data.responseData);
                 setShowIndustryCategoryListReload(false);
             } else {

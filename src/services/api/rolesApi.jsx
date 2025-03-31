@@ -1,4 +1,5 @@
-import { invoiceFailure, invoiceStart } from "../../redux/slices/invoiceSlice";
+import { toast } from "react-toastify";
+import { rolesFailure, rolesStart, rolesSuccess, updateRolesFailure, updateRolesStart, updateRolesSuccess, userRolesFailure, userRolesStart, userRolesSuccess } from "../../redux/slices/roleSlice";
 
 class RoleService {
     constructor(axiosPrivate, auth) {
@@ -25,105 +26,113 @@ class RoleService {
       }
     }
   
-    async fetchRolesByUserId(userId, merchantCode, aggregatorCode) {
+    async fetchRolesByUserId(userId, merchantCode, aggregatorCode, dispatch) {
+      dispatch(userRolesStart());
       try {
         const response = await this.axiosPrivate.get(
           `api/Roles/user/${userId}/${merchantCode}?aggregatorCode=${aggregatorCode}`
         );
-        console.log('This is the role of the user by userId ', response.data);
-        return response.data;
+        const data = response.data.responseData;
+        dispatch(userRolesSuccess(data));
       } catch (err) {
         if (!err.response) {
-            // dispatch(invoiceFailure('No response from server'));
+            toast('No response from server');
+            dispatch(userRolesFailure('No response from server'));
         } else {
-            // dispatch(invoiceFailure('Failed to load Customer permission. Try again.'));
+          toast('Failed to fetch user roles');
+            dispatch(userRolesFailure('Failed to fetch user roles'));
         }
       } finally {
       }
     }
   
-    async fetchRoles(aggregatorCode, merchantCode) {
+    async fetchRoles(aggregatorCode, merchantCode, dispatch) {
+      dispatch(rolesStart());
       try {
         const response = await this.axiosPrivate.get(
-          `api/Roles/user/${merchantCode}?aggregatorCode=${aggregatorCode}`
+          `api/Roles/${merchantCode}?aggregatorCode=${aggregatorCode}`
         );
         console.log('This is the role of the users ', response.data);
-        return response.data;
+        const data = response.data.responseData;
+        dispatch(rolesSuccess(data));
       } catch (err) {
         if (!err.response) {
-            // dispatch(invoiceFailure('No response from server'));
+            dispatch(rolesFailure('No response from server'));
         } else {
-            // dispatch(invoiceFailure('Failed to load Customer permission. Try again.'));
+            dispatch(rolesFailure('Failed to load Customer permission. Try again.'));
         }
       } finally {
       }
     }
   
-    async createRole(aggregatorCode, data) {
+    async createRole(aggregatorCode, formData, merchantCode, dispatch) {
       try {
         const response = await this.axiosPrivate.post(
           `api/Roles/${aggregatorCode}`,
-          JSON.stringify({data})
+          JSON.stringify(formData)
         );
-        console.log('role created ', response.data);
-        return response.data;
+        toast('Role created successfully');
+        await this.fetchRoles(aggregatorCode, merchantCode, dispatch);
       } catch (err) {
         if (!err.response) {
-            // dispatch(invoiceFailure('No response from server'));
+          dispatch(updateRolesFailure('No response from server'));
         } else {
-            // dispatch(invoiceFailure('Failed to load Customer permission. Try again.'));
+          dispatch(updateRolesFailure('Failed to update role details. Try again.'));
         }
       } finally {
       }
     }
   
-    async updateRolesById(id, aggregatorCode, data) {
+    async updateRolesById(id, merchantCode, aggregatorCode, formData, dispatch) {
+      dispatch(updateRolesStart());
       try {
         const response = await this.axiosPrivate.put(
           `api/Roles/${id}/${merchantCode}?aggregatorCode=${aggregatorCode}`,
-          JSON.stringify({data})
+          JSON.stringify(formData)
         );
-        console.log('roles updated ', response.data);
-        return response.data;
+        toast('Role updated successfully');
+        dispatch(updateRolesSuccess());
+        await this.fetchRoles(aggregatorCode, merchantCode, dispatch);
       } catch (err) {
         if (!err.response) {
-            // dispatch(invoiceFailure('No response from server'));
+          dispatch(updateRolesFailure('No response from server'));
         } else {
-            // dispatch(invoiceFailure('Failed to load Customer permission. Try again.'));
+          dispatch(updateRolesFailure('Failed to update role details. Try again.'));
         }
       } finally {
       }
     }
   
-    async activateRole(id, aggregatorCode) {
+    async activateRole(id, aggregatorCode, merchantCode, dispatch) {
       try {
         const response = await this.axiosPrivate.put(
-          `api/Roles/${id}activate/${aggregatorCode}`
+          `api/Roles/${id}/activate/${aggregatorCode}`
         );
-        console.log('role activated ', response.data);
-        return response.data;
+        toast('Role activated successfully');
+        await this.fetchRoles(aggregatorCode, merchantCode, dispatch);
       } catch (err) {
         if (!err.response) {
-            // dispatch(invoiceFailure('No response from server'));
+            toast('No response from server');
         } else {
-            // dispatch(invoiceFailure('Failed to load Customer permission. Try again.'));
+            toast('Failed to activate role. Try again.');
         }
       } finally {
       }
     }
   
-    async deactivateRole(id, aggregatorCode) {
+    async deactivateRole(id, aggregatorCode, merchantCode, dispatch) {
       try {
         const response = await this.axiosPrivate.put(
-          `api/Roles/${id}deactivate/${aggregatorCode}`
+          `api/Roles/${id}/deactivate/${aggregatorCode}`
         );
         console.log('role deactivated ', response.data);
-        return response.data;
+        toast('Role deactivated successfully');
+        await this.fetchRoles(aggregatorCode, merchantCode, dispatch);
       } catch (err) {
         if (!err.response) {
-            // dispatch(invoiceFailure('No response from server'));
+            toast('No response from server');
         } else {
-            // dispatch(invoiceFailure('Failed to load Customer permission. Try again.'));
+            toast('Failed to deactivate role. Try again.');
         }
       } finally {
       }
@@ -134,12 +143,12 @@ class RoleService {
         const response = await this.axiosPrivate.put(
           `api/Roles/${roleId}/user/${userId}/remove`
         );
-        console.log('role removed ', response.data);
-        return response.data;
+        toast('User role removed successfully');
       } catch (err) {
         if (!err.response) {
             // dispatch(invoiceFailure('No response from server'));
         } else {
+          console.log('The error is: ', err.response)
             // dispatch(invoiceFailure('Failed to load Customer permission. Try again.'));
         }
       } finally {
@@ -166,19 +175,20 @@ class RoleService {
         }
       }
   
-    async addUserRole(merchantCode, data) {
+    async addUserRole(merchantCode, formData) {
+
         try {
           const response = await this.axiosPrivate.post(
             `api/UserRoles/addrole/${merchantCode}`,
-            JSON.stringify({data})
+            JSON.stringify(formData)
           );
-          console.log('user role created ', response.data);
-          return response.data;
+          toast('User role assigned successfully');
         } catch (err) {
           if (!err.response) {
-              // dispatch(invoiceFailure('No response from server'));
+              toast('No response from server');
           } else {
-              // dispatch(invoiceFailure('Failed to load Customer permission. Try again.'));
+            console.log(err.response)
+            toast(err.response.data.message)
           }
         } finally {
         }
@@ -189,8 +199,7 @@ class RoleService {
           const response = await this.axiosPrivate.post(
             `api/UserRoles/removerole/${userRoleId}/merchant/${merchantCode}`,
           );
-          console.log('user role removed ', response.data);
-          return response.data;
+          toast('User role removed successfully');
         } catch (err) {
           if (!err.response) {
               // dispatch(invoiceFailure('No response from server'));

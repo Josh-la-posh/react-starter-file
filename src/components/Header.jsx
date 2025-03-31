@@ -15,20 +15,20 @@ const Header = ({ openSidebar, setOpenSidebar, setIsSidebarTextVisible }) => {
   };
 
   const handleSidebar = () => {
-    setOpenSidebar(true);
-    setIsSidebarTextVisible(true)
+    setOpenSidebar(!openSidebar);
+    setIsSidebarTextVisible(!openSidebar)
   }
 
   return (
     <header className="flex justify-between items-center relative">
-      <div className="">
-        {
-          openSidebar === false && 
-            <button className="absolute left-2 block md:hidden" onClick={handleSidebar}>
-              <AlignJustify />
-            </button>
-        }
-        <div className={`text-lg font-semibold ${openSidebar === false ? 'ml-12' : 'ml-4'}`}>{appTitle ?? ''}</div>
+      <div className="flex items-center">
+        
+        {/* { openSidebar === false && */}
+        <button className="" onClick={handleSidebar}>
+          <AlignJustify />
+        </button>
+    
+        <div className='text-lg font-semibold ml-3'>{appTitle ?? ''}</div>
       </div>
       <MerchantSelector merchants={merchants} onMerchantChange={handleMerchantChange} />
     </header>

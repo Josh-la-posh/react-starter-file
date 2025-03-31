@@ -29,7 +29,7 @@ function MerchantDomain() {
 
   return (
     <div>
-      <MerchantDomainFilter />
+      {/* <MerchantDomainFilter /> */}
       <MerchantDomainTable filteredData={merchantDomain} />
     </div>
   )

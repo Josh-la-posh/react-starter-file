@@ -1,4 +1,4 @@
-import { aggregatorBankFailure, aggregatorBankStart, aggregatorDocumentFailure, aggregatorDocumentStart, aggregatorFailure, aggregatorMerchantFailure, aggregatorMerchantStart, aggregatorMerchantSuccess, aggregatorStart } from "../../redux/slices/aggregatorSlice";
+import { aggregatorBankFailure, aggregatorBankStart, aggregatorDocumentFailure, aggregatorDocumentStart, aggregatorFailure, aggregatorMerchantFailure, aggregatorMerchantStart, aggregatorMerchantSuccess, aggregatorStart, aggregatorSuccess } from "../../redux/slices/aggregatorSlice";
 
 class AggregatorService {
     constructor(axiosPrivate) {
@@ -13,8 +13,8 @@ class AggregatorService {
         const response = await this.axiosPrivate.get(
           'api/Aggregator',
         );
-        console.log('This is the aggregator data ', response.data);
-        return response.data;
+        const data = response.data.responseData;
+        dispatch(aggregatorSuccess(data));
       } catch (err) {
         if (!err.response) {
             dispatch(aggregatorFailure('No response from server'));
@@ -54,7 +54,6 @@ class AggregatorService {
           'api/Aggregator',
           JSON.stringify({data})
         );
-        console.log('This is the aggregator data ', response.data);
         return response.data;
       } catch (err) {
         if (!err.response) {
@@ -76,7 +75,6 @@ class AggregatorService {
         const response = await this.axiosPrivate.get(
           'api/AggregatorBank',
         );
-        console.log('This is the aggregator bank data ', response.data);
         return response.data;
       } catch (err) {
         if (!err.response) {
@@ -96,7 +94,6 @@ class AggregatorService {
         const response = await this.axiosPrivate.get(
           `api/AggregatorBank/${id}`,
         );
-        console.log('This is the aggregator bank data ', response.data);
         return response.data;
       } catch (err) {
         if (!err.response) {
@@ -116,7 +113,6 @@ class AggregatorService {
         const response = await this.axiosPrivate.post(
           'api/AggregatorBank',
         );
-        console.log('This is the aggregator bank data ', response.data);
         return response.data;
       } catch (err) {
         if (!err.response) {
@@ -137,7 +133,6 @@ class AggregatorService {
           `api/AggregatorBank/${id}`,
           JSON.stringify({data})
         );
-        console.log('This is the aggregator bank data ', response.data);
         return response.data;
       } catch (err) {
         if (!err.response) {
@@ -261,7 +256,6 @@ class AggregatorService {
         const response = await this.axiosPrivate.get(
           `api/AggregatorDocuments/download/${id}`,
         );
-        console.log('This is the aggregator download ', response.data);
         return response.data;
       } catch (err) {
         if (!err.response) {

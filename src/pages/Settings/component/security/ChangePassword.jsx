@@ -1,21 +1,23 @@
 import React, { useEffect, useRef, useState } from 'react';
 import AuthInputField from '../../../../components/AuthInptField';
 import { faLock } from '@fortawesome/free-solid-svg-icons';
+import { toast } from 'react-toastify';
 
 const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{7,24}$/;
+const EMPTY_FIELD = '';
 
 function ChangePassword() {
     const errRef = useRef();
-    const [newPassword, setNewPassword] = useState('');
+    const [validCurrentPassword, setValidCurrentPassword] = useState(false);
+    const [CurrentPasswordFocus, setCurrentPasswordFocus] = useState(false);
+
     const [validNewPassword, setValidNewPassword] = useState(false);
     const [NewPasswordFocus, setNewPasswordFocus] = useState(false);
 
-    const [confirmPassword, setConfirmPassword] = useState('');
     const [validConfirmPassword, setValidConfirmPassword] = useState(false);
     const [ConfirmPasswordFocus, setConfirmPasswordFocus] = useState(false);
     
-    const [errMsg, setErrMsg] = useState(false);
-    const [success, setSuccess] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const [formData, setFormData] = useState({
         currentPassword: '',
@@ -24,32 +26,45 @@ function ChangePassword() {
     });
 
     useEffect(() => {
-        const result = PWD_REGEX.test(newPassword);
+        setValidCurrentPassword(formData.currentPassword);
+    }, [formData.currentPassword])
+
+    useEffect(() => {
+        const result = PWD_REGEX.test(formData.newPassword);
         setValidNewPassword(result);
-    }, [newPassword])
+    }, [formData.newPassword])
 
     useEffect(() => {
-        const result = confirmPassword === newPassword;
+        const result = formData.confirmPassword === formData.newPassword;
         setValidConfirmPassword(result);
-    }, [confirmPassword, newPassword])
-
-    useEffect(() => {
-        setErrMsg('');
-    }, [newPassword, confirmPassword])
+    }, [formData.confirmPassword, formData.newPassword])
 
     const handleChange = (e) => {
+        e.preventDefault();
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Password change logic (validation and API calls)
-        if (formData.newPassword === formData.confirmPassword) {
-            alert("Password successfully changed!");
-        } else {
-            alert("Passwords do not match!");
+        const v1 = formData.currentPassword;
+        const v2 = formData.newPassword;
+        const v3 = formData.confirmPassword;
+
+        if (v1 === '' && v2 === '' && v3 === '') {
+            toast('No field must be empty');
+            return;
         }
+
+        if (v2 !== v3) {
+            toast('Passwords do not match!');
+            return;
+        }
+        setIsLoading(true);
+        toast('You are good to go');
+        setTimeout(() => {
+            setIsLoading(false);
+        }, 2000)
     };
 
     return (
@@ -57,12 +72,25 @@ function ChangePassword() {
             <h2 className="text-xl font-medium mb-4">Change Password</h2>
             <form onSubmit={handleSubmit} className="space-y-4">
                 <AuthInputField
+                    label="Currenct Password"
+                    type='password'
+                    icon={faLock}
+                    placeholder='Current Password'
+                    validName={validCurrentPassword}
+                    valueName={formData.currentPassword}
+                    id="currentPassword"
+                    onChange={handleChange}
+                    setOnFocus={setCurrentPasswordFocus}
+                    nameFocus={CurrentPasswordFocus}
+                />
+                <AuthInputField
                     label="New Password"
                     type='password'
                     icon={faLock}
+                    placeholder='New Password'
                     validName={validNewPassword}
-                    valueName={newPassword}
-                    id="currentPassword"
+                    valueName={formData.newPassword}
+                    id="newPassword"
                     onChange={handleChange}
                     setOnFocus={setNewPasswordFocus}
                     nameFocus={NewPasswordFocus}
@@ -80,36 +108,28 @@ function ChangePassword() {
                         </>
                     )}
                 />
-                
-                <input 
-                    type="password" 
-                    name="currentPassword" 
-                    value={formData.currentPassword} 
-                    onChange={handleChange} 
-                    placeholder="Current Password" 
-                    className="w-full p-2 border border-gray-300 rounded-md"
-                />
-                <input 
-                    type="password" 
-                    name="newPassword" 
-                    value={formData.newPassword} 
-                    onChange={handleChange} 
-                    placeholder="New Password" 
-                    className="w-full p-2 border border-gray-300 rounded-md"
-                />
-                <input 
-                    type="password" 
-                    name="confirmPassword" 
-                    value={formData.confirmPassword} 
-                    onChange={handleChange} 
-                    placeholder="Confirm New Password" 
-                    className="w-full p-2 border border-gray-300 rounded-md"
+                <AuthInputField
+                    label="Current Password"
+                    type='password'
+                    icon={faLock}
+                    placeholder='Confirm Password'
+                    validName={validConfirmPassword}
+                    valueName={formData.confirmPassword}
+                    id="confirmPassword"
+                    onChange={handleChange}
+                    setOnFocus={setConfirmPasswordFocus}
+                    nameFocus={ConfirmPasswordFocus}
+                    errNote={(
+                        <>
+                            Password do not match
+                        </>
+                    )}
                 />
                 <button 
                     type="submit"
-                    className="py-2 px-4 bg-priColor text-xs text-white rounded-md"
+                    className="py-3 px-6 bg-priColor text-xs text-white rounded-md"
                 >
-                    Change Password
+                    {isLoading ? 'Updating ...' : 'Change Password'}
                 </button>
             </form>
         </div>

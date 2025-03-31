@@ -25,6 +25,7 @@ const useAxiosPrivate = () => {
         const responseIntercept = axiosPrivate.interceptors.response.use(
             response => response,
             async (error) => {
+                // console.log('The real error is: ', error.response.statusCode)
                 const prevRequest = error?.config;
                 if (error.response.status === 401) {
                     try {

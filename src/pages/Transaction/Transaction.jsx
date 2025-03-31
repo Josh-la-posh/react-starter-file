@@ -7,15 +7,20 @@ import TransactionService from '../../services/api/transactionApi';
 import TransactionTable from './components/TransactionTable';
 import TransactionFilter from './components/TransactionFilter';
 import TransactionForm from './components/TransactionForm';
+import Spinner from '../../components/Spinner';
+import ErrorLayout from '../../components/ErrorLayout';
 
 function TransactionPage() {
   const { auth } = useAuth();
   const { setAppTitle } = useTitle();
   const axiosPrivate = useAxiosPrivate();
   const dispatch = useDispatch();
-  const { transactions } = useSelector((state) => state.transaction);
+  const { transactions, transactionLoading, transactionError } = useSelector((state) => state.transaction);
   const [filteredData, setFilteredData] = useState(transactions);
-  const merchantCode = auth?.merchantCode;
+  const [isLoading, setIsLoading] = useState(transactionLoading);
+  const [errMsg, setErrMsg] = useState(transactionError);
+  const [filteredDataResult, setFilteredDataResult] = useState(filteredData);
+  const merchantCode = auth?.merchant.merchantCode;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedTransactionData, setSelectedTransactionData] = useState({});
   const [isExportPopupOpen, setIsExportPopupOpen] = useState(false);
@@ -27,20 +32,31 @@ function TransactionPage() {
   useEffect(() => {
       setAppTitle('Transaction');
   }, []);
+            
+  useEffect(() => {
+    setIsLoading(transactionLoading);
+  }, [transactionLoading]);
+      
+  useEffect(() => {
+      setErrMsg(transactionError);
+  }, [transactionError]);
 
   useEffect(() => {
-    const loadData = async () => {
-      if (merchantCode) {
-        await transactionService.fetchtransactions(merchantCode, env, pageNumber, pageSize, dispatch);
-      }
-    };
     loadData();
   }, [merchantCode, env, pageNumber, pageSize, dispatch]);
 
+  const handleRefresh = () => {
+      loadData();
+  }
+  
+  const loadData = async () => {
+    if (merchantCode) {
+      await transactionService.fetchtransactions(merchantCode, env, pageNumber, pageSize, dispatch);
+    }
+  };
   const handleOpenModal = (val) => {
     setSelectedTransactionData(val);
     setIsModalOpen(true);
-    console.log(val);
   };
 
   const handleCloseModal = () => {
@@ -48,13 +64,15 @@ function TransactionPage() {
     setSelectedTransactionData(null);
   };
 
-  // const handleFilterChange = (val) => {
-  //   setFilteredData(val);
-  // }
+  if (errMsg !== null) return (
+      <div className='h-[40vh] w-full'>
+          <ErrorLayout errMsg={errMsg} handleRefresh={handleRefresh} />
+      </div>
+  );
 
   return (
     <div>
-      <TransactionFilter filteredData={filteredData} setFilteredData={setFilteredData} transactions={transactions}/>
+      <TransactionFilter filteredData={filteredData} setFilteredData={setFilteredData} transactions={transactions} filteredDataResult={filteredDataResult} handleRefresh={handleRefresh} setFilteredDataResult={setFilteredDataResult}/>
 
       {isModalOpen && 
         (<TransactionForm
@@ -63,7 +81,13 @@ function TransactionPage() {
         />
       )}
 
-      <TransactionTable isExportPopupOpen={isExportPopupOpen} setIsExportPopupOpen={setIsExportPopupOpen} filteredData={filteredData} handleOpenModal={handleOpenModal} />
+      {
+        isLoading
+        ? <div className='h-[40vh] w-full'>
+            <Spinner />
+        </div>
+        : <TransactionTable isExportPopupOpen={isExportPopupOpen} setIsExportPopupOpen={setIsExportPopupOpen} filteredData={filteredDataResult} handleOpenModal={handleOpenModal} />
+      }
     </div>
   )
 }

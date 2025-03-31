@@ -5,7 +5,8 @@ function DashboardChart({graph, type}) {
     const {
         successfulGraphCount,
         successfulGraphVolume,
-        dataDate
+        dataDate,
+        totalCounts
     } = processGraphData(graph);
 
     const chartSeries = [{
@@ -29,6 +30,10 @@ function DashboardChart({graph, type}) {
         legend: {horizontalAlign: 'left'},
         
     };
+
+    if (totalCounts === 0) return (
+        <div className="text-md font-[600] w-full h-[20vh] flex items-center justify-center">No Data</div>
+    )
 
     return (
         <ReactApexChart options={chartOptions} series={chartSeries} type="area" height={350} />

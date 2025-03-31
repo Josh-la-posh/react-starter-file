@@ -23,6 +23,14 @@ const aggregatorSlice = createSlice({
       state.aggregatorLoading = true;
       state.aggregatorError = null;
     },
+    aggregatorSuccess: (state, action) => {
+      state.aggregatorLoading = false;
+      state.aggregator = action.payload;
+    },
+    aggregatorFailure: (state, action) => {
+      state.aggregatorLoading = false;
+      state.aggregatorError = action.payload;
+    },
     aggregatorMerchantStart: (state) => {
       state.aggregatorMerchantLoading = true;
       state.aggregatorMerchantError = null;
@@ -35,10 +43,6 @@ const aggregatorSlice = createSlice({
       state.aggregatorDocumentLoading = true;
       state.aggregatorDocumentError = null;
     },
-    aggregatorSuccess: (state, action) => {
-      state.aggregatorLoading = false;
-      state.aggregator = action.payload;
-    },
     aggregatorMerchantSuccess: (state, action) => {
       state.aggregatorMerchantLoading = false;
       state.aggregatorMerchants = action.payload;
@@ -50,10 +54,6 @@ const aggregatorSlice = createSlice({
     aggregatorDocumentSuccess: (state, action) => {
       state.aggregatorDocumentLoading = false;
       state.aggregatorDocument = action.payload;
-    },
-    aggregatorFailure: (state, action) => {
-      state.aggregatorLoading = false;
-      state.aggregatorError = action.payload;
     },
     aggregatorMerchantFailure: (state, action) => {
       state.aggregatorMerchantLoading = false;
